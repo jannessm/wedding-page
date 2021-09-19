@@ -1,0 +1,21 @@
+
+<mat-card>
+    <h1>Tina und Jannes heiraten!</h1>
+    
+    <mat-card-content>
+        
+        <form [formGroup]="form" (ngSubmit)="login()">
+            <mat-form-field appearance='outline'>
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="Name" formControlName="username">
+            </mat-form-field>
+            <mat-form-field appearance='outline'>
+                <mat-label>Passwort</mat-label>
+                <input matInput type="password" placeholder="Passwort" formControlName="password">
+            </mat-form-field>
+
+            <mat-error *ngIf="wrongCredentials">Leider stimmen Passwort und Name nicht.</mat-error>
+            <button mat-button type="submit">Login</button>
+        </form>
+    </mat-card-content>
+</mat-card>
