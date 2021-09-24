@@ -10,6 +10,7 @@ import { ApiError } from 'src/models/api';
 })
 export class AuthService {
   isLoggedIn = false;
+  isAdmin = false;
 
   // store the URL so we can redirect after logging in
   redirectUrl: string | null = null;
@@ -26,6 +27,12 @@ export class AuthService {
           data = <User>resp;
           this.loggedUser = data;
           this.isLoggedIn = true;
+
+          if (data.name === 'jannes' || data.name === 'tina') {
+            this.isAdmin = true;
+          } else {
+            this.isAdmin = false;
+          }
         } else if (resp.hasOwnProperty('error')) {
           data = <ApiError>resp;
         } else {

@@ -1,6 +1,11 @@
 <mat-toolbar *ngIf='authService.isLoggedIn'>
-  <button mat-button routerLink='/registration'>Rückmeldung</button>
-  <button mat-button routerLink='/programm'>Programm</button>
+  <button mat-button routerLink='/user/program'>Programm</button>
+  <button mat-button routerLink='/user/registration'>Rückmeldung</button>
+  <button mat-button routerLink='/user/dress-code'>Dress Code</button>
+  <button mat-button routerLink='/user/gifts'>Geschenketipps</button>
+  <button mat-button routerLink='/user/accomondations'>Unterkünfte</button>
+  <button mat-button routerLink='/user/accomondations'>Unterkünfte</button>
+  <button mat-button *ngIf="authService.isAdmin" routerLink='/user/admin'>Admin</button>
   <button mat-button (click)='logout()'>Logout</button>
 </mat-toolbar>
 <router-outlet></router-outlet>

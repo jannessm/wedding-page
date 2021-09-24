@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgcCookieConsentService } from 'ngx-cookieconsent';
 import { AuthService } from './services/auth/auth.service';
 
 @Component({
@@ -7,12 +8,10 @@ import { AuthService } from './services/auth/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent{
   title = 'Tina und Jannes';
-  authService: AuthService;
-  router: Router;
   
-  constructor(authService: AuthService, router: Router) {
+  constructor(public authService: AuthService, private router: Router, private ccService: NgcCookieConsentService) {
     this.authService = authService;
     this.router = router;
   }

@@ -18,4 +18,12 @@ export class ApiService {
     });
   }
 
+  changePassword(user: string, pwd: string, newPwd: string): Observable<Object> {
+    return this.http.post(this.BASE_API + "change-password.php", {
+      user,
+      pwd,
+      newPwd
+    });
+  }
+
 }

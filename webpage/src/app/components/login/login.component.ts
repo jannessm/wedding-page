@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import md5 from 'md5-ts';
 import { ThisReceiver } from '@angular/compiler';
+import { User } from 'src/models/user';
 
 @Component({
   selector: 'app-login',
@@ -36,15 +37,18 @@ export class LoginComponent implements OnInit {
       this.form.controls.username.value,
       md5(this.form.controls.password.value)
     ).subscribe(data => {
-      if (data.hasOwnProperty('error')) {
+      if (data.hasOwnProperty('firstLogin') && (<User>data).firstLogin) {
+
+        this.router.navigate(['/', 'user', 'change-password']);
+      } else if (data.hasOwnProperty('firstLogin') && !(<User>data).firstLogin) {
+
+        this.router.navigate(['/', 'user', 'program']);
+      } else {
         this.wrongCredentials = true;
 
         Object.values(this.form.controls).forEach(control => {
           control.setErrors({});
         });
-
-      } else {
-        this.router.navigate(['/','registration']);
       }
     })
   }
