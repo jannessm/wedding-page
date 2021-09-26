@@ -1,4 +1,4 @@
-<mat-expansion-panel [expanded]="expanded" (opened)="emitOpened()" hideToggle>
+<mat-expansion-panel [expanded]="expanded" (opened)="this.opened.emit()" (closed)="this.closed.emit()" hideToggle>
     <mat-expansion-panel-header>
         <mat-panel-title>
           Gäste
@@ -38,7 +38,7 @@
         <input matInput (keyup)="applyFilter($event)" placeholder="Filter" #input>
     </mat-form-field>
       
-    <table mat-table [dataSource]="dataSource" matSort>
+    <table mat-table [dataSource]="dataSource" matSort matSortActive="user" matSortDirection="asc">
       
         <!-- ID Column -->
         <ng-container matColumnDef="user">
@@ -122,5 +122,5 @@
         </tr>
     </table>
       
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Gäste pro Seite"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[10, 25, 100]" aria-label="Gäste pro Seite"></mat-paginator>
 </mat-expansion-panel>

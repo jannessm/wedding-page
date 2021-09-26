@@ -19,6 +19,8 @@ export class GuestlistFormComponent {
 
   @Output()
   opened = new EventEmitter();
+  @Output()
+  closed = new EventEmitter();
 
   form: FormGroup;
   guests: FormArray;
@@ -42,10 +44,6 @@ export class GuestlistFormComponent {
       'firstPassword': [this.randomPassword(), Validators.required],
       'guests': this.guests
     });
-  }
-
-  emitOpened() {
-    this.opened.emit();
   }
 
   addGuest() {

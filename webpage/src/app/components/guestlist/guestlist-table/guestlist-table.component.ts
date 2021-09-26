@@ -21,6 +21,8 @@ export class GuestlistTableComponent implements AfterViewInit {
 
   @Output()
   opened = new EventEmitter();
+  @Output()
+  closed = new EventEmitter();
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
@@ -46,7 +48,7 @@ export class GuestlistTableComponent implements AfterViewInit {
     this.dataSource = new MatTableDataSource<GuestTable>([]);
     this.guestService.getData();
     this.guestService.guests.subscribe( guests => {
-      this.dataSource = new MatTableDataSource(guests);
+      this.dataSource.data = guests;
       this.countData(guests);
     });
   }
@@ -70,10 +72,6 @@ export class GuestlistTableComponent implements AfterViewInit {
         this.dataSource.paginator.firstPage();
       }
     }
-  }
-
-  emitOpened() {
-    this.opened.emit();
   }
 
   saveChanges(row: GuestTable) {
