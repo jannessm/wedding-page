@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {randomPassword, lower, upper, digits} from 'secure-random-password';
 import { ApiService } from 'src/app/services/api/api.service';
 import { GuestService } from 'src/app/services/guest/guest.service';
-import { AgeCategories, DIETS, Guest, User, UserResponse } from 'src/models/user';
+import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, DIETS, Guest, User, UserResponse } from 'src/models/user';
 
 @Component({
   selector: 'app-guestlist-form',
@@ -21,15 +21,16 @@ export class GuestlistFormComponent {
   form: FormGroup;
   guests: FormArray;
 
-  ages = Object.keys(AgeCategories);
-  agesLabels = Object.values(AgeCategories);
+  ages = Object.values(AGE_CATEGORIES);
+  agesLabels = AGE_CATEGORY_LABELS;
+  agesIcons = AGE_CATEGORY_ICONS;
 
   constructor(private fb: FormBuilder, private apiService: ApiService, private guestService: GuestService) {
     this.guests = fb.array([
       fb.group({
         'name': ['', Validators.required],
         'lastname': [''],
-        'age': [Object.keys(AgeCategories)[2], Validators.required]
+        'age': ['ADULT', Validators.required]
       })
     ]);
 
@@ -87,7 +88,7 @@ export class GuestlistFormComponent {
         age: (<FormGroup>group).controls.age.value,
         isRegistered: false,
         song: '',
-        diet: 'NORMAL',
+        diet: DIETS.NORMAL,
         allergies: ''
       };
     });
@@ -98,7 +99,7 @@ export class GuestlistFormComponent {
       this.fb.group({
         'name': ['', Validators.required],
         'lastname': [''],
-        'age': [Object.keys(AgeCategories)[2], Validators.required]
+        'age': ['ADULT', Validators.required]
       })
     ]);
 

@@ -35,13 +35,13 @@
                     <mat-form-field appearance='outline'>
                         <mat-label>Alter*</mat-label>
                         <mat-select formControlName="age">
-                            <mat-option *ngFor="let age of ages; index as ageId" [value]="age">{{ agesLabels[ageId] }}</mat-option>
+                            <mat-option *ngFor="let age of ages" [value]="age">{{ agesLabels[age] }}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
             </span>
-            <button mat-icon-button (click)="addGuest()"><mat-icon>add</mat-icon></button>
-            <button mat-icon-button (click)="removeGuest()"><mat-icon>remove</mat-icon></button>
+            <button mat-icon-button (click)="addGuest()"><mat-icon>person_add</mat-icon></button>
+            <button mat-icon-button (click)="removeGuest()"><mat-icon>person_remove</mat-icon></button>
         </span>
       </form>
       

@@ -1,6 +1,5 @@
-import { AgeCategories, DIETS, Guest } from "./user";
+import { Guest } from "./user";
 
 export interface GuestTable extends Guest{
     user: string;
 }
-

@@ -13,22 +13,48 @@ export interface UserResponse {
 export interface Guest {
     name: string;
     lastname: string;
-    age: AgeCategories;
+    age: AGE_CATEGORIES;
     isRegistered: boolean;
     diet: DIETS | string;
     allergies: string;
     song: string;
 }
 
-export enum AgeCategories {
-    INFANT = "Kind (0 - 12)",
-    CHILD = "Kind (13 - 18)",
-    ADULT = "Erwachsen (ab 19)"
+export enum AGE_CATEGORIES {
+    INFANT = "INFANT",
+    CHILD = "CHILD",
+    ADULT = "ADULT"
+};
+
+export const AGE_CATEGORY_LABELS: {[key: string]: string} = {
+    INFANT: "Kind (0 - 11)",
+    CHILD: "Jugendlich (12 - 17)",
+    ADULT: "Erwachsen (ab 18)"
+};
+
+export const AGE_CATEGORY_ICONS: {[key: string]: string} = {
+    INFANT: "toys",
+    CHILD: "school",
+    ADULT: "woman"
 };
 
 export enum DIETS {
-    VEGAN = "vegan",
-    VEGETARIAN = "vegetarisch",
-    GLUTEN_FREE = "glutenfrei",
-    NORMAL = ""
+    VEGAN = "VEGAN",
+    VEGETARIAN = "VEGETERIAN",
+    GLUTEN_FREE = "GLUTEN_FREE",
+    NORMAL = "NORMAL"
+}
+
+export const DIET_LABELS: {[key: string]: string} = {
+    VEGAN: "vegan",
+    VEGETARIAN: "vegetarisch",
+    GLUTEN_FREE: "glutenfrei",
+    NORMAL: ""
+}
+
+export const DIET_ICONS: {[key: string]: string} = {
+    VEGAN: "vegan",
+    VEGETARIAN: "vegetarian",
+    GLUTEN_FREE: "gluten-free",
+    NORMAL: ""
 }

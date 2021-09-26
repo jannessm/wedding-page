@@ -1,9 +1,11 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { GuestService } from 'src/app/services/guest/guest.service';
 import { GuestTable } from 'src/models/guest-table';
+import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, DIETS, DIET_ICONS } from 'src/models/user';
 
 @Component({
   selector: 'app-guestlist-table',
@@ -23,9 +25,65 @@ export class GuestlistTableComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
 
-  constructor(private guestService: GuestService) {
+  agesIcons = AGE_CATEGORY_ICONS;
+  dietIcons = DIET_ICONS;
+
+  // comming | not comming | total 
+  adults = [0,0,0];
+  children = [0, 0, 0];
+  infants = [0, 0, 0];
+
+  vegan = 0;
+  vegetarian = 0;
+  glutenFree = 0;
+
+  constructor(private guestService: GuestService, private iconRegistry: MatIconRegistry) {
+
     this.dataSource = new MatTableDataSource<GuestTable>([]);
-    this.guestService.guests.subscribe( guests => this.dataSource = new MatTableDataSource(guests));
+    this.guestService.guests.subscribe( guests => {
+      this.dataSource = new MatTableDataSource(guests);
+
+      this.adults = [0, 0];
+      this.children = [0, 0];
+      this.infants = [0, 0];
+
+      this.vegan = 0;
+      this.vegetarian = 0;
+      this.glutenFree = 0;
+
+      guests.forEach(guest => {
+        const registered = guest.isRegistered ? 1 : 0;
+
+        switch(guest.age) {
+          case AGE_CATEGORIES.ADULT:
+            this.adults[1]++;
+            this.adults[0] += registered;
+            break;
+          case AGE_CATEGORIES.CHILD:
+            this.children[1]++;
+            this.children[0] += registered;
+            break;
+          case AGE_CATEGORIES.INFANT:
+            this.infants[1]++;
+            this.infants[0] += registered;
+            break;
+        }
+
+        if (guest.isRegistered) {
+          switch(guest.diet) {
+            case DIETS.VEGAN:
+              this.vegan++;
+              break;
+            case DIETS.VEGETARIAN:
+              this.vegetarian++;
+              break;
+            case DIETS.GLUTEN_FREE:
+              this.glutenFree++;
+              break;
+          }
+        }
+      })
+    });
   }
 
   ngAfterViewInit() {

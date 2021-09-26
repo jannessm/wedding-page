@@ -10,9 +10,9 @@
                 "name": "Jannes",
                 "lastname": "",
                 "age": "ADULT",
-                "diet": "NORMAL",
+                "diet": "GLUTEN_FREE",
                 "song": "",
-                "isRegistered": false,
+                "isRegistered": true,
                 "allergies": ""
             }
         ]
