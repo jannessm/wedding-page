@@ -6,10 +6,18 @@ export interface User {
     guests: Guest[];
 }
 
+export interface UserResponse {
+    [key: string]: User;
+}
+
 export interface Guest {
     name: string;
     lastname: string;
     age: AgeCategories;
+    isRegistered: boolean;
+    diet: DIETS;
+    allergies: string;
+    song: string;
 }
 
 export enum AgeCategories {
@@ -17,3 +25,10 @@ export enum AgeCategories {
     CHILD = "Kind (13 - 18)",
     ADULT = "Erwachsen (ab 19)"
 };
+
+export enum DIETS {
+    VEGAN = "vegan",
+    VEGETARIAN = "vegetarisch",
+    GLUTEN_FREE = "glutenfrei",
+    NORMAL = ""
+}

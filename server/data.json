@@ -9,7 +9,11 @@
             {
                 "name": "Jannes",
                 "lastname": "",
-                "age": "ADULT"
+                "age": "ADULT",
+                "diet": "NORMAL",
+                "song": "",
+                "isRegistered": false,
+                "allergies": ""
             }
         ]
     }

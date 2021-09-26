@@ -34,7 +34,11 @@
                 array_push($newUser['guests'], array(
                     'name' => $guest['name'],
                     'lastname' => $guest['lastname'],
-                    'age' => $guest['age']
+                    'age' => $guest['age'],
+                    'diet' => $guest['diet'],
+                    'song' => $guest['song'],
+                    'isRegistered' => $guest['isRegistered'],
+                    'allergies' => $guest['allergies']
                 ));
             }
 

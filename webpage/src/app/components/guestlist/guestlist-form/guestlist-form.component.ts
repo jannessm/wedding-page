@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import {randomPassword, lower, upper, digits} from 'secure-random-password';
 import { ApiService } from 'src/app/services/api/api.service';
-import { AgeCategories, Guest } from 'src/models/user';
+import { AgeCategories, DIETS, Guest } from 'src/models/user';
 
 @Component({
   selector: 'app-guestlist-form',
@@ -83,7 +83,11 @@ export class GuestlistFormComponent implements OnInit {
       return <Guest>{
         name: (<FormGroup>group).controls.name.value,
         lastname: (<FormGroup>group).controls.lastname.value,
-        age: (<FormGroup>group).controls.age.value
+        age: (<FormGroup>group).controls.age.value,
+        isRegistered: false,
+        song: '',
+        diet: DIETS.NORMAL,
+        allergies: ''
       };
     });
   }

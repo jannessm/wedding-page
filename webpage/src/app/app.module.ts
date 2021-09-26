@@ -15,7 +15,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
@@ -32,6 +35,7 @@ import { CookieComponent } from './components/cookie/cookie.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { GuestlistComponent } from './components/guestlist/guestlist.component';
 import { GuestlistFormComponent } from './components/guestlist/guestlist-form/guestlist-form.component';
+import { GuestlistTableComponent } from './components/guestlist/guestlist-table/guestlist-table.component';
  
 const cookieConfig:NgcCookieConsentConfig = {
   "cookie": {
@@ -75,7 +79,8 @@ const cookieConfig:NgcCookieConsentConfig = {
     CookieComponent,
     ChangePasswordComponent,
     GuestlistComponent,
-    GuestlistFormComponent
+    GuestlistFormComponent,
+    GuestlistTableComponent
   ],
   imports: [
     BrowserModule,
@@ -93,7 +98,10 @@ const cookieConfig:NgcCookieConsentConfig = {
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    MatPaginatorModule,
     MatSelectModule,
+    MatSortModule,
+    MatTableModule,
     MatTabsModule,
     MatToolbarModule,
   ],

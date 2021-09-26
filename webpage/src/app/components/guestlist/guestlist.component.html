@@ -1,3 +1,6 @@
-<mat-accordion>
-    <app-guestlist-form [expanded]="step === 0" (opened)="setStep(0)"></app-guestlist-form>
-</mat-accordion>
+<div>
+    <mat-accordion>
+        <app-guestlist-form [expanded]="step === 0" (opened)="setStep(0)"></app-guestlist-form>
+        <app-guestlist-table [expanded]="step === 1" (opened)="setStep(1)"></app-guestlist-table>
+    </mat-accordion>
+</div>

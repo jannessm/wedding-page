@@ -1,0 +1,60 @@
+<mat-expansion-panel [expanded]="expanded" (opened)="emitOpened()" hideToggle>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+          Gäste
+        </mat-panel-title>
+    </mat-expansion-panel-header>
+
+
+    <mat-form-field appearance="outline">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Filter" #input>
+    </mat-form-field>
+      
+    <table mat-table [dataSource]="dataSource" matSort>
+      
+        <!-- ID Column -->
+        <ng-container matColumnDef="user">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> User </th>
+            <td mat-cell *matCellDef="let row"> {{row.user}} </td>
+        </ng-container>
+      
+        <!-- Progress Column -->
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Vorname </th>
+            <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+        </ng-container>
+      
+        <!-- Name Column -->
+        <ng-container matColumnDef="lastname">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Nachname </th>
+            <td mat-cell *matCellDef="let row"> {{row.lastname}} </td>
+        </ng-container>
+      
+        <!-- Fruit Column -->
+        <ng-container matColumnDef="age">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Alter </th>
+            <td mat-cell *matCellDef="let row"> {{row.age}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="diet">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Diät </th>
+            <td mat-cell *matCellDef="let row"> {{row.diet}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="isRegistered">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Registriert </th>
+            <td mat-cell *matCellDef="let row"> {{row.isRegistered}} </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">Keinen Treffer für die Suche "{{input.value}}"</td>
+        </tr>
+    </table>
+      
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Gäste pro Seite"></mat-paginator>
+</mat-expansion-panel>

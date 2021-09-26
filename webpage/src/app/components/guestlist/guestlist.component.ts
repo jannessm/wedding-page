@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./guestlist.component.scss']
 })
 export class GuestlistComponent implements OnInit {
-  step = 0;
+  step = 1;
 
   constructor() { }
 

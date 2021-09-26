@@ -31,4 +31,8 @@ export class ApiService {
     return this.http.post(this.BASE_API + "user.php?add", user);
   }
 
+  getUsers(): Observable<Object> {
+    return this.http.get(this.BASE_API + "user.php");
+  }
+
 }
