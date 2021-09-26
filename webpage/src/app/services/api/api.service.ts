@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { User } from 'src/models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,10 @@ export class ApiService {
       pwd,
       newPwd
     });
+  }
+
+  addUser(user: User): Observable<Object> {
+    return this.http.post(this.BASE_API + "user.php?add", user);
   }
 
 }

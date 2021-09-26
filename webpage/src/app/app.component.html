@@ -5,7 +5,10 @@
   <button mat-button routerLink='/user/gifts'>Geschenketipps</button>
   <button mat-button routerLink='/user/accomondations'>Unterkünfte</button>
   <button mat-button routerLink='/user/change-password'>Passwort ändern</button>
-  <button mat-button *ngIf="authService.isAdmin" routerLink='/user/admin'>Admin</button>
+  <button mat-button *ngIf="authService.loggedUser.isAdmin" routerLink='/user/admin'>Admin</button>
   <button mat-button (click)='logout()'>Logout</button>
 </mat-toolbar>
-<router-outlet></router-outlet>
+
+<div class="content">
+  <router-outlet></router-outlet>
+</div>

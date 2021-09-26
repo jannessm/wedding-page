@@ -7,11 +7,17 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
@@ -24,6 +30,8 @@ import { AdminComponent } from './components/admin/admin.component';
 import {NgcCookieConsentModule, NgcCookieConsentConfig} from 'ngx-cookieconsent';
 import { CookieComponent } from './components/cookie/cookie.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { GuestlistComponent } from './components/guestlist/guestlist.component';
+import { GuestlistFormComponent } from './components/guestlist/guestlist-form/guestlist-form.component';
  
 const cookieConfig:NgcCookieConsentConfig = {
   "cookie": {
@@ -65,7 +73,9 @@ const cookieConfig:NgcCookieConsentConfig = {
     DressCodeComponent,
     AdminComponent,
     CookieComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    GuestlistComponent,
+    GuestlistFormComponent
   ],
   imports: [
     BrowserModule,
@@ -77,8 +87,14 @@ const cookieConfig:NgcCookieConsentConfig = {
     
     MatButtonModule,
     MatCardModule,
+    MatCheckboxModule,
+    MatDividerModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatInputModule,
+    MatIconModule,
+    MatSelectModule,
+    MatTabsModule,
     MatToolbarModule,
   ],
   providers: [],

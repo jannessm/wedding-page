@@ -1,0 +1,51 @@
+<mat-expansion-panel [expanded]="expanded" (opened)="emitOpened()" hideToggle>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+          Personen hinzufügen
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+      <form [formGroup]="form">
+        <mat-checkbox formControlName="admin">Admin*</mat-checkbox>
+        <mat-form-field appearance='outline'>
+            <mat-label>Benutzername*</mat-label>
+            <input matInput formControlName="username">
+            <mat-error>Bitte einen Benutzernamen angeben.</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance='outline'>
+            <mat-label>Verläufiges Passwort*</mat-label>
+            <input matInput formControlName="firstPassword">
+            <mat-error>Bitte ein Passwort angeben.</mat-error>
+        </mat-form-field>
+
+        <span formArrayName="guests">
+            <span *ngFor="let guest of guests.controls;  index as idx">
+                <mat-divider></mat-divider>
+                <div class="guest-label">{{idx + 1}}.</div>
+                <div [formGroupName]="idx" class="guest">
+                    <mat-form-field appearance='outline'>
+                        <mat-label>Vorname*</mat-label>
+                        <input matInput formControlName="name">
+                        <mat-error>Bitte einen Vornamen angeben.</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance='outline'>
+                        <mat-label>Nachname</mat-label>
+                        <input matInput formControlName="lastname">
+                    </mat-form-field>
+                    <mat-form-field appearance='outline'>
+                        <mat-label>Alter*</mat-label>
+                        <mat-select formControlName="age">
+                            <mat-option *ngFor="let age of ages; index as ageId" [value]="age">{{ agesLabels[ageId] }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </span>
+            <button mat-icon-button (click)="addGuest()"><mat-icon>add</mat-icon></button>
+            <button mat-icon-button (click)="removeGuest()"><mat-icon>remove</mat-icon></button>
+        </span>
+      </form>
+      
+      <mat-action-row>
+        <button mat-button (click)="addUser()">Hinzufügen</button>
+      </mat-action-row>
+</mat-expansion-panel>

@@ -9,13 +9,18 @@ import { ApiError } from 'src/models/api';
   providedIn: 'root'
 })
 export class AuthService {
-  isLoggedIn = false;
-  isAdmin = false;
+  isLoggedIn = true;
 
   // store the URL so we can redirect after logging in
   redirectUrl: string | null = null;
 
-  loggedUser: User | null = null;
+  loggedUser: User | null = {
+    name: "jannes",
+    isAdmin: true,
+    firstLogin: false,
+    firstPassword: "test",
+    guests: []
+  };
 
   constructor(private api: ApiService) { }
 
@@ -27,12 +32,6 @@ export class AuthService {
           data = <User>resp;
           this.loggedUser = data;
           this.isLoggedIn = true;
-
-          if (data.name === 'jannes' || data.name === 'tina') {
-            this.isAdmin = true;
-          } else {
-            this.isAdmin = false;
-          }
         } else if (resp.hasOwnProperty('error')) {
           data = <ApiError>resp;
         } else {
