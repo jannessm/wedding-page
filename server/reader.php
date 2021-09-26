@@ -18,4 +18,3 @@ function encrypt_file($in, $out) {
     $content = file_get_contents($in);
     write_file($out, $content);
 }
-?>

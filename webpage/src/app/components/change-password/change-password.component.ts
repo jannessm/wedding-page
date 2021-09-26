@@ -5,6 +5,7 @@ import md5 from 'md5-ts';
 import { ConfirmValidator } from 'src/app/confirm-validator';
 import { ApiService } from 'src/app/services/api/api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { User } from 'src/models/user';
 
 @Component({
   selector: 'app-change-password',
@@ -13,9 +14,14 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 })
 export class ChangePasswordComponent implements OnInit {
   form: FormGroup;
-  
+  wrongCredentials = false;
 
-  constructor(fb: FormBuilder, private apiService: ApiService, private authService: AuthService, private router: Router) {
+  constructor(
+    fb: FormBuilder,
+    private apiService: ApiService,
+    private router: Router,
+    public authService: AuthService
+  ) {
     this.form = fb.group({
       'old_pw': ['', Validators.required],
       'pw1': ['', Validators.required],
@@ -37,7 +43,15 @@ export class ChangePasswordComponent implements OnInit {
         md5(this.form.controls.old_pw.value),
         md5(this.form.controls.pw1.value)
       ).subscribe(data => {
-        // this.router.navigate(['/', 'user', 'program']);
+        if (data.hasOwnProperty('name')) {
+          this.authService.loggedUser = <User>data;
+  
+          this.router.navigate(['/', 'user', 'program']);
+        } else {
+          this.wrongCredentials = true;
+  
+          this.f.old_pw.setErrors({});
+        }
       });
     }
   }
