@@ -1,12 +1,16 @@
 {
     "jannes": {
         "name": "jannes",
+        "isAdmin": true,
         "password": "098f6bcd4621d373cade4e832627b4f6",
-        "firstLogin": "true"
-    },
-    "kai": {
-        "name": "kai",
-        "password": "098f6bcd4621d373cade4e832627b4f6",
-        "firstLogin": "true"
+        "firstLogin": true,
+        "firstPassword": "test",
+        "guests": [
+            {
+                "name": "Jannes",
+                "lastname": "",
+                "age": "ADULT"
+            }
+        ]
     }
 }

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import {randomPassword, lower, upper, digits} from 'secure-random-password';
+import { ApiService } from 'src/app/services/api/api.service';
 import { AgeCategories, Guest } from 'src/models/user';
 
 @Component({
@@ -22,12 +23,12 @@ export class GuestlistFormComponent implements OnInit {
   ages = Object.keys(AgeCategories);
   agesLabels = Object.values(AgeCategories);
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private apiService: ApiService) {
     this.guests = fb.array([
       fb.group({
         'name': ['', Validators.required],
         'lastname': [''],
-        'age': ['', Validators.required]
+        'age': [Object.keys(AgeCategories)[2], Validators.required]
       })
     ]);
 
@@ -68,12 +69,13 @@ export class GuestlistFormComponent implements OnInit {
     const isAdmin = this.form.controls.admin.value;
     const guests = this.getGuests();
 
-    console.log({
-      user,
-      pwd,
+    this.apiService.addUser({
+      name: user,
+      firstPassword: pwd,
       isAdmin,
+      firstLogin: true,
       guests
-    })
+    }).subscribe(console.log)
   }
 
   getGuests(): Guest[] {

@@ -14,6 +14,14 @@ function write_file($filename, $content) {
     file_put_contents($filename, $encrypted);
 }
 
+function filterUser($data) {
+    foreach($data as $key => $value) {
+        unset($value['password']);
+        $data[$key] = $value;
+    }
+    return $data;
+}
+
 function encrypt_file($in, $out) {
     $content = file_get_contents($in);
     write_file($out, $content);
