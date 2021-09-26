@@ -31,6 +31,7 @@
             );
 
             foreach($payload['guests'] as $guest) {
+                // var_dump($guest['diet']);
                 array_push($newUser['guests'], array(
                     'name' => $guest['name'],
                     'lastname' => $guest['lastname'],

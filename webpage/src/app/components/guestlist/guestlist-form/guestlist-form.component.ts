@@ -1,16 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import {randomPassword, lower, upper, digits} from 'secure-random-password';
 import { ApiService } from 'src/app/services/api/api.service';
-import { AgeCategories, DIETS, Guest } from 'src/models/user';
+import { GuestService } from 'src/app/services/guest/guest.service';
+import { AgeCategories, DIETS, Guest, User, UserResponse } from 'src/models/user';
 
 @Component({
   selector: 'app-guestlist-form',
   templateUrl: './guestlist-form.component.html',
   styleUrls: ['./guestlist-form.component.scss']
 })
-export class GuestlistFormComponent implements OnInit {
+export class GuestlistFormComponent {
   @Input()
   expanded: boolean = false;
 
@@ -23,7 +24,7 @@ export class GuestlistFormComponent implements OnInit {
   ages = Object.keys(AgeCategories);
   agesLabels = Object.values(AgeCategories);
 
-  constructor(private fb: FormBuilder, private apiService: ApiService) {
+  constructor(private fb: FormBuilder, private apiService: ApiService, private guestService: GuestService) {
     this.guests = fb.array([
       fb.group({
         'name': ['', Validators.required],
@@ -38,9 +39,6 @@ export class GuestlistFormComponent implements OnInit {
       'firstPassword': [this.randomPassword(), Validators.required],
       'guests': this.guests
     });
-  }
-
-  ngOnInit(): void {
   }
 
   emitOpened() {
@@ -69,13 +67,16 @@ export class GuestlistFormComponent implements OnInit {
     const isAdmin = this.form.controls.admin.value;
     const guests = this.getGuests();
 
-    this.apiService.addUser({
+    this.apiService.addUser(<User>{
       name: user,
       firstPassword: pwd,
       isAdmin,
       firstLogin: true,
       guests
-    }).subscribe(console.log)
+    }).subscribe(users => this.guestService.parseUsers(<UserResponse>users));
+
+    this.resetForm();
+    this.form.setErrors(null);
   }
 
   getGuests(): Guest[] {
@@ -86,9 +87,26 @@ export class GuestlistFormComponent implements OnInit {
         age: (<FormGroup>group).controls.age.value,
         isRegistered: false,
         song: '',
-        diet: DIETS.NORMAL,
+        diet: 'NORMAL',
         allergies: ''
       };
+    });
+  }
+
+  resetForm() {
+    this.guests = this.fb.array([
+      this.fb.group({
+        'name': ['', Validators.required],
+        'lastname': [''],
+        'age': [Object.keys(AgeCategories)[2], Validators.required]
+      })
+    ]);
+
+    this.form = this.fb.group({
+      'admin': [false, Validators.required],
+      'username': ['', Validators.required],
+      'firstPassword': [this.randomPassword(), Validators.required],
+      'guests': this.guests
     });
   }
 

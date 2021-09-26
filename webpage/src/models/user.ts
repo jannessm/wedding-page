@@ -15,7 +15,7 @@ export interface Guest {
     lastname: string;
     age: AgeCategories;
     isRegistered: boolean;
-    diet: DIETS;
+    diet: DIETS | string;
     allergies: string;
     song: string;
 }
