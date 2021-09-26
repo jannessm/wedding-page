@@ -11,6 +11,7 @@ export interface UserResponse {
 }
 
 export interface Guest {
+    uuid: string;
     name: string;
     lastname: string;
     age: AGE_CATEGORIES;
@@ -40,7 +41,7 @@ export const AGE_CATEGORY_ICONS: {[key: string]: string} = {
 
 export enum DIETS {
     VEGAN = "VEGAN",
-    VEGETARIAN = "VEGETERIAN",
+    VEGETARIAN = "VEGETARIAN",
     GLUTEN_FREE = "GLUTEN_FREE",
     NORMAL = "NORMAL"
 }
@@ -49,7 +50,7 @@ export const DIET_LABELS: {[key: string]: string} = {
     VEGAN: "vegan",
     VEGETARIAN: "vegetarisch",
     GLUTEN_FREE: "glutenfrei",
-    NORMAL: ""
+    NORMAL: "normal"
 }
 
 export const DIET_ICONS: {[key: string]: string} = {

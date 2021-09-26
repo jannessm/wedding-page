@@ -6,6 +6,8 @@ import { ApiService } from 'src/app/services/api/api.service';
 import { GuestService } from 'src/app/services/guest/guest.service';
 import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, DIETS, Guest, User, UserResponse } from 'src/models/user';
 
+import { v4 as uuid } from 'uuid';
+
 @Component({
   selector: 'app-guestlist-form',
   templateUrl: './guestlist-form.component.html',
@@ -83,6 +85,7 @@ export class GuestlistFormComponent {
   getGuests(): Guest[] {
     return this.guests.controls.map(group => {
       return <Guest>{
+        uuid: uuid(),
         name: (<FormGroup>group).controls.name.value,
         lastname: (<FormGroup>group).controls.lastname.value,
         age: (<FormGroup>group).controls.age.value,

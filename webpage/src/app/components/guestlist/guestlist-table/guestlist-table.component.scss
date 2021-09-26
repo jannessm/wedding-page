@@ -8,6 +8,21 @@ mat-form-field, table, tr {
     .icon-column {
         width: 50px;
     }
+
+    mat-checkbox {
+        margin: 0 12px;
+    }
+}
+
+tr {
+
+    &:hover .edit {
+        display: block;
+    }
+
+    .edit {
+        display: none;
+    }
 }
 
 .stat-wrapper {

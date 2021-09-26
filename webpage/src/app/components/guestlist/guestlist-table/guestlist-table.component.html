@@ -6,6 +6,7 @@
     </mat-expansion-panel-header>
 
     <div class="stat-wrapper">
+        Rückmeldungen:
         <div class="stat">
             <mat-icon>{{agesIcons.ADULT}}</mat-icon><span>Erwachsene: {{ adults[0] }} / {{ adults[1] }}</span>
         </div>
@@ -48,29 +49,68 @@
         <!-- Progress Column -->
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Vorname </th>
-            <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+            <td mat-cell *matCellDef="let row">
+                <span *ngIf="!row.editMode">{{row.name}}</span>
+                <mat-form-field appearance="outline" *ngIf="row.editMode">
+                    <input matInput [(ngModel)]="row.name">
+                </mat-form-field>
+            </td>
         </ng-container>
       
         <!-- Name Column -->
         <ng-container matColumnDef="lastname">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Nachname </th>
-            <td mat-cell *matCellDef="let row"> {{row.lastname}} </td>
+            <td mat-cell *matCellDef="let row">
+                <span *ngIf="!row.editMode">{{row.lastname}}</span>
+                <mat-form-field appearance="outline" *ngIf="row.editMode">
+                    <input matInput [(ngModel)]="row.lastname">
+                </mat-form-field>
+            </td>
         </ng-container>
       
         <!-- Fruit Column -->
         <ng-container matColumnDef="age">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="icon-column"> Alter </th>
-            <td mat-cell *matCellDef="let row"> <mat-icon>{{agesIcons[row.age]}}</mat-icon> </td>
+            <td mat-cell *matCellDef="let row">
+                <mat-icon *ngIf="!row.editMode">{{agesIcons[row.age]}}</mat-icon>
+                <mat-form-field appearance='outline' *ngIf="row.editMode">
+                    <mat-select [(ngModel)]="row.age">
+                        <mat-option *ngFor="let age of ages" [value]="age">{{ agesLabels[age] }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </td>
         </ng-container>
 
         <ng-container matColumnDef="diet">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="icon-column"> Essensform </th>
-            <td mat-cell *matCellDef="let row"> <mat-icon [svgIcon]="dietIcons[row.diet]"></mat-icon> </td>
+            <td mat-cell *matCellDef="let row">
+            
+                <mat-icon *ngIf="!row.editMode" [svgIcon]="dietIcons[row.diet]"></mat-icon>
+                <mat-form-field appearance='outline' *ngIf="row.editMode">
+                    <mat-select [(ngModel)]="row.diet">
+                        <mat-option *ngFor="let diet of diets" [value]="diet">{{ dietsLabels[diet] }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </td>
         </ng-container>
 
         <ng-container matColumnDef="isRegistered">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="icon-column"> Registriert </th>
-            <td mat-cell *matCellDef="let row"> <mat-icon *ngIf="row.isRegistered">done</mat-icon> </td>
+            <td mat-cell *matCellDef="let row">
+                <mat-icon *ngIf="row.isRegistered && !row.editMode">done</mat-icon>
+
+                <mat-checkbox *ngIf="row.editMode" [(ngModel)]="row.isRegistered"></mat-checkbox>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="expand">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="icon-column"></th>
+            <td mat-cell *matCellDef="let row">
+                <button mat-icon-button class="edit" (click)="row.editMode = !row.editMode">
+                    <mat-icon *ngIf="!row.editMode">edit</mat-icon>
+                    <mat-icon *ngIf="row.editMode" (click)="saveChanges(row)">done</mat-icon>
+                </button>
+            </td>
         </ng-container>
       
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -78,7 +118,7 @@
     
         <!-- Row shown when there is no matching data. -->
         <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="4">Keinen Treffer für die Suche "{{input.value}}"</td>
+        <td class="mat-cell" colspan="7">Keinen Treffer für die Suche "{{input.value}}"</td>
         </tr>
     </table>
       

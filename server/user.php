@@ -33,6 +33,7 @@
             foreach($payload['guests'] as $guest) {
                 // var_dump($guest['diet']);
                 array_push($newUser['guests'], array(
+                    'uuid' => $guest['uuid'],
                     'name' => $guest['name'],
                     'lastname' => $guest['lastname'],
                     'age' => $guest['age'],
@@ -49,6 +50,12 @@
 
             echo json_encode(filterUser($user_data));
         }
+    
+    // admin update
+    } else if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['admin-update'])) {
+        $payload = json_decode(file_get_contents("php://input"), true);
+
+        write_file('data', json_encode($payload));
     } else {
         echo json_encode(array("error" => "no valid request"));
     }
