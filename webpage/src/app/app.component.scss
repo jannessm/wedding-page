@@ -1,9 +1,46 @@
+$breakpoint:  768px;
+
+.desktop {
+    @media (min-width: $breakpoint) {
+        display: block;
+    }
+
+    @media (max-width: $breakpoint) {
+        display: none;
+    }
+}
+
+.mobile {
+    @media (min-width: $breakpoint) {
+        display: none;
+    }
+
+    @media (max-width: $breakpoint) {
+        display: block;
+        position: relative;
+
+        .menu-button {
+            right: 12px;
+            position: absolute;
+        }
+    }
+}
+
 mat-toolbar {
     background: white;
+    button {
+        flex: auto;
+        
+        &[mat-icon-button] {
+            flex: 0 0 40px;
+        }
+    }
 }
 
 .content {
-    margin: 48px;
+    @media (min-width: $breakpoint) {
+        margin: 48px;
+    }
 }
 
 mat-form-field {

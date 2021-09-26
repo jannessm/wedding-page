@@ -16,6 +16,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
@@ -100,6 +101,7 @@ const cookieConfig:NgcCookieConsentConfig = {
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    MatMenuModule,
     MatPaginatorModule,
     MatSelectModule,
     MatSortModule,

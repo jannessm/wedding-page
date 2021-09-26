@@ -1,3 +1,5 @@
+$breakpoint:  768px;
+
 mat-form-field, table, tr {
     width: 100%;
 
@@ -11,6 +13,15 @@ mat-form-field, table, tr {
 
     mat-checkbox {
         margin: 0 12px;
+    }
+}
+
+.div-table {
+    overflow-y: auto;
+
+    @media (max-width: $breakpoint) {
+        margin-left: -24px;
+        margin-right: -24px;
     }
 }
 
