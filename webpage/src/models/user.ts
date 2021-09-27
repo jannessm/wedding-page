@@ -36,7 +36,7 @@ export const AGE_CATEGORY_LABELS: {[key: string]: string} = {
 export const AGE_CATEGORY_ICONS: {[key: string]: string} = {
     INFANT: "toys",
     CHILD: "school",
-    ADULT: "woman"
+    ADULT: "person"
 };
 
 export enum DIETS {

@@ -8,7 +8,7 @@
     <div class="stat-wrapper">
         Rückmeldungen:
         <div class="stat">
-            <mat-icon>{{agesIcons.ADULT}}</mat-icon><span>Erwachsene: {{ adults[0] }} / {{ adults[1] }}</span>
+            <mat-icon [svgIcon]="agesIcons.ADULT"></mat-icon><span>Erwachsene: {{ adults[0] }} / {{ adults[1] }}</span>
         </div>
         <div class="stat">
             <mat-icon>{{agesIcons.CHILD}}</mat-icon><span>Kinder: {{ children[0] }} / {{ children[1] }}</span>
@@ -72,7 +72,7 @@
             <ng-container matColumnDef="age">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="icon-column"> Alter </th>
                 <td mat-cell *matCellDef="let row">
-                    <mat-icon *ngIf="!row.editMode">{{agesIcons[row.age]}}</mat-icon>
+                    <mat-icon *ngIf="!row.editMode" [svgIcon]="agesIcons.ADULT"></mat-icon>
                     <mat-form-field appearance='outline' *ngIf="row.editMode">
                         <mat-select [(ngModel)]="row.age">
                             <mat-option *ngFor="let age of ages" [value]="age">{{ agesLabels[age] }}</mat-option>
