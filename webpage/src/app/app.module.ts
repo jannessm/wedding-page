@@ -16,7 +16,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { MatMenu, MatMenuModule } from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
@@ -32,41 +32,16 @@ import { ProgrammComponent } from './components/programm/programm.component';
 import { DressCodeComponent } from './components/dress-code/dress-code.component';
 import { AdminComponent } from './components/admin/admin.component';
 
-import {NgcCookieConsentModule, NgcCookieConsentConfig} from 'ngx-cookieconsent';
+import {NgcCookieConsentModule} from 'ngx-cookieconsent';
 import { CookieComponent } from './components/cookie/cookie.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { GuestlistComponent } from './components/guestlist/guestlist.component';
 import { GuestlistFormComponent } from './components/guestlist/guestlist-form/guestlist-form.component';
 import { GuestlistTableComponent } from './components/guestlist/guestlist-table/guestlist-table.component';
+
+import { COOKIE_CONFIG } from 'src/models/cookie-consent-config';
  
-const cookieConfig:NgcCookieConsentConfig = {
-  "cookie": {
-    "domain": "tinesoft.github.io"
-  },
-  "position": "top-right",
-  "theme": "block",
-  "palette": {
-    "popup": {
-      "background": "#85abe0",
-      "text": "#000000",
-      "link": "#ffffff"
-    },
-    "button": {
-      "background": "#f1d600",
-      "text": "#000000",
-      "border": "transparent"
-    }
-  },
-  "type": "info",
-  "content": {
-    "message": "Diese Webseite nutzt ausschließlich funktionale Cookies, um Sessions zu ermöglichen.",
-    "dismiss": "Verstanden",
-    "deny": "",
-    "link": "Weitere Infos",
-    "href": "/cookies",
-    "policy": "Cookie Policy"
-  }
-};
+
 
 @NgModule({
   declarations: [
@@ -90,7 +65,7 @@ const cookieConfig:NgcCookieConsentConfig = {
     BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    NgcCookieConsentModule.forRoot(cookieConfig),
+    NgcCookieConsentModule.forRoot(COOKIE_CONFIG),
     FormsModule,
     
     MatButtonModule,
@@ -112,4 +87,4 @@ const cookieConfig:NgcCookieConsentConfig = {
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

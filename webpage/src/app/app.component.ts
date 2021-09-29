@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { NgcCookieConsentService } from 'ngx-cookieconsent';
 import { AuthService } from './services/auth/auth.service';
+import { CookieService } from './services/cookie/cookie.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +16,7 @@ export class AppComponent{
   constructor(
     public authService: AuthService,
     private router: Router,
-    private ccService: NgcCookieConsentService,
+    private cookieService: CookieService,
     iconRegistry: MatIconRegistry,
     domSaniziter: DomSanitizer
   ) {

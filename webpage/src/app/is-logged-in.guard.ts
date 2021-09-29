@@ -22,6 +22,6 @@ export class IsLoggedInGuard implements CanActivate {
     this.authService.redirectUrl = url;
 
     // Redirect to the login page
-    return this.router.parseUrl('/programm');
+    return this.router.parseUrl('/user/program');
   }
 }
