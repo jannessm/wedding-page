@@ -16,7 +16,7 @@ export class ApiService {
     return this.http.post(this.BASE_API + "auth.php", {
       user,
       pwd
-    });
+    })//.shareReplay();
   }
 
   changePassword(user: string, pwd: string, newPwd: string): Observable<Object> {
