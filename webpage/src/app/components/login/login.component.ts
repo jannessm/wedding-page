@@ -16,6 +16,18 @@ export class LoginComponent implements OnInit {
   wrongCredentials = false;
 
   constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
+    // redirect if jwt is valid
+    this.authService.isLoggedIn.subscribe(isLoggedIn => {
+      
+      // first login? yes => choose new password
+      if (isLoggedIn && this.authService.loggedUser?.firstLogin) {
+        this.router.navigate(['/', 'user', 'change-password']);
+      
+      } else {
+        this.router.navigate(['/', 'user', 'program']);
+      }
+    });
+    
     this.form = fb.group({
       'username': ['', Validators.required],
       'password': ['', Validators.required]
@@ -37,13 +49,7 @@ export class LoginComponent implements OnInit {
       this.form.controls.username.value,
       md5(this.form.controls.password.value)
     ).subscribe(data => {
-      if (data.hasOwnProperty('firstLogin') && (<User>data).firstLogin) {
-
-        this.router.navigate(['/', 'user', 'change-password']);
-      } else if (data.hasOwnProperty('firstLogin') && !(<User>data).firstLogin) {
-
-        this.router.navigate(['/', 'user', 'program']);
-      } else {
+      if (!data) {
         this.wrongCredentials = true;
 
         Object.values(this.form.controls).forEach(control => {

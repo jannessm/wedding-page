@@ -25,8 +25,8 @@ export class GuestService {
   getData() {
     if (this.authService.loggedUser?.isAdmin) {
       this.apiService.getUsers().subscribe(users => {
-        this.parseUsers(<UserResponse>users);
-        this._lastDataObject = <UserResponse>users;
+        // this.parseUsers(<UserResponse>users);
+        // this._lastDataObject = <UserResponse>users;
       })
     }
   }

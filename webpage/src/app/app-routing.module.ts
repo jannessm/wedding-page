@@ -11,7 +11,6 @@ import { GiftsComponent } from './components/gifts/gifts.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProgrammComponent } from './components/programm/programm.component';
 import { RegistrationComponent } from './components/registration/registration.component';
-import { IsLoggedInGuard } from './is-logged-in.guard';
 
 const routes: Routes = [
   {path: 'user', canActivate: [AuthGuard], children: [
@@ -23,7 +22,7 @@ const routes: Routes = [
     {path: 'admin', component: AdminComponent, canActivate: [AdminGuard]},
     {path: 'change-password', component: ChangePasswordComponent},
   ]},
-  {path: 'login', component: LoginComponent, canActivate: [IsLoggedInGuard]},
+  {path: 'login', component: LoginComponent},
   {path: 'cookies', component: CookieComponent},
   {path: '', redirectTo: '/login', pathMatch: 'full'}
 ];

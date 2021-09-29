@@ -1,42 +1,50 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ApiResponse } from 'src/models/api';
 import { User, UserResponse } from 'src/models/user';
+import { LocalStorageService } from '../local-storage/local-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  BASE_API = 'http://localhost:8080/'
+  BASE_API = 'http://localhost:8080/api/'
 
   constructor(private http: HttpClient) {}
 
-  authorize(user: string, pwd: string): Observable<Object> {
-    return this.http.post(this.BASE_API + "auth.php", {
+  authorize(user: string, pwd: string): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.BASE_API + "auth/?login", {
       user,
       pwd
-    })//.shareReplay();
+    });
   }
 
-  changePassword(user: string, pwd: string, newPwd: string): Observable<Object> {
-    return this.http.post(this.BASE_API + "change-password.php", {
+  validateJWT(jwt: string): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.BASE_API + "auth/?validate", {
+      jwt
+    });
+  }
+
+  changePassword(user: string, pwd: string, newPwd: string): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.BASE_API + "auth/?change-password", {
       user,
       pwd,
       newPwd
     });
   }
 
-  addUser(user: User): Observable<Object> {
-    return this.http.post(this.BASE_API + "user.php?add", user);
+  addUser(user: User): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.BASE_API + "user.php?add", user);
   }
 
-  getUsers(): Observable<Object> {
-    return this.http.get(this.BASE_API + "user.php");
+  getUsers(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(this.BASE_API + "user.php");
   }
 
-  updateUsers(user: UserResponse): Observable<Object> {
-    return this.http.post(this.BASE_API + 'user.php?admin-update', user);
+  updateUsers(user: UserResponse): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.BASE_API + 'user.php?admin-update', user);
   }
 
 }

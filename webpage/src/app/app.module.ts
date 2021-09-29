@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -40,6 +40,7 @@ import { GuestlistFormComponent } from './components/guestlist/guestlist-form/gu
 import { GuestlistTableComponent } from './components/guestlist/guestlist-table/guestlist-table.component';
 
 import { COOKIE_CONFIG } from 'src/models/cookie-consent-config';
+import { JwtInterceptor } from './services/api/jwt.interceptor';
  
 
 
@@ -84,7 +85,9 @@ import { COOKIE_CONFIG } from 'src/models/cookie-consent-config';
     MatTabsModule,
     MatToolbarModule,
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi:true},
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

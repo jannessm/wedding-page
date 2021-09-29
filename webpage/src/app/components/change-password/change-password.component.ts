@@ -5,6 +5,7 @@ import md5 from 'md5-ts';
 import { ConfirmValidator } from 'src/app/confirm-validator';
 import { ApiService } from 'src/app/services/api/api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { API_STATUS } from 'src/models/api';
 import { User } from 'src/models/user';
 
 @Component({
@@ -42,9 +43,10 @@ export class ChangePasswordComponent implements OnInit {
         this.authService.loggedUser?.name,
         md5(this.form.controls.old_pw.value),
         md5(this.form.controls.pw1.value)
-      ).subscribe(data => {
-        if (data.hasOwnProperty('name')) {
-          this.authService.loggedUser = <User>data;
+      ).subscribe(resp => {
+        console.log(resp)
+        if (resp.status === API_STATUS.SUCCESS && !!this.authService.loggedUser) {
+          this.authService.loggedUser.firstLogin = false;
   
           this.router.navigate(['/', 'user', 'program']);
         } else {

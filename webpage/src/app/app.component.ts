@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
-import { CookieService } from './services/cookie/cookie.service';
+import { LocalStorageService } from './services/local-storage/local-storage.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +16,7 @@ export class AppComponent{
   constructor(
     public authService: AuthService,
     private router: Router,
-    private cookieService: CookieService,
+    private lsService: LocalStorageService,
     iconRegistry: MatIconRegistry,
     domSaniziter: DomSanitizer
   ) {

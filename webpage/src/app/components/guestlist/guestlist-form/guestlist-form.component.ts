@@ -74,7 +74,8 @@ export class GuestlistFormComponent {
       isAdmin,
       firstLogin: true,
       guests
-    }).subscribe(users => this.guestService.parseUsers(<UserResponse>users));
+    }).subscribe(users => {});
+  // }).subscribe(users => this.guestService.parseUsers(<UserResponse>users));
 
     this.resetForm();
     this.form.setErrors(null);
