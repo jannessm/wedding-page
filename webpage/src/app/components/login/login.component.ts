@@ -3,8 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import md5 from 'md5-ts';
-import { ThisReceiver } from '@angular/compiler';
-import { User } from 'src/models/user';
 
 @Component({
   selector: 'app-login',
@@ -17,13 +15,15 @@ export class LoginComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
     // redirect if jwt is valid
-    this.authService.isLoggedIn.subscribe(isLoggedIn => {
+    this.authService.loginStatusChanged.subscribe(isLoggedIn => {      
       
       // first login? yes => choose new password
       if (isLoggedIn && this.authService.loggedUser?.firstLogin) {
+        this.authService.isLoggedIn = true;
         this.router.navigate(['/', 'user', 'change-password']);
       
-      } else {
+      } else if (isLoggedIn) {
+        this.authService.isLoggedIn = true;
         this.router.navigate(['/', 'user', 'program']);
       }
     });

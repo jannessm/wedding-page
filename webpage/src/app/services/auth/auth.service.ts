@@ -13,8 +13,9 @@ import { JWT } from 'src/models/jwt';
   providedIn: 'root'
 })
 export class AuthService {
-  _isLoggedIn: Subscriber<boolean> | undefined;
-  isLoggedIn: Observable<boolean>;
+  _loginStatusChanged: Subscriber<boolean> | undefined;
+  loginStatusChanged: Observable<boolean>;
+  isLoggedIn = false;
 
   // store the URL so we can redirect after logging in
   redirectUrl: string | null = null;
@@ -29,13 +30,15 @@ export class AuthService {
   loggedUser: User | null = null;
 
   constructor(private api: ApiService, private lsService: LocalStorageService) {
-    this.isLoggedIn = new Observable<boolean>(subscriber => this._isLoggedIn = subscriber);
+    this.loginStatusChanged = new Observable<boolean>(subscriber => this._loginStatusChanged = subscriber);
+
+    this.loginStatusChanged.subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
     
     if (!!this.lsService.jwt) {
       const jwt = this.lsService.jwt;
       this.api.validateJWT(jwt).subscribe(resp => {
         if (resp.status === API_STATUS.SUCCESS && !!jwt) {
-          this.setJWT(jwt);
+          this.setJWT((<DataResponse>resp).payload);
         }
       });
     }
@@ -62,15 +65,16 @@ export class AuthService {
   }
 
   logout(): void {
-    this._isLoggedIn?.next(false);
+    this._loginStatusChanged?.next(false);
     this.loggedUser = null;
+    this.lsService.jwt = undefined;
   }
 
   setJWT(jwt: string): User {
     const jwt_decoded: JWT = jwt_decode(jwt);
     
     this.loggedUser = <User>jwt_decoded.user;
-    this._isLoggedIn?.next(true);
+    this._loginStatusChanged?.next(true);
 
     return jwt_decoded.user;
   }

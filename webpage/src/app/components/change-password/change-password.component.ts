@@ -44,7 +44,7 @@ export class ChangePasswordComponent implements OnInit {
         md5(this.form.controls.old_pw.value),
         md5(this.form.controls.pw1.value)
       ).subscribe(resp => {
-        console.log(resp)
+
         if (resp.status === API_STATUS.SUCCESS && !!this.authService.loggedUser) {
           this.authService.loggedUser.firstLogin = false;
   

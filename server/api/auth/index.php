@@ -6,6 +6,8 @@
 
     require_once($BASE . 'autoload.php');
 
+    
+
     if (!validJWT() && !isset($POST) && !isset($_GET['login'])) {
         respondErrorMsg(401, "No valid credentials nor valid JWT.");
     }
@@ -19,11 +21,7 @@
 
     // validateJWT
     if (isset($_POST) && isset($_GET['validate'])) {
-
-        if (!validJWT()) {
-            respondErrorMsg(401, "invalid JWT");
-        }
-        respondJSON(201, "valid JWT");
+        include($BASE . "api/auth/validate.php");
     }
 
     // change Pwd

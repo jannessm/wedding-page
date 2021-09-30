@@ -49,7 +49,11 @@ export class LocalStorageService implements OnDestroy {
   }
 
   set jwt(jwt: string | undefined) {
-    ls.set(COOKIE.JWT, jwt);
+    if (!jwt) {
+      ls.remove(COOKIE.JWT);
+    } else {
+      ls.set(COOKIE.JWT, jwt);
+    }
   }
 
   ngOnDestroy() {
