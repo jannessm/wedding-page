@@ -7,6 +7,7 @@ import { AuthService } from '../auth/auth.service';
 
 import { v4 as uuid } from 'uuid';
 import { API_STATUS, DataResponse } from 'src/models/api';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,11 @@ export class GuestService {
 
   _lastDataObject: UserResponse | undefined;
 
-  constructor(private apiService: ApiService, private authService: AuthService) {
+  constructor(
+    private apiService: ApiService,
+    private authService: AuthService,
+    private snackBar: MatSnackBar
+  ) {
     this.guests = new Observable<GuestTable[]>(subscriber => this._guests = subscriber);
 
     this.getData();
@@ -85,7 +90,33 @@ export class GuestService {
     }
 
     if (update && this._lastDataObject) {
-      this.apiService.updateUsers(this._lastDataObject).subscribe();
+      this.apiService.updateUsers(this._lastDataObject).subscribe(resp => {
+        if (resp.status == API_STATUS.ERROR) {
+          this.snackBar.open("Änderungen konnten nicht gespeichert werden.", "OK");
+        }
+      });
     }
+  }
+
+  deleteData(row: GuestTable) {
+    if (this._lastDataObject) {
+      const user = this._lastDataObject[row.user];
+      
+      if (!!user) {
+        this.apiService.deleteUser(row.user).subscribe(resp => {
+          if (resp.status == API_STATUS.ERROR) {
+            this.snackBar.open("Benutzer konnte nicht gelöscht werden.", "OK");
+          } else {
+            const users = (<DataResponse>resp).payload;
+            this.parseUsers(users);
+            this._lastDataObject = users;
+          }
+        });
+      }
+    }
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, 'OK');
   }
 }

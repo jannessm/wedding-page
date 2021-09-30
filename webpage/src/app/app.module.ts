@@ -41,6 +41,7 @@ import { GuestlistTableComponent } from './components/guestlist/guestlist-table/
 
 import { COOKIE_CONFIG } from 'src/models/cookie-consent-config';
 import { JwtInterceptor } from './services/api/jwt.interceptor';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
  
 
 
@@ -80,6 +81,7 @@ import { JwtInterceptor } from './services/api/jwt.interceptor';
     MatMenuModule,
     MatPaginatorModule,
     MatSelectModule,
+    MatSnackBarModule,
     MatSortModule,
     MatTableModule,
     MatTabsModule,

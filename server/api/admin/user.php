@@ -5,10 +5,10 @@
     $user_data = json_decode(read_file($BASE . 'data'), true);
 
     // if user already exists return error
-    if (!isset($user_data[$payload['name']]) || !isset($payload['name'])) {
+    if (isset($payload['name']) && isset($user_data[$payload['name']])) {
         respondErrorMsg(401, 'user already exists');
     
-    } else {
+    } else if (isset($payload['name'])) {
         $newUser = array(
             'isAdmin' => $payload['isAdmin'],
             'firstPassword' => $payload['firstPassword'],
@@ -35,5 +35,7 @@
         write_file($BASE . 'data', json_encode($user_data));
 
         respondJSON(201, filterUser($user_data));
+    } else {
+        respondErrorMsg(401, 'invalid request');
     }
 ?>

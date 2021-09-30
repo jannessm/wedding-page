@@ -40,13 +40,11 @@
     <div class="div-table">
         <table mat-table [dataSource]="dataSource" matSort matSortActive="user" matSortDirection="asc">
       
-            <!-- ID Column -->
             <ng-container matColumnDef="user">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> User </th>
                 <td mat-cell *matCellDef="let row" class="user"> {{row.user}} </td>
             </ng-container>
           
-            <!-- Progress Column -->
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Vorname </th>
                 <td mat-cell *matCellDef="let row">
@@ -57,7 +55,6 @@
                 </td>
             </ng-container>
           
-            <!-- Name Column -->
             <ng-container matColumnDef="lastname">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Nachname </th>
                 <td mat-cell *matCellDef="let row">
@@ -68,7 +65,6 @@
                 </td>
             </ng-container>
           
-            <!-- Fruit Column -->
             <ng-container matColumnDef="age">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="icon-column"> Alter </th>
                 <td mat-cell *matCellDef="let row">
@@ -103,12 +99,20 @@
                 </td>
             </ng-container>
     
-            <ng-container matColumnDef="expand">
+            <ng-container matColumnDef="edit">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="icon-column"></th>
                 <td mat-cell *matCellDef="let row">
                     <button mat-icon-button class="edit" (click)="row.editMode = !row.editMode">
                         <mat-icon *ngIf="!row.editMode">edit</mat-icon>
                         <mat-icon *ngIf="row.editMode" (click)="saveChanges(row)">done</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="icon-column"></th>
+                <td mat-cell *matCellDef="let row">
+                    <button mat-icon-button class="edit" (click)="deleteUser(row)">
+                        <mat-icon>delete</mat-icon>
                     </button>
                 </td>
             </ng-container>

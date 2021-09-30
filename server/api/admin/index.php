@@ -34,3 +34,15 @@
 
         write_file($BASE . 'data', json_encode($payload));
     }
+
+    // delete user
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['delete-user'])) {
+        $payload = json_decode(file_get_contents("php://input"), true);
+        $user_data = json_decode(read_file($BASE . 'data'), true);
+
+        unset($user_data[$payload['name']]);
+
+        write_file($BASE . 'data', json_encode($user_data));
+        
+        respondJSON(200, filterUser($user_data));
+    }
