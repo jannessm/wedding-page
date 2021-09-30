@@ -21,8 +21,8 @@ function respondJSON($httpCode, $payload) {
     header('Access-Control-Allow-Methods: *');
     header('Access-Control-Allow-Headers: *');
 
-    if (gettype($payload) == "array") {
-        $payload = json_encode($payload);
+    if (gettype($payload) !== "string" && gettype($payload) !== "array") {
+        $payload = (array) $payload;
     }
 
     echo json_encode(array(

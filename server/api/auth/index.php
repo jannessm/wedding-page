@@ -12,8 +12,6 @@
         respondErrorMsg(401, "No valid credentials nor valid JWT.");
     }
 
-    // TODO: only include username in jwt and get curr user obj if valid token
-
     // login
     if (isset($_POST) && isset($_GET['login'])) {
         include($BASE . "api/auth/login.php");

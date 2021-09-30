@@ -16,7 +16,6 @@ export class AppComponent{
   constructor(
     public authService: AuthService,
     private router: Router,
-    private lsService: LocalStorageService,
     iconRegistry: MatIconRegistry,
     domSaniziter: DomSanitizer
   ) {

@@ -16,6 +16,7 @@ export class AuthService {
   _loginStatusChanged: Subscriber<boolean> | undefined;
   loginStatusChanged: Observable<boolean>;
   isLoggedIn = false;
+  isAdmin = false;
 
   // store the URL so we can redirect after logging in
   redirectUrl: string | null = null;

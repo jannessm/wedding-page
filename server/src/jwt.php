@@ -31,6 +31,11 @@
     function validJWT() {
         global $serverName;
         $token = decodeToken(readToken());
+
+        if(!$token) {
+            var_dump($token);
+            return false;
+        }
         
         $now = new DateTimeImmutable();
 

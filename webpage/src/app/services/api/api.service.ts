@@ -36,15 +36,15 @@ export class ApiService {
   }
 
   addUser(user: User): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.BASE_API + "user.php?add", user);
+    return this.http.post<ApiResponse>(this.BASE_API + "admin/?user", user);
   }
 
   getUsers(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.BASE_API + "user.php");
+    return this.http.get<ApiResponse>(this.BASE_API + "admin/?user");
   }
 
   updateUsers(user: UserResponse): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.BASE_API + 'user.php?admin-update', user);
+    return this.http.post<ApiResponse>(this.BASE_API + 'admin/?update-user', user);
   }
 
 }

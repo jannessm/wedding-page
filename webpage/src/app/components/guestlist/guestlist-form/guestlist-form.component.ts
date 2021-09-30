@@ -4,6 +4,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {randomPassword, lower, upper, digits} from 'secure-random-password';
 import { ApiService } from 'src/app/services/api/api.service';
 import { GuestService } from 'src/app/services/guest/guest.service';
+import { API_STATUS, DataResponse, ErrorResponse } from 'src/models/api';
 import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, DIETS, Guest, User, UserResponse } from 'src/models/user';
 
 import { v4 as uuid } from 'uuid';
@@ -74,11 +75,18 @@ export class GuestlistFormComponent {
       isAdmin,
       firstLogin: true,
       guests
-    }).subscribe(users => {});
-  // }).subscribe(users => this.guestService.parseUsers(<UserResponse>users));
+    }).subscribe(resp => {
+      if (resp.status === API_STATUS.ERROR) {
+        console.log((<ErrorResponse>resp).message);
+        this.form.controls.username.setErrors({'userExists': true});
+      } else {
+        const users = (<DataResponse>resp).payload;
+        this.guestService.parseUsers(users);
 
-    this.resetForm();
-    this.form.setErrors(null);
+        this.resetForm();
+        this.form.setErrors(null);
+      }
+    });
   }
 
   getGuests(): Guest[] {

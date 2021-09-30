@@ -20,9 +20,11 @@ export class LoginComponent implements OnInit {
       // first login? yes => choose new password
       if (isLoggedIn && this.authService.loggedUser?.firstLogin) {
         this.authService.isLoggedIn = true;
+        this.authService.isAdmin = this.authService.loggedUser.isAdmin;
         this.router.navigate(['/', 'user', 'change-password']);
       
-      } else if (isLoggedIn) {
+      } else if (isLoggedIn && !!this.authService.loggedUser) {
+        this.authService.isAdmin = this.authService.loggedUser.isAdmin;
         this.authService.isLoggedIn = true;
         this.router.navigate(['/', 'user', 'program']);
       }

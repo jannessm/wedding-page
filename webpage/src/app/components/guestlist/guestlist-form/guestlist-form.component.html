@@ -10,7 +10,8 @@
         <mat-form-field appearance='outline'>
             <mat-label>Benutzername*</mat-label>
             <input matInput formControlName="username">
-            <mat-error>Bitte einen Benutzernamen angeben.</mat-error>
+            <mat-error *ngIf="form.controls.username.errors?.required">Bitte einen Benutzernamen angeben.</mat-error>
+            <mat-error *ngIf="form.controls.username.errors?.userExists">Benutzername ist bereits vergeben.</mat-error>
         </mat-form-field>
         <mat-form-field appearance='outline'>
             <mat-label>Verläufiges Passwort*</mat-label>

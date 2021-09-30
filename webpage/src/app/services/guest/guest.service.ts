@@ -6,6 +6,7 @@ import { ApiService } from '../api/api.service';
 import { AuthService } from '../auth/auth.service';
 
 import { v4 as uuid } from 'uuid';
+import { API_STATUS, DataResponse } from 'src/models/api';
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +25,12 @@ export class GuestService {
 
   getData() {
     if (this.authService.loggedUser?.isAdmin) {
-      this.apiService.getUsers().subscribe(users => {
-        // this.parseUsers(<UserResponse>users);
-        // this._lastDataObject = <UserResponse>users;
+      this.apiService.getUsers().subscribe(resp => {
+        if (resp.status === API_STATUS.SUCCESS) {
+          const users = (<DataResponse>resp).payload;
+          this.parseUsers(users);
+          this._lastDataObject = users;
+        }
       })
     }
   }
@@ -35,6 +39,7 @@ export class GuestService {
     const guests: GuestTable[] = [];
 
     Object.keys(users).forEach(user => {
+
       const u = users[user];
       u.guests.map( guest => {
         if (!guest.uuid) {
