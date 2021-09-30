@@ -42,20 +42,20 @@ export const AGE_CATEGORY_ICONS: {[key: string]: string} = {
 export enum DIETS {
     VEGAN = "VEGAN",
     VEGETARIAN = "VEGETARIAN",
-    GLUTEN_FREE = "GLUTEN_FREE",
+    // GLUTEN_FREE = "GLUTEN_FREE", // may be combined with others, so more allergic than diet
     NORMAL = "NORMAL"
 }
 
 export const DIET_LABELS: {[key: string]: string} = {
     VEGAN: "vegan",
     VEGETARIAN: "vegetarisch",
-    GLUTEN_FREE: "glutenfrei",
+    // GLUTEN_FREE: "glutenfrei",
     NORMAL: "normal"
 }
 
 export const DIET_ICONS: {[key: string]: string} = {
     VEGAN: "vegan",
     VEGETARIAN: "vegetarian",
-    GLUTEN_FREE: "gluten-free",
+    // GLUTEN_FREE: "gluten-free",
     NORMAL: ""
 }

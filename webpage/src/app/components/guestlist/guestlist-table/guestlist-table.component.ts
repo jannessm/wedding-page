@@ -41,7 +41,6 @@ export class GuestlistTableComponent implements AfterViewInit {
 
   vegan = 0;
   vegetarian = 0;
-  glutenFree = 0;
 
   constructor(private guestService: GuestService, private iconRegistry: MatIconRegistry) {
 
@@ -89,7 +88,6 @@ export class GuestlistTableComponent implements AfterViewInit {
 
     this.vegan = 0;
     this.vegetarian = 0;
-    this.glutenFree = 0;
 
     guests.forEach((guest: GuestTable) => {
       const registered = guest.isRegistered ? 1 : 0;
@@ -116,9 +114,6 @@ export class GuestlistTableComponent implements AfterViewInit {
             break;
           case DIETS.VEGETARIAN:
             this.vegetarian++;
-            break;
-          case DIETS.GLUTEN_FREE:
-            this.glutenFree++;
             break;
         }
       }
