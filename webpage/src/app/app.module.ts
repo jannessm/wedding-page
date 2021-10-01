@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -44,6 +45,8 @@ import { JwtInterceptor } from './services/api/jwt.interceptor';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthGuard } from './guards/auth.guard';
 import { IsLoggedGuard } from './guards/is-logged.guard';
+import { UserTableComponent } from './components/guestlist/user-table/user-table.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
  
 
 
@@ -61,7 +64,9 @@ import { IsLoggedGuard } from './guards/is-logged.guard';
     ChangePasswordComponent,
     GuestlistComponent,
     GuestlistFormComponent,
-    GuestlistTableComponent
+    GuestlistTableComponent,
+    UserTableComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -75,6 +80,7 @@ import { IsLoggedGuard } from './guards/is-logged.guard';
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
+    MatDialogModule,
     MatDividerModule,
     MatExpansionModule,
     MatFormFieldModule,

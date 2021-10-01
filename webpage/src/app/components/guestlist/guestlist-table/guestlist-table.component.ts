@@ -13,7 +13,7 @@ import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, DIETS, DIET_IC
   styleUrls: ['./guestlist-table.component.scss']
 })
 export class GuestlistTableComponent implements AfterViewInit {
-  displayedColumns: string[] = ['user', 'name', 'lastname', 'age', 'diet', 'isRegistered', 'edit', 'delete'];
+  displayedColumns: string[] = ['user', 'name', 'lastname', 'age', 'diet', 'isRegistered', 'edit'];
   dataSource: MatTableDataSource<GuestTable>;
 
   @Input()
@@ -77,9 +77,9 @@ export class GuestlistTableComponent implements AfterViewInit {
     this.guestService.updateData(row);
   }
 
-  deleteUser(row: GuestTable) {
-    this.guestService.deleteData(row);
-  }
+  // deleteUser(row: GuestTable) {
+  //   this.guestService.deleteData(row);
+  // }
 
   countData(guests: GuestTable[]) {
     this.adults = [0, 0];

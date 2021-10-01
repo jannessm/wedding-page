@@ -51,4 +51,8 @@ export class ApiService {
     return this.http.post<ApiResponse>(this.BASE_API + "admin/?delete-user", {name: user});
   }
 
+  resetPwd(user: string): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.BASE_API + "admin/?reset-pwd", {name: user});
+  }
+
 }

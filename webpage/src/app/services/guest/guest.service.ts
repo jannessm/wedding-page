@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subscriber } from 'rxjs';
-import { GuestTable } from 'src/models/guest-table';
-import { UserResponse } from 'src/models/user';
+import { Observable, of, Subscriber } from 'rxjs';
+import { GuestTable, UserTable } from 'src/models/guest-table';
+import { Guest, User, UserResponse } from 'src/models/user';
 import { ApiService } from '../api/api.service';
 import { AuthService } from '../auth/auth.service';
 
 import { v4 as uuid } from 'uuid';
 import { API_STATUS, DataResponse } from 'src/models/api';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class GuestService {
   _guests: Subscriber<GuestTable[]> | undefined;
   guests: Observable<GuestTable[]>;
+  _users: Subscriber<UserTable[]> | undefined;
+  users: Observable<UserTable[]>;
 
   _lastDataObject: UserResponse | undefined;
 
@@ -24,6 +27,7 @@ export class GuestService {
     private snackBar: MatSnackBar
   ) {
     this.guests = new Observable<GuestTable[]>(subscriber => this._guests = subscriber);
+    this.users = new Observable<UserTable[]>(subscriber => this._users = subscriber);
 
     this.getData();
   }
@@ -41,17 +45,19 @@ export class GuestService {
   }
 
   parseUsers(users: UserResponse) {
-    const guests: GuestTable[] = [];
+    const guestsData: GuestTable[] = [];
+    const usersData: UserTable[] = [];
 
-    Object.keys(users).forEach(user => {
+    Object.keys(users).forEach(username => {
 
-      const u = users[user];
-      u.guests.map( guest => {
+      const origUser = users[username];
+      origUser.guests.map( guest => {
         if (!guest.uuid) {
           guest.uuid = uuid()
         }
 
         return <GuestTable>{
+          user: username,
           uuid: guest.uuid,
           name: guest.name,
           lastname: guest.lastname,
@@ -59,25 +65,46 @@ export class GuestService {
           isRegistered: guest.isRegistered,
           diet: guest.diet,
           song: guest.song,
-          user: user,
-          editMode: false
+          editMode: false,
+          allergies: ""
         }
-      }).forEach(val => guests.push(val));
-      
-      this._guests?.next(guests);
+      }).forEach(val => guestsData.push(val));
+
+      const user: UserTable = {
+        name: username,
+        isAdmin: origUser.isAdmin,
+        guests: origUser.guests
+          .map( guest => !!guest.lastname ? `${guest.name} ${guest.lastname}` : guest.name)
+      };
+
+      usersData.push(user);
     });
+
+    this._guests?.next(guestsData);
+    this._users?.next(usersData);
   }
 
   updateData(updatedGuest: GuestTable) {
-    let update = false;
-    
     if (this._lastDataObject) {
+      let oldGuest: Guest;
       const row = this._lastDataObject[updatedGuest.user];
       
       if (!!row) {
         row.guests.forEach(guest => {
           if (guest.uuid === updatedGuest.uuid) {
-            update = true;
+            // copy old data for restoring if needed
+            oldGuest = {
+              name: guest.name,
+              lastname: guest.lastname,
+              age: guest.age,
+              allergies: guest.allergies,
+              diet: guest.diet,
+              isRegistered: guest.isRegistered,
+              uuid: guest.uuid,
+              song: guest.song
+            };
+
+
             guest.name = updatedGuest.name;
             guest.lastname = updatedGuest.lastname;
             guest.age = updatedGuest.age;
@@ -87,36 +114,91 @@ export class GuestService {
           }
         });
       }
-    }
 
-    if (update && this._lastDataObject) {
       this.apiService.updateUsers(this._lastDataObject).subscribe(resp => {
         if (resp.status == API_STATUS.ERROR) {
           this.snackBar.open("Änderungen konnten nicht gespeichert werden.", "OK");
+
+          updatedGuest.name = oldGuest.name;
+          updatedGuest.lastname = oldGuest.lastname;
+          updatedGuest.age = oldGuest.age;
+          updatedGuest.allergies = oldGuest.allergies;
+          updatedGuest.diet = oldGuest.diet;
+          updatedGuest.isRegistered = oldGuest.isRegistered;
         }
       });
     }
   }
 
-  deleteData(row: GuestTable) {
+  updateUser(updatedUser: UserTable): Observable<boolean> {
+    let update = false;
+
+    if (updatedUser.name === this.authService.loggedUser?.name && updatedUser.isAdmin !== this.authService.loggedUser?.isAdmin) {
+      this.snackBar.open("Rechte des aktuellen Admins können nicht übernommen werden.", "OK");
+      updatedUser.isAdmin = !updatedUser.isAdmin;
+      return of(false);
+    }
+    
     if (this._lastDataObject) {
-      const user = this._lastDataObject[row.user];
+      const row = this._lastDataObject[updatedUser.name];
       
-      if (!!user) {
-        this.apiService.deleteUser(row.user).subscribe(resp => {
-          if (resp.status == API_STATUS.ERROR) {
-            this.snackBar.open("Benutzer konnte nicht gelöscht werden.", "OK");
-          } else {
-            const users = (<DataResponse>resp).payload;
-            this.parseUsers(users);
-            this._lastDataObject = users;
-          }
-        });
+      if (!!row && row.isAdmin !== updatedUser.isAdmin) {
+        row.isAdmin = updatedUser.isAdmin;
+        update = true;
       }
     }
+
+    if (update && this._lastDataObject) {
+      const row = this._lastDataObject[updatedUser.name];
+
+      return this.apiService.updateUsers(this._lastDataObject).pipe(
+        map(resp => {
+          if (resp.status == API_STATUS.ERROR) {
+            this.snackBar.open("Änderungen konnten nicht gespeichert werden.", "OK");
+
+            row.isAdmin = !updatedUser.isAdmin;
+            console.log(row.isAdmin);
+            return false;
+          } else {
+            return true;
+          }
+        }));
+    }
+
+    return of(false);
   }
 
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, 'OK');
+  deleteUser(row: UserTable): Observable<boolean> {
+    if (row.name === this.authService.loggedUser?.name) {
+      this.snackBar.open("Der aktuelle Benutzer kann nicht gelöscht werden.", "OK");
+      return of(false);
+    }
+    if (this._lastDataObject) {
+      const user = this._lastDataObject[row.name];
+      
+      if (!!user) {
+        return this.apiService.deleteUser(row.name)
+          .pipe(map(resp => {
+            if (resp.status == API_STATUS.ERROR) {
+              this.snackBar.open("Benutzer konnte nicht gelöscht werden.", "OK");
+              return false;
+            
+            } else {
+              const users = (<DataResponse>resp).payload;
+              this.parseUsers(users);
+              this._lastDataObject = users;
+              return true;
+            }
+          }));
+      }
+    }
+
+    return of(false);
+  }
+
+  resetPwd(user: string) {
+    this.apiService.resetPwd(user).subscribe(resp => {
+
+    });
   }
 }

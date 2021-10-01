@@ -1,0 +1,51 @@
+$breakpoint:  768px;
+
+mat-form-field, table, tr {
+    width: 100%;
+
+    .user {
+        color: grey;
+    }
+
+    .icon-column {
+        width: 50px;
+    }
+
+    mat-checkbox {
+        margin: 0 12px;
+    }
+}
+
+.div-table {
+    overflow-y: auto;
+
+    @media (max-width: $breakpoint) {
+        margin-left: -24px;
+        margin-right: -24px;
+    }
+}
+
+tr {
+
+    &:hover .edit {
+        display: block;
+    }
+
+    .edit {
+        display: none;
+    }
+}
+
+.stat-wrapper {
+    margin: 12px 0;
+
+    .stat span {
+        height: 24px;
+        vertical-align: super;
+        margin-left: 12px;
+    }
+}
+
+mat-expansion-panel {
+    padding: 24px;
+}

@@ -28,11 +28,12 @@
         include($BASE . 'api/admin/user.php');
     }
     
-    // users update
+    // update users
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-user'])) {
         $payload = json_decode(file_get_contents("php://input"), true);
 
         write_file($BASE . 'data', json_encode($payload));
+        respondJSON(201, "");
     }
 
     // delete user
