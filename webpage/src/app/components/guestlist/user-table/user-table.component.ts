@@ -4,12 +4,9 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Observable, of } from 'rxjs';
-import { concatAll, map } from 'rxjs/operators';
+import { DialogService } from 'src/app/services/dialog/dialog.service';
 import { GuestService } from 'src/app/services/guest/guest.service';
-import { ConfirmDialogData } from 'src/models/dialog';
 import { UserTable } from 'src/models/guest-table';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-user-table',
@@ -33,7 +30,7 @@ export class UserTableComponent {
   @ViewChild(MatSort) sort: MatSort | undefined;
 
 
-  constructor(private guestService: GuestService, private iconRegistry: MatIconRegistry, public dialog: MatDialog) {
+  constructor(private guestService: GuestService, private iconRegistry: MatIconRegistry, private dialogService: DialogService) {
 
     this.dataSource = new MatTableDataSource<UserTable>([]);
     this.guestService.getData();
@@ -68,7 +65,7 @@ export class UserTableComponent {
   }
 
   deleteUser(row: UserTable) {
-    return this.openDialog(`Soll der Benutzer ${row.name} gelöscht werden?`).afterClosed()
+    return this.dialogService.openConfirmDialog(`Soll der Benutzer ${row.name} gelöscht werden?`).afterClosed()
       .subscribe(result => {
         if (result === 'ok') {     
           this.guestService.deleteUser(row);
@@ -77,20 +74,11 @@ export class UserTableComponent {
   }
 
   resetPwd(row: UserTable) {
-    this.openDialog(`Soll das Passwort von Benutzer ${row.name} zurückgesetzt werden?`).afterClosed().subscribe(result => {
+    this.dialogService.openConfirmDialog(`Soll das Passwort von Benutzer ${row.name} zurückgesetzt werden?`).afterClosed().subscribe(result => {
       if (result === 'ok') {     
         this.guestService.resetPwd(row.name);
       }
     });
-  }
-
-  openDialog(question: string) {
-    return this.dialog.open(ConfirmDialogComponent, {
-      width: '250px',
-      data: <ConfirmDialogData>{
-        question
-      }
-    })
   }
 
 }

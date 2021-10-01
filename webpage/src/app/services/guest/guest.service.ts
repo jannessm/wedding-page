@@ -9,6 +9,7 @@ import { v4 as uuid } from 'uuid';
 import { API_STATUS, DataResponse } from 'src/models/api';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map } from 'rxjs/operators';
+import { DialogService } from '../dialog/dialog.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,8 @@ export class GuestService {
   constructor(
     private apiService: ApiService,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialogService: DialogService,
   ) {
     this.guests = new Observable<GuestTable[]>(subscriber => this._guests = subscriber);
     this.users = new Observable<UserTable[]>(subscriber => this._users = subscriber);
@@ -199,7 +201,13 @@ export class GuestService {
   resetPwd(user: string) {
     this.apiService.resetPwd(user).subscribe(resp => {
       if (resp.status === API_STATUS.SUCCESS) {
-        this.snackBar.open("Passwort wurde zurückgesetzt.", "OK");
+        let password = "";
+
+        if (this._lastDataObject && this._lastDataObject[user]) {
+          password = this._lastDataObject[user].firstPassword;
+        }
+
+        this.dialogService.openInfoDialog(`Passwort wurde auf "${password}" zurückgesetzt.`);
       }
     });
   }

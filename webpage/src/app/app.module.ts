@@ -46,7 +46,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthGuard } from './guards/auth.guard';
 import { IsLoggedGuard } from './guards/is-logged.guard';
 import { UserTableComponent } from './components/guestlist/user-table/user-table.component';
-import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from './components/dialogs/confirm-dialog/confirm-dialog.component';
+import { InfoDialogComponent } from './components/dialogs/info-dialog/info-dialog.component';
  
 
 
@@ -66,7 +67,8 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     GuestlistFormComponent,
     GuestlistTableComponent,
     UserTableComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    InfoDialogComponent
   ],
   imports: [
     BrowserModule,
