@@ -45,5 +45,18 @@
 
         write_file($BASE . 'data', json_encode($user_data));
         
-        respondJSON(200, filterUser($user_data));
+        respondJSON(201, filterUser($user_data));
+    }
+
+    // reset passwort for user
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['reset-pwd'])) {
+        $payload = json_decode(file_get_contents("php://input"), true);
+        $user_data = json_decode(read_file($BASE . 'data'), true);
+
+        $user_data[$payload['name']]['password'] = md5($user_data[$payload['name']]['firstPassword']);
+        $user_data[$payload['name']]['firstLogin'] = true;
+
+        write_file($BASE . 'data', json_encode($user_data));
+        
+        respondJSON(201, "done");
     }

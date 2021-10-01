@@ -198,7 +198,9 @@ export class GuestService {
 
   resetPwd(user: string) {
     this.apiService.resetPwd(user).subscribe(resp => {
-
+      if (resp.status === API_STATUS.SUCCESS) {
+        this.snackBar.open("Passwort wurde zurückgesetzt.", "OK");
+      }
     });
   }
 }
