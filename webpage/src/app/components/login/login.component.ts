@@ -13,23 +13,7 @@ export class LoginComponent implements OnInit {
   form: FormGroup;
   wrongCredentials = false;
 
-  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
-    // redirect if jwt is valid
-    this.authService.loginStatusChanged.subscribe(isLoggedIn => {      
-      
-      // first login? yes => choose new password
-      if (isLoggedIn && this.authService.loggedUser?.firstLogin) {
-        this.authService.isLoggedIn = true;
-        this.authService.isAdmin = this.authService.loggedUser.isAdmin;
-        this.router.navigate(['/', 'user', 'change-password']);
-      
-      } else if (isLoggedIn && !!this.authService.loggedUser) {
-        this.authService.isAdmin = this.authService.loggedUser.isAdmin;
-        this.authService.isLoggedIn = true;
-        this.router.navigate(['/', 'user', 'program']);
-      }
-    });
-    
+  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {    
     this.form = fb.group({
       'username': ['', Validators.required],
       'password': ['', Validators.required]
@@ -50,13 +34,26 @@ export class LoginComponent implements OnInit {
     this.authService.login(
       this.form.controls.username.value,
       md5(this.form.controls.password.value)
-    ).subscribe(data => {
-      if (!data) {
+    ).subscribe(user => {
+      // no user data returned === wrong credentials
+      if (!user) {
         this.wrongCredentials = true;
 
         Object.values(this.form.controls).forEach(control => {
           control.setErrors({});
         });
+
+      // login successful => redirect to change-password/previous-url/default page
+      } else {
+        if (user.firstLogin) {
+          this.router.navigate(['/', 'user', 'change-password']);
+        
+        } else if (this.authService.redirectUrl) {
+          this.router.navigateByUrl(this.authService.redirectUrl);
+        
+        } else {
+          this.router.navigateByUrl('/user/program');
+        }
       }
     })
   }

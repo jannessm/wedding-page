@@ -42,6 +42,8 @@ import { GuestlistTableComponent } from './components/guestlist/guestlist-table/
 import { COOKIE_CONFIG } from 'src/models/cookie-consent-config';
 import { JwtInterceptor } from './services/api/jwt.interceptor';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { AuthGuard } from './guards/auth.guard';
+import { IsLoggedGuard } from './guards/is-logged.guard';
  
 
 
@@ -89,6 +91,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi:true},
+    AuthGuard,
+    IsLoggedGuard,
   ],
   bootstrap: [AppComponent]
 })

@@ -1,5 +1,9 @@
 {
   "dependencies": {
     "@angular/cli": "^12.2.6"
+  },
+  "scripts": {
+    "server": "php -S localhost:8080 -t server/",
+    "page": "cd webpage; npm start"
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subscriber } from 'rxjs';
+import { Observable, of, Subscriber } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiService } from '../api/api.service';
 import { User } from 'src/models/user';
@@ -8,41 +8,53 @@ import { LocalStorageService } from '../local-storage/local-storage.service';
 
 import jwt_decode from 'jwt-decode';
 import { JWT } from 'src/models/jwt';
+import { ThrowStmt } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  _loginStatusChanged: Subscriber<boolean> | undefined;
-  loginStatusChanged: Observable<boolean>;
-  isLoggedIn = false;
+  _jwtValidation: Observable<boolean>;
+  _isLoggedIn: boolean | undefined;
   isAdmin = false;
 
   // store the URL so we can redirect after logging in
   redirectUrl: string | null = null;
 
-  // loggedUser: User | null = {
-  //   name: "jannes",
-  //   isAdmin: true,
-  //   firstLogin: false,
-  //   firstPassword: "test",
-  //   guests: []
-  // };
   loggedUser: User | null = null;
 
   constructor(private api: ApiService, private lsService: LocalStorageService) {
-    this.loginStatusChanged = new Observable<boolean>(subscriber => this._loginStatusChanged = subscriber);
 
-    this.loginStatusChanged.subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
     
     if (!!this.lsService.jwt) {
       const jwt = this.lsService.jwt;
-      this.api.validateJWT(jwt).subscribe(resp => {
-        if (resp.status === API_STATUS.SUCCESS && !!jwt) {
-          this.setJWT((<DataResponse>resp).payload);
-        }
-      });
+      this._jwtValidation = this.api.validateJWT(jwt).pipe(
+        map(resp => {
+          if (resp.status === API_STATUS.SUCCESS && !!jwt) {
+            this.setJWT((<DataResponse>resp).payload);
+            return true;
+          } else {
+            return false;
+          }
+        }));
+    } else {
+      this._jwtValidation = of(false);
     }
+  }
+
+  isLoggedIn(): Observable<boolean> {
+    // no JWT set
+    if (!this.lsService.jwt) {
+      return of(false);
+    }
+
+    // logged in is set
+    if (this._isLoggedIn != undefined) {
+      return of(this._isLoggedIn);
+    }
+
+    // get result from jwt validation
+    return this._jwtValidation;
   }
 
   login(user: string, pwd: string): Observable<User | undefined> {
@@ -66,8 +78,8 @@ export class AuthService {
   }
 
   logout(): void {
-    this._loginStatusChanged?.next(false);
     this.loggedUser = null;
+    this._isLoggedIn = false;
     this.lsService.jwt = undefined;
   }
 
@@ -75,7 +87,8 @@ export class AuthService {
     const jwt_decoded: JWT = jwt_decode(jwt);
     
     this.loggedUser = <User>jwt_decoded.user;
-    this._loginStatusChanged?.next(true);
+    this._isLoggedIn = true;
+    this.isAdmin = (<User>jwt_decoded.user).isAdmin;
 
     return jwt_decoded.user;
   }

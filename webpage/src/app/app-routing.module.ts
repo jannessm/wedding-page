@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminGuard } from './admin.guard';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 import { AccomondationsComponent } from './components/accomondations/accomondations.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
@@ -11,6 +11,7 @@ import { GiftsComponent } from './components/gifts/gifts.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProgrammComponent } from './components/programm/programm.component';
 import { RegistrationComponent } from './components/registration/registration.component';
+import { IsLoggedGuard } from './guards/is-logged.guard';
 
 const routes: Routes = [
   {path: 'user', canActivate: [AuthGuard], children: [
@@ -22,9 +23,9 @@ const routes: Routes = [
     {path: 'admin', component: AdminComponent, canActivate: [AdminGuard]},
     {path: 'change-password', component: ChangePasswordComponent},
   ]},
-  {path: 'login', component: LoginComponent},
+  {path: 'login', component: LoginComponent, canActivate:[IsLoggedGuard]},
   {path: 'cookies', component: CookieComponent},
-  {path: '', redirectTo: '/login', pathMatch: 'full'}
+  {path: '', redirectTo: '/user/program', pathMatch: 'full'}
 ];
 
 @NgModule({

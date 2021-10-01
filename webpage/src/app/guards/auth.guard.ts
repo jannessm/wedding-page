@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthService } from './services/auth/auth.service';
+import { Observable, of } from 'rxjs';
+import { catchError, map, take, tap } from 'rxjs/operators';
+import { AuthService } from '../services/auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,17 +15,19 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const url: string = state.url;
     
-    return this.checkLogin(url);
-  }
-
-  checkLogin(url: string): true|UrlTree {
-    if (this.authService.isLoggedIn) { return true; }
-
-    // Store the attempted URL for redirecting
-    this.authService.redirectUrl = url;
-
-    // Redirect to the login page
-    return this.router.parseUrl('/login');
+    return this.authService.isLoggedIn().pipe(
+      map(loggedIn => {
+        if (loggedIn) {
+          return true;
+        
+        } else {
+          this.authService.redirectUrl = url;
+          throw Error();
+        }
+      }), catchError((err) => {
+        return of(this.router.parseUrl('/login'));
+      })
+    );
   }
   
 }
