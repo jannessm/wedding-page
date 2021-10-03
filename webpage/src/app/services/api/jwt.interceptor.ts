@@ -12,8 +12,6 @@ export class JwtInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log(`JwtInterceptor - ${req.url}`);
-
     let jsonReq: HttpRequest<any> = req.clone();
 
     if (this.lsService.jwt != null || this.lsService.jwt !== undefined) {

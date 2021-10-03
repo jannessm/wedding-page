@@ -67,8 +67,6 @@ export class AuthService {
           this.lsService.jwt = r.payload;
           return this.setJWT(r.payload);
         
-        } else {
-          console.log('wrong credentials.');
         }
         
         return data;

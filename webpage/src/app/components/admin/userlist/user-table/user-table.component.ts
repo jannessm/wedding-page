@@ -32,7 +32,6 @@ export class UserTableComponent {
 
     this.dataSource = new MatTableDataSource<UserTable>([]);
     this.userService.users.subscribe( users => {
-      console.log('user');
       this.dataSource.data = users;
     });
   }

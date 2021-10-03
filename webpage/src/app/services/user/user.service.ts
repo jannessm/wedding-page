@@ -25,7 +25,6 @@ export class UserService {
     this.users = new Subject<UserTable[]>();
     
     this.cacheService.data.subscribe(data => {
-      console.log("u");
       this.parseData(data);
     });
   }

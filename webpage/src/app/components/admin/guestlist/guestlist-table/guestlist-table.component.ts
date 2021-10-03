@@ -74,7 +74,6 @@ export class GuestlistTableComponent implements AfterViewInit {
   }
 
   saveChanges(row: GuestTable) {
-    console.log("save changes");
     this.guestService.updateGuest(row.user, {
       uuid: row.uuid,
       name: row.name,
@@ -86,7 +85,7 @@ export class GuestlistTableComponent implements AfterViewInit {
       song: row.song
     }).subscribe(oldGuest => {
       if(!!oldGuest) {
-        console.log('hi');
+        // TODO: handle failed changes
       }
     });
   }

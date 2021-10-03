@@ -22,7 +22,6 @@ export class LocalStorageService implements OnDestroy {
  
     this.statusChangeSubscription = this.ccService.statusChange$.subscribe(
       () => {
-        console.log("cookie accepted");
         ls.set(COOKIE.CONSENT_POPUP, COOKIE.ACCEPTED);
       });
 

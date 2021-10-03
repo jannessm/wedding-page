@@ -24,7 +24,6 @@ export class CacheService {
 
   handleData(resp: ApiResponse) {
     const users = (<DataResponse>resp).payload;
-    console.log(this.data, users);
     this._lastDataObject = users;
     this.data.next(users);
   }

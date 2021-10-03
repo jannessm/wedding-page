@@ -26,7 +26,6 @@ export class GuestService {
     this.guests = new Observable<GuestTable[]>(subscriber => this._guests = subscriber);
     
     this.cacheService.data.subscribe(data => {
-      console.log('g');
       this.parseData(data);
     })
   }
