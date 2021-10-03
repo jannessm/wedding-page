@@ -1,0 +1,33 @@
+mat-card {
+    background: white;
+
+    h1 {
+        margin-top: 50px;
+        width: 100%;
+        text-align: center;
+        font-size: 4em;
+    }
+
+    form {
+        width: 100%;
+    
+        mat-form-field {
+            width: 100%;
+        }
+    
+        .guest {
+            display: inline-block;
+            width: calc(100% - 48px - 24px);
+        }
+        .guest-label {
+            vertical-align: top;
+            margin: 12px;
+            display: inline-block;
+            width: 48px;
+        }
+    
+        mat-check-box {
+            margin: 12px;
+        }
+    }
+}

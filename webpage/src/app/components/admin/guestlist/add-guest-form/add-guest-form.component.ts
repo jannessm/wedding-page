@@ -24,6 +24,7 @@ export class AddGuestFormComponent {
 
   form: FormGroup;
   users: string[] = [];
+  filteredUsers: string[] = [];
 
   ages = Object.values(AGE_CATEGORIES);
   agesLabels = AGE_CATEGORY_LABELS;
@@ -42,6 +43,7 @@ export class AddGuestFormComponent {
 
     this.userService.users.subscribe(users => {
       this.users = users.map(u => u.name);
+      this.filteredUsers = this.users;
     });
   }
 
@@ -86,6 +88,10 @@ export class AddGuestFormComponent {
 
         return of(!!this.users.find(user => user === value) ? null : {invalidUser: true});
       }
+  }
+
+  filterUsers() {
+    this.filteredUsers = this.users.filter(user => user.includes(this.form.controls.username.value));
   }
 
 }

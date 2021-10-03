@@ -1,1 +1,31 @@
-<p>registration works!</p>
+<mat-card>
+    <h1>Sag uns wer kommt!</h1>
+    <form *ngIf="!!user">
+        <div *ngFor="let guestControl of form.controls; index as idx">
+            <h3>{{user.guests[idx].name}} {{user.guests[idx].lastname}}</h3>
+            <span [formGroup]="$any(guestControl)">
+                <mat-checkbox formControlName="isComming">Zusagen</mat-checkbox>
+    
+                <mat-form-field>
+                    <mat-label>Ernährungsweise</mat-label>
+                    <mat-select formControlName="diet">
+                        <mat-option *ngFor="let diet of diets" [value]="diet">{{dietLabels[diet]}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Allergien</mat-label>
+                    <mat-select formControlName="allergies">
+                        <mat-option *ngFor="let diet of diets" [value]="diet">{{dietLabels[diet]}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </span>
+        </div>
+    </form>
+    
+    <span *ngIf="!user">Etwas ging schief. Bitte benachrichtige den Admin!</span>
+    
+    <mat-card-actions>
+        <button mat-button (click)="saveChanges()" [disabled]="form.invalid">Speichern</button>
+    </mat-card-actions>
+</mat-card>

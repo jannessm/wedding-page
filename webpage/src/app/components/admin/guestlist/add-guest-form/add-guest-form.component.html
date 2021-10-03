@@ -11,9 +11,9 @@
             <input type="text"
                 matInput
                 formControlName="username"
-                [matAutocomplete]="auto">
+                [matAutocomplete]="auto" (input)="filterUsers()">
             <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let option of users" [value]="option">
+                <mat-option *ngFor="let option of filteredUsers" [value]="option">
                   {{option}}
                 </mat-option>
             </mat-autocomplete>

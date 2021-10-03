@@ -50,7 +50,7 @@ export const DIET_LABELS: {[key: string]: string} = {
     VEGAN: "vegan",
     VEGETARIAN: "vegetarisch",
     // GLUTEN_FREE: "glutenfrei",
-    NORMAL: "normal"
+    NORMAL: "mit Fleisch"
 }
 
 export const DIET_ICONS: {[key: string]: string} = {
