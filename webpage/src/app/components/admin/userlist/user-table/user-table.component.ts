@@ -1,11 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatIconRegistry } from '@angular/material/icon';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
-import { GuestService } from 'src/app/services/guest/guest.service';
+import { UserService } from 'src/app/services/user/user.service';
 import { UserTable } from 'src/models/guest-table';
 
 @Component({
@@ -30,11 +28,11 @@ export class UserTableComponent {
   @ViewChild(MatSort) sort: MatSort | undefined;
 
 
-  constructor(private guestService: GuestService, private iconRegistry: MatIconRegistry, private dialogService: DialogService) {
+  constructor(private userService: UserService, private dialogService: DialogService) {
 
     this.dataSource = new MatTableDataSource<UserTable>([]);
-    this.guestService.getData();
-    this.guestService.users.subscribe( users => {
+    this.userService.users.subscribe( users => {
+      console.log('user');
       this.dataSource.data = users;
     });
   }
@@ -61,14 +59,14 @@ export class UserTableComponent {
   }
 
   saveChanges(row: UserTable) {
-    this.guestService.updateUser(row);
+    this.userService.updateUser(row).subscribe();
   }
 
   deleteUser(row: UserTable) {
     return this.dialogService.openConfirmDialog(`Soll der Benutzer ${row.name} gelöscht werden?`).afterClosed()
       .subscribe(result => {
-        if (result === 'ok') {     
-          this.guestService.deleteUser(row);
+        if (result === 'ok') {
+          this.userService.deleteUser(row).subscribe();
         }
       });
   }
@@ -76,7 +74,7 @@ export class UserTableComponent {
   resetPwd(row: UserTable) {
     this.dialogService.openConfirmDialog(`Soll das Passwort von Benutzer ${row.name} zurückgesetzt werden?`).afterClosed().subscribe(result => {
       if (result === 'ok') {     
-        this.guestService.resetPwd(row.name);
+        this.userService.resetPwd(row.name);
       }
     });
   }

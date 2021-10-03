@@ -3,18 +3,18 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import {randomPassword, lower, upper, digits} from 'secure-random-password';
 import { ApiService } from 'src/app/services/api/api.service';
-import { GuestService } from 'src/app/services/guest/guest.service';
-import { API_STATUS, DataResponse, ErrorResponse } from 'src/models/api';
-import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, DIETS, Guest, User, UserResponse } from 'src/models/user';
+import { UserService } from 'src/app/services/user/user.service';
+import { API_STATUS, ErrorResponse } from 'src/models/api';
+import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, DIETS, Guest, User } from 'src/models/user';
 
 import { v4 as uuid } from 'uuid';
 
 @Component({
-  selector: 'app-guestlist-form',
-  templateUrl: './guestlist-form.component.html',
-  styleUrls: ['./guestlist-form.component.scss']
+  selector: 'app-add-user-form',
+  templateUrl: './add-user-form.component.html',
+  styleUrls: ['./add-user-form.component.scss']
 })
-export class GuestlistFormComponent {
+export class AddUserFormComponent {
   @Input()
   expanded: boolean = false;
 
@@ -30,7 +30,7 @@ export class GuestlistFormComponent {
   agesLabels = AGE_CATEGORY_LABELS;
   agesIcons = AGE_CATEGORY_ICONS;
 
-  constructor(private fb: FormBuilder, private apiService: ApiService, private guestService: GuestService) {
+  constructor(private fb: FormBuilder, private apiService: ApiService, private userService: UserService) {
     this.guests = fb.array([
       fb.group({
         'name': ['', Validators.required],
@@ -69,7 +69,7 @@ export class GuestlistFormComponent {
     const isAdmin = this.form.controls.admin.value;
     const guests = this.getGuests();
 
-    this.apiService.addUser(<User>{
+    this.userService.addUser(<User>{
       name: user,
       firstPassword: pwd,
       isAdmin,
@@ -80,9 +80,6 @@ export class GuestlistFormComponent {
         console.log((<ErrorResponse>resp).message);
         this.form.controls.username.setErrors({'userExists': true});
       } else {
-        const users = (<DataResponse>resp).payload;
-        this.guestService.parseUsers(users);
-
         this.resetForm();
         this.form.setErrors(null);
       }

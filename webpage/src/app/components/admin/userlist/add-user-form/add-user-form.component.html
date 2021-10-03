@@ -1,7 +1,7 @@
 <mat-expansion-panel [expanded]="expanded" (opened)="this.opened.emit()" (closed)="this.closed.emit()" hideToggle>
     <mat-expansion-panel-header>
         <mat-panel-title>
-          Benutzer mit Gästen hinzufügen
+          Benutzer hinzufügen
         </mat-panel-title>
     </mat-expansion-panel-header>
   
@@ -47,6 +47,6 @@
       </form>
       
       <mat-action-row>
-        <button mat-button (click)="addUser()">Hinzufügen</button>
+        <button mat-button (click)="addUser()" [disabled]="form.invalid">Hinzufügen</button>
       </mat-action-row>
 </mat-expansion-panel>

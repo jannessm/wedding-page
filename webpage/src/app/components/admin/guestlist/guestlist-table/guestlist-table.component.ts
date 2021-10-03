@@ -3,6 +3,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { DialogService } from 'src/app/services/dialog/dialog.service';
 import { GuestService } from 'src/app/services/guest/guest.service';
 import { GuestTable } from 'src/models/guest-table';
 import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, DIETS, DIET_ICONS, DIET_LABELS } from 'src/models/user';
@@ -13,7 +14,7 @@ import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, DIETS, DIET_IC
   styleUrls: ['./guestlist-table.component.scss']
 })
 export class GuestlistTableComponent implements AfterViewInit {
-  displayedColumns: string[] = ['user', 'name', 'lastname', 'age', 'diet', 'isRegistered', 'edit'];
+  displayedColumns: string[] = ['user', 'name', 'lastname', 'age', 'diet', 'isRegistered', 'edit', 'delete'];
   dataSource: MatTableDataSource<GuestTable>;
 
   @Input()
@@ -42,10 +43,9 @@ export class GuestlistTableComponent implements AfterViewInit {
   vegan = 0;
   vegetarian = 0;
 
-  constructor(private guestService: GuestService, private iconRegistry: MatIconRegistry) {
+  constructor(private guestService: GuestService, private dialogService: DialogService) {
 
     this.dataSource = new MatTableDataSource<GuestTable>([]);
-    this.guestService.getData();
     this.guestService.guests.subscribe( guests => {
       this.dataSource.data = guests;
       this.countData(guests);
@@ -74,12 +74,31 @@ export class GuestlistTableComponent implements AfterViewInit {
   }
 
   saveChanges(row: GuestTable) {
-    this.guestService.updateData(row);
+    console.log("save changes");
+    this.guestService.updateGuest(row.user, {
+      uuid: row.uuid,
+      name: row.name,
+      lastname: row.lastname,
+      age: row.age,
+      isRegistered: row.isRegistered,
+      diet: row.diet,
+      allergies: row.allergies,
+      song: row.song
+    }).subscribe(oldGuest => {
+      if(!!oldGuest) {
+        console.log('hi');
+      }
+    });
   }
 
-  // deleteUser(row: GuestTable) {
-  //   this.guestService.deleteData(row);
-  // }
+  deleteGuest(row: GuestTable) {
+    return this.dialogService.openConfirmDialog(`Soll der Gast ${row.name} gelöscht werden?`).afterClosed()
+      .subscribe(result => {
+        if (result === 'ok') {
+          this.guestService.deleteGuest(row.user, row.uuid).subscribe();
+        }
+      });
+  }
 
   countData(guests: GuestTable[]) {
     this.adults = [0, 0];

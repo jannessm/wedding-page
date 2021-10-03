@@ -1,5 +1,5 @@
 <div class="desktop">
-  <mat-toolbar *ngIf='authService.isLoggedIn && authService.loggedUser && !authService.loggedUser.firstLogin'>
+  <mat-toolbar *ngIf='authService._isLoggedIn && authService.loggedUser && !authService.loggedUser.firstLogin'>
 
       <button mat-button routerLink='/user/program'>Programm</button>
       <button mat-button routerLink='/user/registration'>Rückmeldung</button>
@@ -18,7 +18,7 @@
 </div>
 
 <div class="mobile">
-  <mat-toolbar *ngIf='authService.isLoggedIn && authService.loggedUser && !authService.loggedUser.firstLogin'>
+  <mat-toolbar *ngIf='authService._isLoggedIn && authService.loggedUser && !authService.loggedUser.firstLogin'>
   
     <button mat-button [matMenuTriggerFor]="menu" aria-label="Menü" class="menu-button">
       Menü

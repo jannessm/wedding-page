@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -33,21 +34,23 @@ import { ProgrammComponent } from './components/programm/programm.component';
 import { DressCodeComponent } from './components/dress-code/dress-code.component';
 import { AdminComponent } from './components/admin/admin.component';
 
-import {NgcCookieConsentModule} from 'ngx-cookieconsent';
+import { NgcCookieConsentModule } from 'ngx-cookieconsent';
 import { CookieComponent } from './components/cookie/cookie.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
-import { GuestlistComponent } from './components/guestlist/guestlist.component';
-import { GuestlistFormComponent } from './components/guestlist/guestlist-form/guestlist-form.component';
-import { GuestlistTableComponent } from './components/guestlist/guestlist-table/guestlist-table.component';
+import { GuestlistComponent } from './components/admin/guestlist/guestlist.component';
+import { AddUserFormComponent } from './components/admin/userlist/add-user-form/add-user-form.component';
+import { GuestlistTableComponent } from './components/admin/guestlist/guestlist-table/guestlist-table.component';
 
 import { COOKIE_CONFIG } from 'src/models/cookie-consent-config';
 import { JwtInterceptor } from './services/api/jwt.interceptor';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AuthGuard } from './guards/auth.guard';
 import { IsLoggedGuard } from './guards/is-logged.guard';
-import { UserTableComponent } from './components/guestlist/user-table/user-table.component';
+import { UserTableComponent } from './components/admin/userlist/user-table/user-table.component';
 import { ConfirmDialogComponent } from './components/dialogs/confirm-dialog/confirm-dialog.component';
 import { InfoDialogComponent } from './components/dialogs/info-dialog/info-dialog.component';
+import { AddGuestFormComponent } from './components/admin/guestlist/add-guest-form/add-guest-form.component';
+import { UserlistComponent } from './components/admin/userlist/userlist.component';
  
 
 
@@ -64,11 +67,13 @@ import { InfoDialogComponent } from './components/dialogs/info-dialog/info-dialo
     CookieComponent,
     ChangePasswordComponent,
     GuestlistComponent,
-    GuestlistFormComponent,
+    AddUserFormComponent,
     GuestlistTableComponent,
     UserTableComponent,
     ConfirmDialogComponent,
-    InfoDialogComponent
+    InfoDialogComponent,
+    AddGuestFormComponent,
+    UserlistComponent
   ],
   imports: [
     BrowserModule,
@@ -79,6 +84,7 @@ import { InfoDialogComponent } from './components/dialogs/info-dialog/info-dialo
     NgcCookieConsentModule.forRoot(COOKIE_CONFIG),
     FormsModule,
     
+    MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,

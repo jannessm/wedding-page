@@ -8,7 +8,6 @@ import { LocalStorageService } from '../local-storage/local-storage.service';
 
 import jwt_decode from 'jwt-decode';
 import { JWT } from 'src/models/jwt';
-import { ThrowStmt } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'

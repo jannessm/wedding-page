@@ -40,6 +40,7 @@ export class LocalStorageService implements OnDestroy {
     
     const decoded: JWT = jwtDecode(jwt);
 
+    // TODO:
     // if (decoded.exp <= Date.now()) {
     //   this.jwt = undefined;
     //   return;
