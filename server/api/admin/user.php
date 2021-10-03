@@ -26,7 +26,8 @@
                 'diet' => $guest['diet'],
                 'song' => $guest['song'],
                 'isRegistered' => $guest['isRegistered'],
-                'allergies' => $guest['allergies']
+                'allergies' => $guest['allergies'],
+                'otherAllergies' => $guest['otherAllergies'],
             ));
         }
 

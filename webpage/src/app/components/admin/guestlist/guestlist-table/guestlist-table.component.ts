@@ -36,7 +36,7 @@ export class GuestlistTableComponent implements AfterViewInit {
   dietIcons = DIET_ICONS;
 
   // comming | not comming | total 
-  adults = [0,0,0];
+  adults = [0, 0, 0];
   children = [0, 0, 0];
   infants = [0, 0, 0];
 
@@ -82,6 +82,7 @@ export class GuestlistTableComponent implements AfterViewInit {
       isRegistered: row.isRegistered,
       diet: row.diet,
       allergies: row.allergies,
+      otherAllergies: row.otherAllergies,
       song: row.song
     }).subscribe(oldGuest => {
       if(!!oldGuest) {

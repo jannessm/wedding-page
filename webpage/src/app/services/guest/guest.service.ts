@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, Subscriber } from 'rxjs';
-import { GuestTable, UserTable } from 'src/models/guest-table';
-import { Guest, User, UserResponse } from 'src/models/user';
-import { ApiService } from '../api/api.service';
-import { AuthService } from '../auth/auth.service';
+import { GuestTable } from 'src/models/guest-table';
+import { Guest, UserResponse } from 'src/models/user';
 
 import { v4 as uuid } from 'uuid';
-import { ApiResponse, API_STATUS, DataResponse } from 'src/models/api';
+import { API_STATUS } from 'src/models/api';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map } from 'rxjs/operators';
-import { DialogService } from '../dialog/dialog.service';
 import { CacheService } from '../cache/cache.service';
 
 @Injectable({
@@ -51,7 +48,8 @@ export class GuestService {
           diet: guest.diet,
           song: guest.song,
           editMode: false,
-          allergies: ""
+          allergies: [],
+          otherAllergies: ''
         }
       }).forEach(val => guestsData.push(val));
     });
@@ -104,6 +102,7 @@ export class GuestService {
             lastname: guest.lastname,
             age: guest.age,
             allergies: guest.allergies,
+            otherAllergies: guest.otherAllergies,
             diet: guest.diet,
             isRegistered: guest.isRegistered,
             uuid: guest.uuid,
@@ -115,6 +114,7 @@ export class GuestService {
           guest.lastname = updatedGuest.lastname;
           guest.age = updatedGuest.age;
           guest.allergies = updatedGuest.allergies;
+          guest.otherAllergies = updatedGuest.otherAllergies;
           guest.diet = updatedGuest.diet;
           guest.isRegistered = updatedGuest.isRegistered;
         }
@@ -129,6 +129,7 @@ export class GuestService {
             updatedGuest.lastname = oldGuest.lastname;
             updatedGuest.age = oldGuest.age;
             updatedGuest.allergies = oldGuest.allergies;
+            updatedGuest.otherAllergies = oldGuest.otherAllergies;
             updatedGuest.diet = oldGuest.diet;
             updatedGuest.isRegistered = oldGuest.isRegistered;
 

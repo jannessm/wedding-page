@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -96,6 +97,7 @@ import { UserlistComponent } from './components/admin/userlist/userlist.componen
     MatIconModule,
     MatMenuModule,
     MatPaginatorModule,
+    MatRadioModule,
     MatSelectModule,
     MatSnackBarModule,
     MatSortModule,

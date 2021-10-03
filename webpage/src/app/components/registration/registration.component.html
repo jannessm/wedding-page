@@ -4,21 +4,35 @@
         <div *ngFor="let guestControl of form.controls; index as idx">
             <h3>{{user.guests[idx].name}} {{user.guests[idx].lastname}}</h3>
             <span [formGroup]="$any(guestControl)">
-                <mat-checkbox formControlName="isComming">Zusagen</mat-checkbox>
+                <mat-label>Rückmeldung*</mat-label>
+                <mat-radio-group formControlName="isComing">
+                    <mat-radio-button [value]="true">Zusagen</mat-radio-button>
+                    <mat-radio-button [value]="false">Absagen</mat-radio-button>
+                </mat-radio-group>
     
                 <mat-form-field>
-                    <mat-label>Ernährungsweise</mat-label>
+                    <mat-label>Ernährungsweise*</mat-label>
                     <mat-select formControlName="diet">
                         <mat-option *ngFor="let diet of diets" [value]="diet">{{dietLabels[diet]}}</mat-option>
                     </mat-select>
                 </mat-form-field>
 
                 <mat-form-field>
-                    <mat-label>Allergien</mat-label>
-                    <mat-select formControlName="allergies">
-                        <mat-option *ngFor="let diet of diets" [value]="diet">{{dietLabels[diet]}}</mat-option>
+                    <mat-label>Allergien/Intoleranzen</mat-label>
+                    <mat-select formControlName="allergies" multiple>
+                        <mat-option *ngFor="let allergy of allergies" [value]="allergy">{{allergiesLabels[allergy]}}</mat-option>
                     </mat-select>
                 </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Sonstige Allergien/Intoleranzen</mat-label>
+                    <input matInput formControlName="otherAllergies">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Bei diesem Lied tanze ich (gerne auch einen Youtube-Link):</mat-label>
+                    <input matInput formControlName="song" (change)="youtubeURLs[idx] = updateSaveYoutubeURL($event)">
+                </mat-form-field>
+                <iframe *ngIf="!!youtubeURLs[idx]" width="560" height="315" [src]="youtubeURLs[idx]" frameborder="0" allowfullscreen></iframe>
             </span>
         </div>
     </form>

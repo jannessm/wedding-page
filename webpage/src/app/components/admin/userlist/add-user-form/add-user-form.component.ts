@@ -96,7 +96,8 @@ export class AddUserFormComponent {
         isRegistered: false,
         song: '',
         diet: DIETS.NORMAL,
-        allergies: ''
+        allergies: [],
+        otherAllergies: ''
       };
     });
   }

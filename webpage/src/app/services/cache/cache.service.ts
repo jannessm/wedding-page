@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject, Subscriber } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { ApiResponse, API_STATUS, DataResponse } from 'src/models/api';
 import { User, UserResponse } from 'src/models/user';
@@ -56,6 +56,29 @@ export class CacheService {
   updateUser(): Observable<undefined | ApiResponse> {
     if (this._lastDataObject) {
       return this.apiService.updateUsers(this._lastDataObject);
+    } else {
+      return of();
+    }
+  }
+
+  updateUserNonAdmin(updatedUser: User): Observable<undefined | ApiResponse> {
+    if (this._lastDataObject) {
+      return this.apiService.updateUser(updatedUser).pipe(
+        tap(resp => {
+          if (resp.status === API_STATUS.SUCCESS && this._lastDataObject) {
+            const user = this._lastDataObject[updatedUser.name];
+
+            user.guests.forEach((guest, id) => {
+              guest.diet = updatedUser.guests[id].diet;
+              guest.allergies = updatedUser.guests[id].allergies;
+              guest.otherAllergies = updatedUser.guests[id].otherAllergies;
+              guest.song = updatedUser.guests[id].song;
+            });
+
+            // this.handleData(this._lastDataObject);
+          }
+        })
+      );
     } else {
       return of();
     }

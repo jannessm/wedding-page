@@ -26,3 +26,8 @@
     if (isset($_POST) && isset($_GET['change-password'])) {
         include($BASE . "api/auth/change-password.php");
     }
+
+    // update User
+    if (isset($_POST) && isset($_GET['update-user'])) {
+        include($BASE . "api/auth/update-user.php");
+    }

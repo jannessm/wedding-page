@@ -47,6 +47,10 @@ export class ApiService {
     return this.http.post<ApiResponse>(this.BASE_API + 'admin/?update-user', user);
   }
 
+  updateUser(user: User): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.BASE_API + 'auth/?update-user', user);
+  }
+
   deleteUser(user: string): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.BASE_API + "admin/?delete-user", {name: user});
   }

@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { upper } from 'secure-random-password';
 import { GuestService } from 'src/app/services/guest/guest.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, Guest } from 'src/models/user';
@@ -59,8 +58,10 @@ export class AddGuestFormComponent {
       lastname,
       age,
       diet: "",
-      allergies: "",
-      song: ""
+      allergies: [],
+      otherAllergies: "",
+      song: "",
+      isRegistered: null
     }).subscribe(resp => {
       if (!!resp) {
         this.resetForm();

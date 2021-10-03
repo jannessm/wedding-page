@@ -1,3 +1,5 @@
+import { ALLERGIES } from "./allergies";
+
 export interface User {
     name: string;
     firstLogin: boolean;
@@ -15,9 +17,10 @@ export interface Guest {
     name: string;
     lastname: string;
     age: AGE_CATEGORIES;
-    isRegistered: boolean;
+    isRegistered: boolean | null;
     diet: DIETS | string;
-    allergies: string;
+    allergies: ALLERGIES[];
+    otherAllergies: string;
     song: string;
 }
 
