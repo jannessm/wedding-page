@@ -21,6 +21,7 @@ const routes: Routes = [
     {path: 'program', component: ProgrammComponent},
     {path: 'dress-code', component: DressCodeComponent},
     {path: 'admin', component: AdminComponent, canActivate: [AdminGuard]},
+    {path: 'admin/:page', component: AdminComponent, canActivate: [AdminGuard]},
     {path: 'change-password', component: ChangePasswordComponent},
   ]},
   {path: 'login', component: LoginComponent, canActivate:[IsLoggedGuard]},
