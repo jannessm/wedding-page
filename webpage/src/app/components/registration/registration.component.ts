@@ -6,6 +6,7 @@ import { CacheService } from 'src/app/services/cache/cache.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { ALLERGIES, ALLERGIES_LABELS } from 'src/models/allergies';
 import { DIETS, DIET_LABELS, User } from 'src/models/user';
+import { getYoutubeID, isYoutubeLink } from 'src/models/youtube';
 
 @Component({
   selector: 'app-registration',
@@ -67,10 +68,10 @@ export class RegistrationComponent {
   }
 
   getSaveYoutubeURL(link: string) {
-    if (link.search(/v=([a-zA-Z0-9_-]{11})/) < 0) {
+    if (!isYoutubeLink(link)) {
       return '';
     }
-    const youtubeId = link.replace(/^.*v=([a-zA-Z0-9_-]{11})&.*/, '$1');
+    const youtubeId = getYoutubeID(link);
     return this.sanitizer.bypassSecurityTrustResourceUrl("https://www.youtube.com/embed/" + 
     youtubeId);
   }

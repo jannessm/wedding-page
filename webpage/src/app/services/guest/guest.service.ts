@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subscriber } from 'rxjs';
+import { Observable, of, Subject, Subscriber } from 'rxjs';
 import { GuestTable } from 'src/models/guest-table';
 import { Guest, UserResponse } from 'src/models/user';
 
@@ -13,14 +13,13 @@ import { CacheService } from '../cache/cache.service';
   providedIn: 'root'
 })
 export class GuestService {
-  _guests: Subscriber<GuestTable[]> | undefined;
-  guests: Observable<GuestTable[]>;
+  guests: Subject<GuestTable[]>;
 
   constructor(
     private cacheService: CacheService,
     private snackBar: MatSnackBar,
   ) {
-    this.guests = new Observable<GuestTable[]>(subscriber => this._guests = subscriber);
+    this.guests = new Subject<GuestTable[]>();
     
     this.cacheService.data.subscribe(data => {
       this.parseData(data);
@@ -54,7 +53,7 @@ export class GuestService {
       }).forEach(val => guestsData.push(val));
     });
 
-    this._guests?.next(guestsData);
+    this.guests.next(guestsData);
   }
 
   addGuest(username: string, newGuest: Guest): Observable<boolean> {

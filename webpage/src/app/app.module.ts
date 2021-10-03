@@ -54,6 +54,7 @@ import { AddGuestFormComponent } from './components/admin/guestlist/add-guest-fo
 import { UserlistComponent } from './components/admin/userlist/userlist.component';
 import { VectorPipe } from './vector.pipe';
 import { AsyncVectorPipe } from './async-vector.pipe';
+import { SongsComponent } from './components/admin/songs/songs.component';
  
 
 
@@ -78,7 +79,8 @@ import { AsyncVectorPipe } from './async-vector.pipe';
     AddGuestFormComponent,
     UserlistComponent,
     VectorPipe,
-    AsyncVectorPipe
+    AsyncVectorPipe,
+    SongsComponent
   ],
   imports: [
     BrowserModule,
