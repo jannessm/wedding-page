@@ -37,7 +37,9 @@ tr {
 }
 
 .stat-wrapper {
-    margin: 12px 0;
+    margin: 12px;
+    display: inline-block;
+    vertical-align: top;
 
     .stat span {
         height: 24px;

@@ -26,6 +26,9 @@ export class AppComponent{
     iconRegistry.addSvgIcon('vegetarian', domSaniziter.bypassSecurityTrustResourceUrl('/assets/milk-bottle.svg'));
     iconRegistry.addSvgIcon('gluten-free', domSaniziter.bypassSecurityTrustResourceUrl('/assets/gluten-free.svg'));
     iconRegistry.addSvgIcon('person', domSaniziter.bypassSecurityTrustResourceUrl('/assets/non-binary.svg'));
+    iconRegistry.addSvgIcon('meat', domSaniziter.bypassSecurityTrustResourceUrl('/assets/meat.svg'));
+    iconRegistry.addSvgIcon('nut', domSaniziter.bypassSecurityTrustResourceUrl('/assets/nut.svg'));
+    iconRegistry.addSvgIcon('apple', domSaniziter.bypassSecurityTrustResourceUrl('/assets/apple.svg'));
   }
 
   logout() {

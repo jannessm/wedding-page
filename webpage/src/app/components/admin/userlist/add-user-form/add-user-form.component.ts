@@ -93,7 +93,7 @@ export class AddUserFormComponent {
         name: (<FormGroup>group).controls.name.value,
         lastname: (<FormGroup>group).controls.lastname.value,
         age: (<FormGroup>group).controls.age.value,
-        isRegistered: false,
+        isComing: null,
         song: '',
         diet: DIETS.NORMAL,
         allergies: [],

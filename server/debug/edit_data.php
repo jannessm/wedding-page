@@ -24,9 +24,8 @@ foreach($data as $username => $user) {
     // $user['firstLogin'] = true;
 
     foreach($user['guests'] as $id => $guest) {
-        // $user['guests'][$id]['isRegistered'] = null;
-        $user['guests'][$id]['allergies'] = [];
-        $user['guests'][$id]['otherAllergies'] = '';
+        $user['guests'][$id]['isComing'] = null;
+        unset($user['guests'][$id]['isRegistered']);
     }
     
     $data[$username] = $user;

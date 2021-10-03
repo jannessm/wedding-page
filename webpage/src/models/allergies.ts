@@ -11,3 +11,10 @@ export enum ALLERGIES_LABELS {
     LACTOSE = "Laktose",
     NUTS = "Nüsse/Erdnüsse"
 }
+
+export enum ALLERGIES_ICONS {
+    FRUCTOSE = "apple",
+    GLUTEN = "gluten-free",
+    LACTOSE = "vegetarian",
+    NUTS = "nut"
+}

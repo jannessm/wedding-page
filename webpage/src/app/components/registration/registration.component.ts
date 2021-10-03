@@ -28,9 +28,10 @@ export class RegistrationComponent {
     this.user = this.authService.loggedUser;
 
     if (!!this.user) {
+      console.log()
       this.form = fb.array(this.user.guests.map(guest => 
         fb.group({
-          'isComing': [guest.isRegistered, Validators.required],
+          'isComing': [guest.isComing, Validators.required],
           'diet': [guest.diet, Validators.required],
           'allergies': [guest.allergies],
           'otherAllergies': [guest.otherAllergies],
@@ -47,7 +48,7 @@ export class RegistrationComponent {
   saveChanges() {
     this.form.controls.forEach((guest, id) => {
       if (!!this.user) {
-        this.user.guests[id].isRegistered = (<FormGroup>guest).controls.isComing.value;
+        this.user.guests[id].isComing = (<FormGroup>guest).controls.isComing.value;
         this.user.guests[id].diet = (<FormGroup>guest).controls.diet.value;
         this.user.guests[id].allergies = (<FormGroup>guest).controls.allergies.value;
         this.user.guests[id].otherAllergies = (<FormGroup>guest).controls.otherAllergies.value;
@@ -58,22 +59,6 @@ export class RegistrationComponent {
 
     if (!!this.user) {
       this.cacheService.updateUserNonAdmin(this.user).subscribe();
-    }
-  }
-
-  resetForm() {
-    if (!!this.user) {
-      this.form = this.fb.array(this.user.guests.map(guest => 
-        this.fb.group({
-          'isComing': [guest.isRegistered],
-          'diet': [guest.diet, Validators.required],
-          'allergies': [guest.allergies],
-          'otherAllergies': [guest.otherAllergies],
-          'song': [guest.song],
-        })
-      ));
-    } else {
-      this.form = this.fb.array([]);
     }
   }
 

@@ -1,12 +1,13 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
+import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
 import { GuestService } from 'src/app/services/guest/guest.service';
 import { GuestTable } from 'src/models/guest-table';
+import { AllergiesVector, RegisteredVector } from 'src/models/vector';
 import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, DIETS, DIET_ICONS, DIET_LABELS } from 'src/models/user';
+import { ALLERGIES, ALLERGIES_ICONS, ALLERGIES_LABELS } from 'src/models/allergies';
 
 @Component({
   selector: 'app-guestlist-table',
@@ -34,14 +35,20 @@ export class GuestlistTableComponent implements AfterViewInit {
   diets = Object.values(DIETS);
   dietsLabels = DIET_LABELS;
   dietIcons = DIET_ICONS;
+  allergies = Object.values(ALLERGIES);
+  allergiesLabels = ALLERGIES_LABELS;
+  allergiesIcons = ALLERGIES_ICONS;
 
-  // comming | not comming | total 
-  adults = [0, 0, 0];
-  children = [0, 0, 0];
-  infants = [0, 0, 0];
+  adults = new RegisteredVector();
+  children = new RegisteredVector();
+  infants = new RegisteredVector();
 
   vegan = 0;
   vegetarian = 0;
+  normal = 0;
+
+  allergiesCounter = new AllergiesVector(Object.values(ALLERGIES).length);
+  otherAllergies: string[] = [];
 
   constructor(private guestService: GuestService, private dialogService: DialogService) {
 
@@ -79,12 +86,13 @@ export class GuestlistTableComponent implements AfterViewInit {
       name: row.name,
       lastname: row.lastname,
       age: row.age,
-      isRegistered: row.isRegistered,
+      isComing: row.isComing,
       diet: row.diet,
       allergies: row.allergies,
       otherAllergies: row.otherAllergies,
       song: row.song
     }).subscribe(oldGuest => {
+      this.countData(this.dataSource.data);
       if(!!oldGuest) {
         // TODO: handle failed changes
       }
@@ -101,32 +109,34 @@ export class GuestlistTableComponent implements AfterViewInit {
   }
 
   countData(guests: GuestTable[]) {
-    this.adults = [0, 0];
-    this.children = [0, 0];
-    this.infants = [0, 0];
+    this.adults.reset();
+    this.children.reset();
+    this.infants.reset();
 
     this.vegan = 0;
     this.vegetarian = 0;
+    this.normal = 0;
+
+    this.allergiesCounter.reset();
+
+    this.otherAllergies = [];
 
     guests.forEach((guest: GuestTable) => {
-      const registered = guest.isRegistered ? 1 : 0;
+      const registered = guest.isComing ? 1 : 0;
 
       switch(guest.age) {
         case AGE_CATEGORIES.ADULT:
-          this.adults[1]++;
-          this.adults[0] += registered;
+          this.adults.count(guest.isComing);
           break;
         case AGE_CATEGORIES.CHILD:
-          this.children[1]++;
-          this.children[0] += registered;
+          this.children.count(guest.isComing);
           break;
         case AGE_CATEGORIES.INFANT:
-          this.infants[1]++;
-          this.infants[0] += registered;
+          this.infants.count(guest.isComing);
           break;
       }
 
-      if (guest.isRegistered) {
+      if (guest.isComing) {
         switch(guest.diet) {
           case DIETS.VEGAN:
             this.vegan++;
@@ -134,7 +144,18 @@ export class GuestlistTableComponent implements AfterViewInit {
           case DIETS.VEGETARIAN:
             this.vegetarian++;
             break;
+          case DIETS.NORMAL:
+            this.normal++;
         }
+      }
+
+      if (guest.isComing) {
+        const allergyVec = this.allergies.map(allergy => guest.allergies.includes(allergy) ? 1 : 0);
+        this.allergiesCounter.add(new AllergiesVector().from(allergyVec));
+      }
+
+      if (guest.isComing && guest.otherAllergies.trim() !== '') {
+        this.otherAllergies.push(guest.otherAllergies);
       }
     });
   }

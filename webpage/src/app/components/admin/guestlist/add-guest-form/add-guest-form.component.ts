@@ -61,7 +61,7 @@ export class AddGuestFormComponent {
       allergies: [],
       otherAllergies: "",
       song: "",
-      isRegistered: null
+      isComing: null
     }).subscribe(resp => {
       if (!!resp) {
         this.resetForm();

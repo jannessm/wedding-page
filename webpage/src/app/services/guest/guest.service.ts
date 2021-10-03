@@ -44,12 +44,12 @@ export class GuestService {
           name: guest.name,
           lastname: guest.lastname,
           age: guest.age,
-          isRegistered: guest.isRegistered,
+          isComing: guest.isComing,
           diet: guest.diet,
           song: guest.song,
           editMode: false,
-          allergies: [],
-          otherAllergies: ''
+          allergies: guest.allergies,
+          otherAllergies: guest.otherAllergies
         }
       }).forEach(val => guestsData.push(val));
     });
@@ -104,7 +104,7 @@ export class GuestService {
             allergies: guest.allergies,
             otherAllergies: guest.otherAllergies,
             diet: guest.diet,
-            isRegistered: guest.isRegistered,
+            isComing: guest.isComing,
             uuid: guest.uuid,
             song: guest.song
           };
@@ -116,7 +116,7 @@ export class GuestService {
           guest.allergies = updatedGuest.allergies;
           guest.otherAllergies = updatedGuest.otherAllergies;
           guest.diet = updatedGuest.diet;
-          guest.isRegistered = updatedGuest.isRegistered;
+          guest.isComing = updatedGuest.isComing;
         }
       });
 
@@ -131,7 +131,7 @@ export class GuestService {
             updatedGuest.allergies = oldGuest.allergies;
             updatedGuest.otherAllergies = oldGuest.otherAllergies;
             updatedGuest.diet = oldGuest.diet;
-            updatedGuest.isRegistered = oldGuest.isRegistered;
+            updatedGuest.isComing = oldGuest.isComing;
 
             return oldGuest;
           }

@@ -69,13 +69,14 @@ export class CacheService {
             const user = this._lastDataObject[updatedUser.name];
 
             user.guests.forEach((guest, id) => {
+              guest.isComing = updatedUser.guests[id].isComing;
               guest.diet = updatedUser.guests[id].diet;
               guest.allergies = updatedUser.guests[id].allergies;
               guest.otherAllergies = updatedUser.guests[id].otherAllergies;
               guest.song = updatedUser.guests[id].song;
             });
 
-            // this.handleData(this._lastDataObject);
+            this.authService.loggedUser = user;
           }
         })
       );

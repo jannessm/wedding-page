@@ -9,7 +9,7 @@ if ($payload['guests'] && $user_data[$payload['name']]) {
     
     // update guests
     foreach ($user['guests'] as $key => $guest) {
-        $user['guests'][$key]['isRegistered'] = $payload['guests'][$key]['isRegistered'];
+        $user['guests'][$key]['isComing'] = $payload['guests'][$key]['isComing'];
         $user['guests'][$key]['diet'] = $payload['guests'][$key]['diet'];
         $user['guests'][$key]['allergies'] = $payload['guests'][$key]['allergies'];
         $user['guests'][$key]['otherAllergies'] = $payload['guests'][$key]['otherAllergies'];

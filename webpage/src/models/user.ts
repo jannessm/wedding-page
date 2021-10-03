@@ -17,7 +17,7 @@ export interface Guest {
     name: string;
     lastname: string;
     age: AGE_CATEGORIES;
-    isRegistered: boolean | null;
+    isComing: boolean | null;
     diet: DIETS | string;
     allergies: ALLERGIES[];
     otherAllergies: string;
@@ -60,5 +60,5 @@ export const DIET_ICONS: {[key: string]: string} = {
     VEGAN: "vegan",
     VEGETARIAN: "vegetarian",
     // GLUTEN_FREE: "gluten-free",
-    NORMAL: ""
+    NORMAL: "meat"
 }

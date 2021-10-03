@@ -52,6 +52,8 @@ import { ConfirmDialogComponent } from './components/dialogs/confirm-dialog/conf
 import { InfoDialogComponent } from './components/dialogs/info-dialog/info-dialog.component';
 import { AddGuestFormComponent } from './components/admin/guestlist/add-guest-form/add-guest-form.component';
 import { UserlistComponent } from './components/admin/userlist/userlist.component';
+import { VectorPipe } from './vector.pipe';
+import { AsyncVectorPipe } from './async-vector.pipe';
  
 
 
@@ -74,7 +76,9 @@ import { UserlistComponent } from './components/admin/userlist/userlist.componen
     ConfirmDialogComponent,
     InfoDialogComponent,
     AddGuestFormComponent,
-    UserlistComponent
+    UserlistComponent,
+    VectorPipe,
+    AsyncVectorPipe
   ],
   imports: [
     BrowserModule,

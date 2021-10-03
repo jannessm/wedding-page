@@ -6,27 +6,41 @@
     </mat-expansion-panel-header>
 
     <div class="stat-wrapper">
-        Rückmeldungen:
+        <h3>Rückmeldungen (Ja / Nein / Total):</h3>
         <div class="stat">
-            <mat-icon [svgIcon]="agesIcons.ADULT"></mat-icon><span>Erwachsene: {{ adults[0] }} / {{ adults[1] }}</span>
+            <mat-icon [svgIcon]="agesIcons.ADULT"></mat-icon><span>Erwachsene: {{ adults | asyncVector | async }} </span>
         </div>
         <div class="stat">
-            <mat-icon>{{agesIcons.CHILD}}</mat-icon><span>Kinder: {{ children[0] }} / {{ children[1] }}</span>
+            <mat-icon>{{agesIcons.CHILD}}</mat-icon><span>Kinder: {{ children | asyncVector | async }}</span>
         </div>
         <div class="stat">
-            <mat-icon>{{agesIcons.INFANT}}</mat-icon><span>Kleinkinder: {{ infants[0] }} / {{ infants[1] }}</span>
+            <mat-icon>{{agesIcons.INFANT}}</mat-icon><span>Kleinkinder: {{ infants | asyncVector | async }}</span>
         </div>
         <div class="stat">
-            <mat-icon>functions</mat-icon><span>Gesamt: {{adults[0] + children[0] + infants[0]}} / {{adults[1] + children[1] + infants[1]}}</span>
+            <mat-icon>functions</mat-icon><span>Gesamt: {{ adults.add(children).add(infants) | vector }}</span>
         </div>
     </div>
 
     <div class="stat-wrapper">
+        <h3>Ernährungsweise:</h3>
         <div class="stat">
-            <mat-icon [svgIcon]="dietIcons.VEGAN"></mat-icon><span>Vegan: {{ vegan }} / {{adults[1] + children[1] + infants[1]}}</span>
+            <mat-icon [svgIcon]="dietIcons.VEGAN"></mat-icon><span>Vegan: {{ vegan }} / {{adults.add(children).add(infants).total}}</span>
         </div>
         <div class="stat">
-            <mat-icon [svgIcon]="dietIcons.VEGETARIAN"></mat-icon><span>Vegetarisch: {{ vegetarian }} / {{adults[1] + children[1] + infants[1]}}</span>
+            <mat-icon [svgIcon]="dietIcons.VEGETARIAN"></mat-icon><span>Vegetarisch: {{ vegetarian }} / {{adults.add(children).add(infants).total}}</span>
+        </div>
+        <div class="stat">
+            <mat-icon [svgIcon]="dietIcons.NORMAL"></mat-icon><span>mit Fleisch: {{ normal }} / {{adults.add(children).add(infants).total}}</span>
+        </div>
+    </div>
+
+    <div class="stat-wrapper">
+        <h3>Allergien/Intoleranzen:</h3>
+        <div class="stat" *ngFor="let allergy of allergies; index as idx">
+            <mat-icon [svgIcon]="allergiesIcons[allergy]"></mat-icon><span>{{allergiesLabels[allergy]}}: {{allergiesCounter.values[idx]}}</span>
+        </div>
+        <div class="stat">
+            <span>Andere Angaben: <ul><li *ngFor="let a of otherAllergies">{{a}}</li></ul></span>
         </div>
     </div>
 
@@ -89,11 +103,12 @@
             </ng-container>
     
             <ng-container matColumnDef="isRegistered">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header class="icon-column"> Registriert </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="icon-column"> Zu-/Absage </th>
                 <td mat-cell *matCellDef="let row">
-                    <mat-icon *ngIf="row.isRegistered && !row.editMode">done</mat-icon>
+                    <mat-icon *ngIf="row.isComing && !row.editMode">done</mat-icon>
+                    <mat-icon *ngIf="row.isComing === false && !row.editMode">close</mat-icon>
     
-                    <mat-checkbox *ngIf="row.editMode" [(ngModel)]="row.isRegistered"></mat-checkbox>
+                    <mat-checkbox *ngIf="row.editMode" [(ngModel)]="row.isComing"></mat-checkbox>
                 </td>
             </ng-container>
     
