@@ -37,18 +37,33 @@ tr {
     }
 }
 
-.stat-wrapper {
-    margin: 12px;
-    display: inline-block;
-    vertical-align: top;
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 24px;
+    
+    .stat-wrapper {
+        flex: 0 0 auto;
+        width: 250px;
+        text-align: center;
 
-    .stat span {
-        height: 24px;
-        vertical-align: super;
-        margin-left: 12px;
+        .stat span {
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        
+            span, mat-icon {
+                flex: 0 0 auto;
+            }
+        }
     }
 }
 
 mat-expansion-panel {
-    padding: 24px;
+    @media (min-width: $breakpoint) {
+        padding: 24px;
+    }
 }
