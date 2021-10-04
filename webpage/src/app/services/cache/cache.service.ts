@@ -10,6 +10,7 @@ import { AuthService } from '../auth/auth.service';
   providedIn: 'root'
 })
 export class CacheService {
+  _initialized = false;
   _lastDataObject: UserResponse | undefined;
   data: Subject<UserResponse>;
 
@@ -29,12 +30,15 @@ export class CacheService {
   }
 
   getData() {
-    if (this.authService.loggedUser?.isAdmin) {
+    if (this.authService.loggedUser?.isAdmin && !this._initialized) {
       this.apiService.getUsers().subscribe(resp => {
         if (resp.status === API_STATUS.SUCCESS) {
           this.handleData(resp);
+          this._initialized = true;
         }
       })
+    } else if (this.authService.loggedUser?.isAdmin) {
+      this.data.next(this._lastDataObject);
     }
   }
 
@@ -55,6 +59,9 @@ export class CacheService {
 
   updateUser(): Observable<undefined | ApiResponse> {
     if (this._lastDataObject) {
+      if (this.authService.loggedUser) {
+        this.authService.loggedUser = this._lastDataObject[this.authService.loggedUser.name];
+      }
       return this.apiService.updateUsers(this._lastDataObject);
     } else {
       return of();

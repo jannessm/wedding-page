@@ -1,19 +1,33 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject, Subscriber } from 'rxjs';
 import { GuestTable } from 'src/models/guest-table';
-import { Guest, UserResponse } from 'src/models/user';
+import { AGE_CATEGORIES, DIETS, Guest, UserResponse } from 'src/models/user';
 
 import { v4 as uuid } from 'uuid';
 import { API_STATUS } from 'src/models/api';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map } from 'rxjs/operators';
 import { CacheService } from '../cache/cache.service';
+import { AllergiesVector, RegisteredVector } from 'src/models/vector';
+import { ALLERGIES } from 'src/models/allergies';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GuestService {
   guests: Subject<GuestTable[]>;
+  _lastDataObject: GuestTable[] | undefined;
+
+  adults = new RegisteredVector();
+  children = new RegisteredVector();
+  infants = new RegisteredVector();
+
+  vegan = 0;
+  vegetarian = 0;
+  normal = 0;
+
+  allergiesCounter = new AllergiesVector(Object.values(ALLERGIES).length);
+  otherAllergies: string[] = [];
 
   constructor(
     private cacheService: CacheService,
@@ -53,6 +67,7 @@ export class GuestService {
       }).forEach(val => guestsData.push(val));
     });
 
+    this.countData(guestsData);
     this.guests.next(guestsData);
   }
 
@@ -166,6 +181,63 @@ export class GuestService {
     }
 
     return of(false);
+  }
+
+  countData(guests: GuestTable[]) {
+    this.adults.reset();
+    this.children.reset();
+    this.infants.reset();
+
+    this.vegan = 0;
+    this.vegetarian = 0;
+    this.normal = 0;
+
+    this.allergiesCounter.reset();
+
+    this.otherAllergies = [];
+
+    guests.forEach((guest: GuestTable) => {
+      const registered = guest.isComing ? 1 : 0;
+
+      switch(guest.age) {
+        case AGE_CATEGORIES.ADULT:
+          this.adults = this.adults.count(guest.isComing);
+          break;
+        case AGE_CATEGORIES.CHILD:
+          this.children.count(guest.isComing);
+          break;
+        case AGE_CATEGORIES.INFANT:
+          this.infants.count(guest.isComing);
+          break;
+      }
+
+      if (guest.isComing) {
+        switch(guest.diet) {
+          case DIETS.VEGAN:
+            this.vegan++;
+            break;
+          case DIETS.VEGETARIAN:
+            this.vegetarian++;
+            break;
+          case DIETS.NORMAL:
+            this.normal++;
+        }
+      }
+
+      if (guest.isComing) {
+        const allergyVec = Object.values(ALLERGIES).map(allergy => guest.allergies.includes(allergy) ? 1 : 0);
+        this.allergiesCounter.add(new AllergiesVector().from(allergyVec));
+      }
+
+      if (guest.isComing && guest.otherAllergies.trim() !== '') {
+        this.otherAllergies.push(guest.otherAllergies);
+      }
+    });
+
+    // trigger template reload
+    this.adults = this.adults.copy();
+    this.children = this.children.copy();
+    this.infants = this.infants.copy();
   }
 
 }

@@ -3,7 +3,6 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CacheService } from 'src/app/services/cache/cache.service';
-import { UserService } from 'src/app/services/user/user.service';
 import { ALLERGIES, ALLERGIES_LABELS } from 'src/models/allergies';
 import { DIETS, DIET_LABELS, User } from 'src/models/user';
 import { getYoutubeID, isYoutubeLink } from 'src/models/youtube';
@@ -29,7 +28,6 @@ export class RegistrationComponent {
     this.user = this.authService.loggedUser;
 
     if (!!this.user) {
-      console.log()
       this.form = fb.array(this.user.guests.map(guest => 
         fb.group({
           'isComing': [guest.isComing, Validators.required],

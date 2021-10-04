@@ -1,7 +1,8 @@
 mat-card{
-    margin-top: calc(50vh - 140px);
-    width: max(200px, 50%);
-    margin-left: calc(50vw - max(100px, 25%));
+    margin-top: calc(50vh - max(230px, 25vh));
+    width: max(300px, 50vw);
+    margin-left: calc(50vw - max(150px, 25vw));
+    box-sizing: border-box;
 
     h1 {
         margin-top: 50px;

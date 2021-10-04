@@ -22,10 +22,11 @@ $data = json_decode(read_file('../data'), true);
 foreach($data as $username => $user) {
     // $user['firstPassword'] = getRandomString(8);
     // $user['firstLogin'] = true;
+    $user['password'] = md5($user['firstPassword']);
 
     foreach($user['guests'] as $id => $guest) {
-        $user['guests'][$id]['isComing'] = null;
-        unset($user['guests'][$id]['isRegistered']);
+        // $user['guests'][$id]['isComing'] = null;
+        // unset($user['guests'][$id]['isRegistered']);
     }
     
     $data[$username] = $user;

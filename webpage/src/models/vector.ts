@@ -2,7 +2,7 @@ import { Subject } from "rxjs";
 
 export interface Vector {
     vector: Subject<number[]>;
-    getVector(): number[];
+    values: number[];
 }
 
 export class RegisteredVector implements Vector {
@@ -13,7 +13,7 @@ export class RegisteredVector implements Vector {
 
     set yes(x: number) {
         this._yes = x;
-        this.vector.next(this.getVector());
+        this.vector.next(this.values);
     }
     get yes(): number {
         return this._yes;
@@ -21,7 +21,7 @@ export class RegisteredVector implements Vector {
 
     set no(x: number) {
         this._no = x;
-        this.vector.next(this.getVector());
+        this.vector.next(this.values);
     }
     get no(): number {
         return this._no;
@@ -29,14 +29,19 @@ export class RegisteredVector implements Vector {
 
     set total(x: number) {
         this._total = x;
-        this.vector.next(this.getVector());
+        this.vector.next(this.values);
     }
     get total(): number {
         return this._total;
     }
     
+    constructor(yes?: number, no?: number, total?: number) {
+        this.yes = yes || 0;
+        this.no = no || 0;
+        this.total = total || 0;
+    }
 
-    count(isComing: boolean | null) {
+    count(isComing: boolean | null): RegisteredVector {
         if (isComing) {
             this.yes++;
         } else if (isComing === false) {
@@ -44,14 +49,17 @@ export class RegisteredVector implements Vector {
         }
 
         this.total++;
+
+        return this;
+    }
+
+    copy(): RegisteredVector {
+        return new RegisteredVector(this.yes, this.no, this.total);
     }
 
     add(b: RegisteredVector): RegisteredVector {
-        const newVec = new RegisteredVector();
-        newVec.yes = this.yes + b.yes;
-        newVec.no = this.no + b.no;
-        newVec.total = this.total + b.total;
-        newVec.vector.next(newVec.getVector());
+        const newVec = new RegisteredVector(this.yes + b.yes, this.no + b.no, this.total + b.total);
+        newVec.vector.next(newVec.values);
         return newVec;
     }
 
@@ -59,10 +67,10 @@ export class RegisteredVector implements Vector {
         this.yes = 0;
         this.no = 0;
         this.total = 0;
-        this.vector.next(this.getVector());
+        this.vector.next(this.values);
     }
 
-    getVector() {
+    get values() {
         return [this._yes, this._no, this._total];
     }
 }

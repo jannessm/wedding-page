@@ -8,39 +8,39 @@
     <div class="stat-wrapper">
         <h3>Rückmeldungen (Ja / Nein / Total):</h3>
         <div class="stat">
-            <mat-icon [svgIcon]="agesIcons.ADULT"></mat-icon><span>Erwachsene: {{ adults | asyncVector | async }} </span>
+            <mat-icon [svgIcon]="agesIcons.ADULT"></mat-icon><span>Erwachsene: {{ guestService.adults | vector }} </span>
         </div>
         <div class="stat">
-            <mat-icon>{{agesIcons.CHILD}}</mat-icon><span>Kinder: {{ children | asyncVector | async }}</span>
+            <mat-icon>{{agesIcons.CHILD}}</mat-icon><span>Kinder: {{ guestService.children | vector }}</span>
         </div>
         <div class="stat">
-            <mat-icon>{{agesIcons.INFANT}}</mat-icon><span>Kleinkinder: {{ infants | asyncVector | async }}</span>
+            <mat-icon>{{agesIcons.INFANT}}</mat-icon><span>Kleinkinder: {{ guestService.infants | vector }}</span>
         </div>
         <div class="stat">
-            <mat-icon>functions</mat-icon><span>Gesamt: {{ adults.add(children).add(infants) | vector }}</span>
+            <mat-icon>functions</mat-icon><span>Gesamt: {{ guestService.adults.add(guestService.children).add(guestService.infants) | vector }}</span>
         </div>
     </div>
 
     <div class="stat-wrapper">
         <h3>Ernährungsweise:</h3>
         <div class="stat">
-            <mat-icon [svgIcon]="dietIcons.VEGAN"></mat-icon><span>Vegan: {{ vegan }} / {{adults.add(children).add(infants).total}}</span>
+            <mat-icon [svgIcon]="dietIcons.VEGAN"></mat-icon><span>Vegan: {{ guestService.vegan }} / {{guestService.adults.add(guestService.children).add(guestService.infants).total}}</span>
         </div>
         <div class="stat">
-            <mat-icon [svgIcon]="dietIcons.VEGETARIAN"></mat-icon><span>Vegetarisch: {{ vegetarian }} / {{adults.add(children).add(infants).total}}</span>
+            <mat-icon [svgIcon]="dietIcons.VEGETARIAN"></mat-icon><span>Vegetarisch: {{ guestService.vegetarian }} / {{guestService.adults.add(guestService.children).add(guestService.infants).total}}</span>
         </div>
         <div class="stat">
-            <mat-icon [svgIcon]="dietIcons.NORMAL"></mat-icon><span>mit Fleisch: {{ normal }} / {{adults.add(children).add(infants).total}}</span>
+            <mat-icon [svgIcon]="dietIcons.NORMAL"></mat-icon><span>mit Fleisch: {{ guestService.normal }} / {{guestService.adults.add(guestService.children).add(guestService.infants).total}}</span>
         </div>
     </div>
 
     <div class="stat-wrapper">
         <h3>Allergien/Intoleranzen:</h3>
         <div class="stat" *ngFor="let allergy of allergies; index as idx">
-            <mat-icon [svgIcon]="allergiesIcons[allergy]"></mat-icon><span>{{allergiesLabels[allergy]}}: {{allergiesCounter.values[idx]}}</span>
+            <mat-icon [svgIcon]="allergiesIcons[allergy]"></mat-icon><span>{{allergiesLabels[allergy]}}: {{guestService.allergiesCounter.values[idx]}}</span>
         </div>
         <div class="stat">
-            <span>Andere Angaben: <ul><li *ngFor="let a of otherAllergies">{{a}}</li></ul></span>
+            <span>Andere Angaben: <ul><li *ngFor="let a of guestService.otherAllergies">{{a}}</li></ul></span>
         </div>
     </div>
 

@@ -1,20 +1,20 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
 import { GuestService } from 'src/app/services/guest/guest.service';
 import { GuestTable } from 'src/models/guest-table';
-import { AllergiesVector, RegisteredVector } from 'src/models/vector';
 import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, DIETS, DIET_ICONS, DIET_LABELS } from 'src/models/user';
 import { ALLERGIES, ALLERGIES_ICONS, ALLERGIES_LABELS } from 'src/models/allergies';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-guestlist-table',
   templateUrl: './guestlist-table.component.html',
   styleUrls: ['./guestlist-table.component.scss']
 })
-export class GuestlistTableComponent implements AfterViewInit {
+export class GuestlistTableComponent implements AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['user', 'name', 'lastname', 'age', 'diet', 'isRegistered', 'edit', 'delete'];
   dataSource: MatTableDataSource<GuestTable>;
 
@@ -39,24 +39,18 @@ export class GuestlistTableComponent implements AfterViewInit {
   allergiesLabels = ALLERGIES_LABELS;
   allergiesIcons = ALLERGIES_ICONS;
 
-  adults = new RegisteredVector();
-  children = new RegisteredVector();
-  infants = new RegisteredVector();
+  guestSubscription: Subscription;
 
-  vegan = 0;
-  vegetarian = 0;
-  normal = 0;
-
-  allergiesCounter = new AllergiesVector(Object.values(ALLERGIES).length);
-  otherAllergies: string[] = [];
-
-  constructor(private guestService: GuestService, private dialogService: DialogService) {
+  constructor(public guestService: GuestService, private dialogService: DialogService) {
 
     this.dataSource = new MatTableDataSource<GuestTable>([]);
-    this.guestService.guests.subscribe( guests => {
+    this.guestSubscription = this.guestService.guests.subscribe( guests => {
       this.dataSource.data = guests;
-      this.countData(guests);
     });
+
+    if (this.guestService._lastDataObject) {
+      this.dataSource.data = this.guestService._lastDataObject;
+    }
   }
 
   ngAfterViewInit() {
@@ -66,7 +60,11 @@ export class GuestlistTableComponent implements AfterViewInit {
         this.dataSource.sort = this.sort;
         clearInterval(interval);
       }
-    }, 100);
+    }, 10);
+  }
+
+  ngOnDestroy() {
+    this.guestSubscription.unsubscribe();
   }
 
   applyFilter(event: Event) {
@@ -91,12 +89,7 @@ export class GuestlistTableComponent implements AfterViewInit {
       allergies: row.allergies,
       otherAllergies: row.otherAllergies,
       song: row.song
-    }).subscribe(oldGuest => {
-      this.countData(this.dataSource.data);
-      if(!!oldGuest) {
-        // TODO: handle failed changes
-      }
-    });
+    }).subscribe();
   }
 
   deleteGuest(row: GuestTable) {
@@ -106,58 +99,6 @@ export class GuestlistTableComponent implements AfterViewInit {
           this.guestService.deleteGuest(row.user, row.uuid).subscribe();
         }
       });
-  }
-
-  countData(guests: GuestTable[]) {
-    this.adults.reset();
-    this.children.reset();
-    this.infants.reset();
-
-    this.vegan = 0;
-    this.vegetarian = 0;
-    this.normal = 0;
-
-    this.allergiesCounter.reset();
-
-    this.otherAllergies = [];
-
-    guests.forEach((guest: GuestTable) => {
-      const registered = guest.isComing ? 1 : 0;
-
-      switch(guest.age) {
-        case AGE_CATEGORIES.ADULT:
-          this.adults.count(guest.isComing);
-          break;
-        case AGE_CATEGORIES.CHILD:
-          this.children.count(guest.isComing);
-          break;
-        case AGE_CATEGORIES.INFANT:
-          this.infants.count(guest.isComing);
-          break;
-      }
-
-      if (guest.isComing) {
-        switch(guest.diet) {
-          case DIETS.VEGAN:
-            this.vegan++;
-            break;
-          case DIETS.VEGETARIAN:
-            this.vegetarian++;
-            break;
-          case DIETS.NORMAL:
-            this.normal++;
-        }
-      }
-
-      if (guest.isComing) {
-        const allergyVec = this.allergies.map(allergy => guest.allergies.includes(allergy) ? 1 : 0);
-        this.allergiesCounter.add(new AllergiesVector().from(allergyVec));
-      }
-
-      if (guest.isComing && guest.otherAllergies.trim() !== '') {
-        this.otherAllergies.push(guest.otherAllergies);
-      }
-    });
   }
 
 }

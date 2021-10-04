@@ -31,6 +31,11 @@
     // update users
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-user'])) {
         $payload = json_decode(file_get_contents("php://input"), true);
+        $user_data = json_decode(read_file($BASE . 'data'), true);
+
+        foreach ($payload as $user => $userObj) {
+            $payload[$user]['password'] = $user_data[$user]['password'];
+        }
 
         write_file($BASE . 'data', json_encode($payload));
         respondJSON(201, "");

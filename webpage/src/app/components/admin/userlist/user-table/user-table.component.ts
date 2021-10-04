@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { UserTable } from 'src/models/guest-table';
@@ -11,7 +12,7 @@ import { UserTable } from 'src/models/guest-table';
   templateUrl: './user-table.component.html',
   styleUrls: ['./user-table.component.scss']
 })
-export class UserTableComponent {
+export class UserTableComponent implements OnDestroy, AfterViewInit {
 
   displayedColumns: string[] = ['user', 'guests', 'isAdmin', 'resetPwd', 'edit', 'delete'];
   dataSource: MatTableDataSource<UserTable>;
@@ -27,13 +28,18 @@ export class UserTableComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
 
+  userSubscription: Subscription;
 
   constructor(private userService: UserService, private dialogService: DialogService) {
 
     this.dataSource = new MatTableDataSource<UserTable>([]);
-    this.userService.users.subscribe( users => {
+    this.userSubscription = this.userService.users.subscribe( users => {
       this.dataSource.data = users;
     });
+
+    if (this.userService._lastDataObject) {
+      this.dataSource.data = this.userService._lastDataObject;
+    }
   }
 
   ngAfterViewInit() {
@@ -43,7 +49,11 @@ export class UserTableComponent {
         this.dataSource.sort = this.sort;
         clearInterval(interval);
       }
-    }, 100);
+    }, 10);
+  }
+
+  ngOnDestroy() {
+    this.userSubscription.unsubscribe();
   }
 
   applyFilter(event: Event) {

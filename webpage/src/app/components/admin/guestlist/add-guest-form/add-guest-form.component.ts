@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { GuestService } from 'src/app/services/guest/guest.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, Guest } from 'src/models/user';
@@ -12,7 +12,7 @@ import { v4 as uuid } from 'uuid';
   templateUrl: './add-guest-form.component.html',
   styleUrls: ['./add-guest-form.component.scss']
 })
-export class AddGuestFormComponent {
+export class AddGuestFormComponent implements OnDestroy {
   @Input()
   expanded: boolean = false;
 
@@ -29,6 +29,8 @@ export class AddGuestFormComponent {
   agesLabels = AGE_CATEGORY_LABELS;
   agesIcons = AGE_CATEGORY_ICONS;
 
+  usersSubscription: Subscription;
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -40,10 +42,19 @@ export class AddGuestFormComponent {
       'age': ['ADULT', Validators.required]
     });
 
-    this.userService.users.subscribe(users => {
+    this.usersSubscription = this.userService.users.subscribe(users => {
       this.users = users.map(u => u.name);
       this.filteredUsers = this.users;
     });
+
+    if (this.userService._lastDataObject) {
+      this.users = this.userService._lastDataObject.map(u => u.name);
+      this.filteredUsers = this.users;
+    }
+  }
+
+  ngOnDestroy() {
+    this.usersSubscription.unsubscribe();
   }
 
   addGuest() {

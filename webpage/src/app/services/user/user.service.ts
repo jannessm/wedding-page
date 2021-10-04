@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, of, Subject, Subscriber } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiResponse, API_STATUS } from 'src/models/api';
 import { UserTable } from 'src/models/guest-table';
 import { User, UserResponse } from 'src/models/user';
-import { ApiService } from '../api/api.service';
 import { AuthService } from '../auth/auth.service';
 import { CacheService } from '../cache/cache.service';
 import { DialogService } from '../dialog/dialog.service';
@@ -15,6 +14,8 @@ import { DialogService } from '../dialog/dialog.service';
 })
 export class UserService {
   users: Subject<UserTable[]>;
+
+  _lastDataObject: UserTable[] = [];
 
   constructor(
     private cacheService: CacheService,
@@ -46,7 +47,8 @@ export class UserService {
 
       usersData.push(user);
     });
-
+    
+    this._lastDataObject = usersData;
     this.users.next(usersData);
   }
 

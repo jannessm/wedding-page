@@ -53,7 +53,6 @@ import { InfoDialogComponent } from './components/dialogs/info-dialog/info-dialo
 import { AddGuestFormComponent } from './components/admin/guestlist/add-guest-form/add-guest-form.component';
 import { UserlistComponent } from './components/admin/userlist/userlist.component';
 import { VectorPipe } from './vector.pipe';
-import { AsyncVectorPipe } from './async-vector.pipe';
 import { SongsComponent } from './components/admin/songs/songs.component';
  
 
@@ -79,7 +78,6 @@ import { SongsComponent } from './components/admin/songs/songs.component';
     AddGuestFormComponent,
     UserlistComponent,
     VectorPipe,
-    AsyncVectorPipe,
     SongsComponent
   ],
   imports: [
