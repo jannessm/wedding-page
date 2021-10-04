@@ -9,7 +9,7 @@ import { Vector } from 'src/models/vector';
 export class VectorPipe implements PipeTransform {
 
   transform(value: Vector, ...args: unknown[]): string {
-    return value.values.join(' / ');
+    return value.vector.join(' / ');
   }
 
 }

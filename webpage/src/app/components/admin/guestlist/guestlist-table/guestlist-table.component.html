@@ -37,7 +37,7 @@
     <div class="stat-wrapper">
         <h3>Allergien/Intoleranzen:</h3>
         <div class="stat" *ngFor="let allergy of allergies; index as idx">
-            <mat-icon [svgIcon]="allergiesIcons[allergy]"></mat-icon><span>{{allergiesLabels[allergy]}}: {{guestService.allergiesCounter.values[idx]}}</span>
+            <mat-icon [svgIcon]="allergiesIcons[allergy]"></mat-icon><span>{{allergiesLabels[allergy]}}: {{guestService.allergiesCounter.vector[idx]}}</span>
         </div>
         <div class="stat">
             <span>Andere Angaben: <ul><li *ngFor="let a of guestService.otherAllergies">{{a}}</li></ul></span>
