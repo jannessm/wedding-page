@@ -1,10 +1,11 @@
-$breakpoint:  768px;
+@import 'colors.scss';
+@import 'vars.scss';
 
 mat-form-field, table, tr {
     width: 100%;
 
     .user {
-        color: grey;
+        color: $secondary-text;
     }
 
     .icon-column {

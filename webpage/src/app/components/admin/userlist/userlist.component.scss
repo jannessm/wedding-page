@@ -1,7 +1,9 @@
+@import "vars.scss";
+
 div {
     padding: 12px;
 
-    @media (min-width: 786px) {
+    @media (min-width: $breakpoint) {
         padding: 24px;
     }
 }

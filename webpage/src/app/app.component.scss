@@ -1,4 +1,4 @@
-$breakpoint:  768px;
+@import "vars.scss";
 
 .desktop {
     @media (min-width: $breakpoint) {
@@ -39,7 +39,10 @@ mat-toolbar {
 
 .content {
     @media (min-width: $breakpoint) {
-        margin: 48px;
+        padding: 48px;
+    }
+    @media (max-width: $breakpoint) {
+        padding: 16px 0;
     }
 }
 

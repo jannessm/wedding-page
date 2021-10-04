@@ -1,16 +1,27 @@
-mat-card {
-    background: white;
+@import "vars.scss";
 
-    h1 {
-        margin-top: 50px;
-        width: 100%;
-        text-align: center;
-        font-size: 4em;
-    }
 
-    form {
-        width: 100%;
-    
+h1 {
+    margin: 50px 0;
+    width: 100%;
+    text-align: center;
+    font-size: 4em;
+}
+
+form {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 24px;
+
+    mat-card {
+        width: min(560px, 100%);
+        display: inline-block;
+        flex: 0 0 auto;
+        box-sizing: border-box;
+
+
         mat-form-field {
             width: 100%;
         }
@@ -34,4 +45,9 @@ mat-card {
             margin: 12px;
         }
     }
+}
+
+button {
+    width: min(100%, 500px);
+    margin: 24px calc(50% - min(100%, 500px)/2);
 }

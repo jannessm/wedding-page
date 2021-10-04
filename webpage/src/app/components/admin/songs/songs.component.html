@@ -1,9 +1,11 @@
 <div>
-    <h2>Diese Lieder dürfen nicht fehlen:</h2>
+    <h1>Diese Lieder dürfen nicht fehlen:</h1>
 
-    <mat-card *ngFor="let song of songs">
-        <h4>{{song.guest}}</h4>
-        <iframe *ngIf="song.youtube" width="560" height="315" [src]="song.song" frameborder="0" allowfullscreen></iframe>
-        <h1 *ngIf="!song.youtube" >{{song.songName}}</h1>
-    </mat-card>
+    <div>
+        <mat-card *ngFor="let song of songs">
+            <h4>{{song.guest}}</h4>
+            <iframe *ngIf="song.youtube" height="315" [src]="song.song" frameborder="0" allowfullscreen></iframe>
+            <h1 *ngIf="!song.youtube" >{{song.songName}}</h1>
+        </mat-card>
+    </div>
 </div>

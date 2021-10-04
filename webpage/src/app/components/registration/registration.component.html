@@ -1,7 +1,6 @@
-<mat-card>
     <h1>Sag uns wer kommt!</h1>
     <form *ngIf="!!user">
-        <div *ngFor="let guestControl of form.controls; index as idx">
+        <mat-card *ngFor="let guestControl of form.controls; index as idx">
             <h3>{{user.guests[idx].name}} {{user.guests[idx].lastname}}</h3>
             <span [formGroup]="$any(guestControl)">
                 <mat-label>Rückmeldung*</mat-label>
@@ -32,15 +31,12 @@
                     <mat-label>Bei diesem Lied tanze ich (gerne auch einen Youtube-Link):</mat-label>
                     <input matInput formControlName="song" (change)="youtubeURLs[idx] = updateSaveYoutubeURL($event)">
                 </mat-form-field>
-                <iframe *ngIf="!!youtubeURLs[idx]" width="560" height="315" [src]="youtubeURLs[idx]" frameborder="0" allowfullscreen></iframe>
+                <iframe *ngIf="!!youtubeURLs[idx]" height="315" [src]="youtubeURLs[idx]" frameborder="0" allowfullscreen></iframe>
             </span>
-            <mat-divider></mat-divider>
-        </div>
+        </mat-card>
     </form>
     
     <span *ngIf="!user">Etwas ging schief. Bitte benachrichtige den Admin!</span>
     
-    <mat-card-actions>
-        <button mat-button (click)="saveChanges()" [disabled]="form.invalid">Speichern</button>
-    </mat-card-actions>
-</mat-card>
+    <button mat-flat-button (click)="saveChanges()" [disabled]="form.invalid">Speichern</button>
+        

@@ -1,14 +1,24 @@
+@import "vars.scss";
+
 div {
     padding: 12px;
 
-    @media (min-width: 786px) {
+
+    @media (min-width: $breakpoint) {
         padding: 24px;
     }
 
-    mat-card {
-        width: 560px;
-        height: 353px;
-        display: inline-block;
-        margin: 12px;
+    div {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        gap: 24px;
+        
+        mat-card {
+            width: min(560px, 100%);
+            display: inline-block;
+            flex: 0 0 auto;
+            box-sizing: border-box;
+        }
     }
 }
