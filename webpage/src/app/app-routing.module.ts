@@ -9,16 +9,16 @@ import { CookieComponent } from './components/cookie/cookie.component';
 import { DressCodeComponent } from './components/dress-code/dress-code.component';
 import { GiftsComponent } from './components/gifts/gifts.component';
 import { LoginComponent } from './components/login/login.component';
-import { ProgrammComponent } from './components/programm/programm.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { IsLoggedGuard } from './guards/is-logged.guard';
+import { ScheduleComponent } from './components/schedule/schedule.component';
 
 const routes: Routes = [
   {path: 'user', canActivate: [AuthGuard], children: [
     {path: 'registration', component: RegistrationComponent},
     {path: 'accomondations', component: AccomondationsComponent},
     {path: 'gifts', component: GiftsComponent},
-    {path: 'program', component: ProgrammComponent},
+    {path: 'program', component: ScheduleComponent},
     {path: 'dress-code', component: DressCodeComponent},
     {path: 'admin', component: AdminComponent, canActivate: [AdminGuard]},
     {path: 'admin/:page', component: AdminComponent, canActivate: [AdminGuard]},

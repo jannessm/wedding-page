@@ -1,0 +1,27 @@
+div {
+    float: center;
+    text-align: center;
+
+    div {
+        width: 300px;
+        margin: 128px auto;
+
+        h1 {
+            line-height: 1em;
+            font-size: 5em;
+        }
+
+        h2 {
+            width: 100%;
+            font-weight: lighter;
+        }
+
+        h4 {
+            width: 100%;
+            letter-spacing: 0.7em;
+            font-weight: lighter;
+        }
+
+
+    }
+}

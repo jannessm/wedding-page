@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
 import { LocalStorageService } from './services/local-storage/local-storage.service';
 
@@ -10,18 +10,24 @@ import { LocalStorageService } from './services/local-storage/local-storage.serv
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent{
+export class AppComponent implements OnInit {
   title = 'Tina und Jannes';
+
+  navItems = [
+    {text: 'Programm', link:'/user/program'},
+    {text: 'Rückmeldung', link:'/user/registration'},
+    {text: 'Dress Code', link:'/user/dress-code'},
+    {text: 'Geschenketipps', link:'/user/gifts'},
+    {text: 'Unterkünfte', link:'/user/accomondations'},
+  ];
   
   constructor(
     public authService: AuthService,
-    private router: Router,
+    public router: Router,
     iconRegistry: MatIconRegistry,
-    domSaniziter: DomSanitizer
+    domSaniziter: DomSanitizer,
+    private activeRoute: ActivatedRoute
   ) {
-    this.authService = authService;
-    this.router = router;
-
     iconRegistry.addSvgIcon('vegan', domSaniziter.bypassSecurityTrustResourceUrl('/assets/vegan.svg'));
     iconRegistry.addSvgIcon('vegetarian', domSaniziter.bypassSecurityTrustResourceUrl('/assets/milk-bottle.svg'));
     iconRegistry.addSvgIcon('gluten-free', domSaniziter.bypassSecurityTrustResourceUrl('/assets/gluten-free.svg'));
@@ -29,6 +35,13 @@ export class AppComponent{
     iconRegistry.addSvgIcon('meat', domSaniziter.bypassSecurityTrustResourceUrl('/assets/meat.svg'));
     iconRegistry.addSvgIcon('nut', domSaniziter.bypassSecurityTrustResourceUrl('/assets/nut.svg'));
     iconRegistry.addSvgIcon('apple', domSaniziter.bypassSecurityTrustResourceUrl('/assets/apple.svg'));
+    iconRegistry.addSvgIcon('dress', domSaniziter.bypassSecurityTrustResourceUrl('/assets/dress.svg'));
+    iconRegistry.addSvgIcon('suite', domSaniziter.bypassSecurityTrustResourceUrl('/assets/suite.svg'));
+    iconRegistry.addSvgIcon('wedding', domSaniziter.bypassSecurityTrustResourceUrl('/assets/wedding.svg'));
+  }
+
+  ngOnInit() {
+    this.activeRoute.url.subscribe(console.log);
   }
 
   logout() {

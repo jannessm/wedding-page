@@ -61,9 +61,3 @@ tr {
         }
     }
 }
-
-mat-expansion-panel {
-    @media (min-width: $breakpoint) {
-        padding: 24px;
-    }
-}

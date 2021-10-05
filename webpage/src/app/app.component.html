@@ -1,11 +1,9 @@
+<div class="background"></div>
 <div class="desktop">
   <mat-toolbar *ngIf='authService._isLoggedIn && authService.loggedUser && !authService.loggedUser.firstLogin'>
+      <span class="logo"><mat-icon [svgIcon]="'wedding'"></mat-icon></span>
+      <button *ngFor="let item of navItems" mat-button [routerLink]='item.link' [class.active]="router.isActive(item.link, true)">{{item.text}}</button>
 
-      <button mat-button routerLink='/user/program'>Programm</button>
-      <button mat-button routerLink='/user/registration'>Rückmeldung</button>
-      <button mat-button routerLink='/user/dress-code'>Dress Code</button>
-      <button mat-button routerLink='/user/gifts'>Geschenketipps</button>
-      <button mat-button routerLink='/user/accomondations'>Unterkünfte</button>
       <button mat-icon-button [matMenuTriggerFor]="accountMenu" aria-label="Account">
         <mat-icon>person</mat-icon>
       </button>
@@ -18,22 +16,36 @@
 </div>
 
 <div class="mobile">
-  <mat-toolbar *ngIf='authService._isLoggedIn && authService.loggedUser && !authService.loggedUser.firstLogin'>
+  <!-- <mat-toolbar *ngIf='authService._isLoggedIn && authService.loggedUser && !authService.loggedUser.firstLogin'>
+    <span class="logo"><mat-icon [svgIcon]="'wedding'"></mat-icon></span>
   
-    <button mat-button [matMenuTriggerFor]="menu" aria-label="Menü" class="menu-button">
-      Menü
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menü" class="menu-button">
+      <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-button routerLink='/user/program'>Programm</button>
-      <button mat-button routerLink='/user/registration'>Rückmeldung</button>
-      <button mat-button routerLink='/user/dress-code'>Dress Code</button>
-      <button mat-button routerLink='/user/gifts'>Geschenketipps</button>
-      <button mat-button routerLink='/user/accomondations'>Unterkünfte</button>
-      <button mat-button routerLink='/user/change-password'>Passwort ändern</button>
+      <button *ngFor="let item of navItems" mat-button [routerLink]='item.link' [class.active]="router.isActive(item.link, true)">{{item.text}}</button>
+
       <button mat-button *ngIf="authService.loggedUser.isAdmin" routerLink='/user/admin'>Admin</button>
       <button mat-button (click)='logout()'>Logout</button>
     </mat-menu>
-  </mat-toolbar>
+  </mat-toolbar> -->
+  <mat-accordion *ngIf='authService._isLoggedIn && authService.loggedUser && !authService.loggedUser.firstLogin'>
+    <mat-expansion-panel hideToggle>
+      <mat-expansion-panel-header><span class="logo"><mat-icon [svgIcon]="'wedding'"></mat-icon></span>
+  
+        <button mat-icon-button aria-label="Menü" class="menu-button">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </mat-expansion-panel-header>
+
+      <button *ngFor="let item of navItems" mat-button [routerLink]='item.link' [class.active]="router.isActive(item.link, true)">{{item.text}}</button>
+
+      <button mat-button *ngIf="authService.loggedUser.isAdmin" routerLink='/user/admin'>Admin</button>
+      <button mat-button (click)='logout()'>Logout</button>
+    </mat-expansion-panel>
+    
+    
+  </mat-accordion>
 </div>
 
 <div class="content">

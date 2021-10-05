@@ -1,0 +1,19 @@
+.container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: space-evenly;
+
+    .wrapper {
+        width: max(40%, 300px);
+        flex: 1 0 auto;
+        text-align: center;
+
+        mat-icon {
+            width: 100px;
+            height: 100px;
+        }
+    }
+
+}

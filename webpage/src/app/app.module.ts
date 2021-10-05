@@ -31,7 +31,6 @@ import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { GiftsComponent } from './components/gifts/gifts.component';
 import { AccomondationsComponent } from './components/accomondations/accomondations.component';
-import { ProgrammComponent } from './components/programm/programm.component';
 import { DressCodeComponent } from './components/dress-code/dress-code.component';
 import { AdminComponent } from './components/admin/admin.component';
 
@@ -54,6 +53,7 @@ import { AddGuestFormComponent } from './components/admin/guestlist/add-guest-fo
 import { UserlistComponent } from './components/admin/userlist/userlist.component';
 import { VectorPipe } from './vector.pipe';
 import { SongsComponent } from './components/admin/songs/songs.component';
+import { ScheduleComponent } from './components/schedule/schedule.component';
  
 
 
@@ -64,7 +64,6 @@ import { SongsComponent } from './components/admin/songs/songs.component';
     RegistrationComponent,
     GiftsComponent,
     AccomondationsComponent,
-    ProgrammComponent,
     DressCodeComponent,
     AdminComponent,
     CookieComponent,
@@ -78,7 +77,8 @@ import { SongsComponent } from './components/admin/songs/songs.component';
     AddGuestFormComponent,
     UserlistComponent,
     VectorPipe,
-    SongsComponent
+    SongsComponent,
+    ScheduleComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,9 @@
+<div>
+    <div *ngFor="let item of items">
+        <h1>{{item.title}}</h1>
+        <h2 *ngIf="item.subtitle">{{item.subtitle}}</h2>
+        <h4>{{item.time}}</h4>
+        <h3>{{item.locationName}}</h3>
+        <h5>{{item.location}}</h5>
+    </div>
+</div>
