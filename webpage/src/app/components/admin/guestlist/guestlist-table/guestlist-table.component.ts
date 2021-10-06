@@ -8,6 +8,7 @@ import { GuestTable } from 'src/models/guest-table';
 import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, DIETS, DIET_ICONS, DIET_LABELS } from 'src/models/user';
 import { ALLERGIES, ALLERGIES_ICONS, ALLERGIES_LABELS } from 'src/models/allergies';
 import { Subscription } from 'rxjs';
+import { ExcelService } from 'src/app/services/excel/excel.service';
 
 @Component({
   selector: 'app-guestlist-table',
@@ -41,7 +42,7 @@ export class GuestlistTableComponent implements AfterViewInit, OnDestroy {
 
   guestSubscription: Subscription;
 
-  constructor(public guestService: GuestService, private dialogService: DialogService) {
+  constructor(public guestService: GuestService, private dialogService: DialogService, private excelService: ExcelService) {
 
     this.dataSource = new MatTableDataSource<GuestTable>([]);
     this.guestSubscription = this.guestService.guests.subscribe( guests => {
@@ -99,6 +100,18 @@ export class GuestlistTableComponent implements AfterViewInit, OnDestroy {
           this.guestService.deleteGuest(row.user, row.uuid).subscribe();
         }
       });
+  }
+
+  generateExcel() {
+    if (this.dataSource.data) {
+      this.excelService.createGuestFile(this.dataSource.data).then(data => {
+        const blob = new Blob([data], {
+          type:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          });
+        saveAs(blob, "Gästeliste.xlsx");
+      });
+    }
   }
 
 }

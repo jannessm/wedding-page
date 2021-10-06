@@ -3,9 +3,13 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
+import { CacheService } from 'src/app/services/cache/cache.service';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
+import { ExcelService } from 'src/app/services/excel/excel.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { UserTable } from 'src/models/guest-table';
+
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-user-table',
@@ -30,7 +34,7 @@ export class UserTableComponent implements OnDestroy, AfterViewInit {
 
   userSubscription: Subscription;
 
-  constructor(private userService: UserService, private dialogService: DialogService) {
+  constructor(private userService: UserService, private dialogService: DialogService, private excelService: ExcelService, private cacheService: CacheService) {
 
     this.dataSource = new MatTableDataSource<UserTable>([]);
     this.userSubscription = this.userService.users.subscribe( users => {
@@ -86,6 +90,23 @@ export class UserTableComponent implements OnDestroy, AfterViewInit {
         this.userService.resetPwd(row.name);
       }
     });
+  }
+
+  generateExcel() {
+    if (this.cacheService._lastDataObject) {
+      const user = Object.entries(this.cacheService._lastDataObject).map((entry) => {
+        return Object.assign(entry[1], {
+          name: entry[0],
+        });
+      })
+      this.excelService.createUserFile(user).then(data => {
+        const blob = new Blob([data], {
+          type:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          });
+        saveAs(blob, "Benutzer.xlsx");
+      });
+    }
   }
 
 }

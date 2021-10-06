@@ -38,6 +38,7 @@ export class AppComponent implements OnInit {
     iconRegistry.addSvgIcon('dress', domSaniziter.bypassSecurityTrustResourceUrl('/assets/dress.svg'));
     iconRegistry.addSvgIcon('suite', domSaniziter.bypassSecurityTrustResourceUrl('/assets/suite.svg'));
     iconRegistry.addSvgIcon('wedding', domSaniziter.bypassSecurityTrustResourceUrl('/assets/wedding.svg'));
+    iconRegistry.addSvgIcon('excel', domSaniziter.bypassSecurityTrustResourceUrl('/assets/excel.svg'));
   }
 
   ngOnInit() {

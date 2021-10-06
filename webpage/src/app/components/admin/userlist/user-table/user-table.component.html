@@ -3,8 +3,9 @@
         <mat-panel-title>
           Benutzer
         </mat-panel-title>
+        <button mat-button (click)="generateExcel()"><mat-icon svgIcon="excel"></mat-icon>Exportieren als .xlsx</button>
     </mat-expansion-panel-header>
-
+    
     <mat-form-field appearance="outline">
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Filter" #input>

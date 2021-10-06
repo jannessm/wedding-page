@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn,
 import { Observable, of, Subscription } from 'rxjs';
 import { GuestService } from 'src/app/services/guest/guest.service';
 import { UserService } from 'src/app/services/user/user.service';
-import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, Guest } from 'src/models/user';
+import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, DIETS, Guest } from 'src/models/user';
 
 import { v4 as uuid } from 'uuid';
 
@@ -68,7 +68,7 @@ export class AddGuestFormComponent implements OnDestroy {
       name,
       lastname,
       age,
-      diet: "",
+      diet: DIETS.NORMAL,
       allergies: [],
       otherAllergies: "",
       song: "",
