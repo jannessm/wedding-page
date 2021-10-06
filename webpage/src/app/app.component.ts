@@ -41,9 +41,7 @@ export class AppComponent implements OnInit {
     iconRegistry.addSvgIcon('excel', domSaniziter.bypassSecurityTrustResourceUrl('/assets/excel.svg'));
   }
 
-  ngOnInit() {
-    this.activeRoute.url.subscribe(console.log);
-  }
+  ngOnInit() { }
 
   logout() {
     this.authService.logout();

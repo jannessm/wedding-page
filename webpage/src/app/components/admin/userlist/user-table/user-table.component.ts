@@ -92,7 +92,9 @@ export class UserTableComponent implements OnDestroy, AfterViewInit {
     });
   }
 
-  generateExcel() {
+  generateExcel(event: any) {
+    event.stopPropagation();
+
     if (this.cacheService._lastDataObject) {
       const user = Object.entries(this.cacheService._lastDataObject).map((entry) => {
         return Object.assign(entry[1], {

@@ -102,7 +102,9 @@ export class GuestlistTableComponent implements AfterViewInit, OnDestroy {
       });
   }
 
-  generateExcel() {
+  generateExcel(event: any) {
+    event.stopPropagation();
+    
     if (this.dataSource.data) {
       this.excelService.createGuestFile(this.dataSource.data).then(data => {
         const blob = new Blob([data], {
