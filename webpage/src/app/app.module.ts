@@ -54,6 +54,7 @@ import { UserlistComponent } from './components/admin/userlist/userlist.componen
 import { VectorPipe } from './vector.pipe';
 import { SongsComponent } from './components/admin/songs/songs.component';
 import { ScheduleComponent } from './components/schedule/schedule.component';
+import { WipComponent } from './components/wip/wip.component';
  
 
 
@@ -78,7 +79,8 @@ import { ScheduleComponent } from './components/schedule/schedule.component';
     UserlistComponent,
     VectorPipe,
     SongsComponent,
-    ScheduleComponent
+    ScheduleComponent,
+    WipComponent
   ],
   imports: [
     BrowserModule,

@@ -1,27 +1,17 @@
+@use '~@angular/material' as mat;
+@import 'colors.scss';
+
 div {
     float: center;
     text-align: center;
 
     div {
-        width: 300px;
+        width: max(300px, 50%);
         margin: 128px auto;
 
-        h1 {
-            line-height: 1em;
-            font-size: 5em;
+        a[href] {
+            text-decoration: none;
+            color: mat.get-color-from-palette(mat.$teal-palette, 800);
         }
-
-        h2 {
-            width: 100%;
-            font-weight: lighter;
-        }
-
-        h4 {
-            width: 100%;
-            letter-spacing: 0.7em;
-            font-weight: lighter;
-        }
-
-
     }
 }

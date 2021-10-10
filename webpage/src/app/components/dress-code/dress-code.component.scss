@@ -1,19 +1,33 @@
-.container {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 24px;
-    justify-content: space-evenly;
+div {
+    width: max(300px, 50%);
+    margin: 0 auto;
 
-    .wrapper {
-        width: max(40%, 300px);
-        flex: 1 0 auto;
+    h1, p {
+        width: 100%;
         text-align: center;
-
-        mat-icon {
-            width: 100px;
-            height: 100px;
+    }
+    
+    .container {
+        margin-top: 48px;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        justify-content: space-evenly;
+    
+        .wrapper {
+            width: max(40%, 300px);
+            flex: 1 0 auto;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+    
+            mat-icon {
+                width: 100px;
+                height: 100px;
+            }
         }
     }
-
 }
