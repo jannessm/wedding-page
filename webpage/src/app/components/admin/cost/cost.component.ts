@@ -66,13 +66,17 @@ export class CostComponent {
         return;
       }
 
-      this.budgetService.updateBudget(budget).subscribe(success => {
-        if (!success) {
-          this.data.budget = this.oldBudget;
-        }
-
+      if (budget !== this.oldBudget) {
+        this.budgetService.updateBudget(budget).subscribe(success => {
+          if (!success) {
+            this.data.budget = this.oldBudget;
+          }
+  
+          this.editBudget = false;
+        });
+      } else {
         this.editBudget = false;
-      });
+      }
     }
   }
 

@@ -1,6 +1,6 @@
 <div>
     <h2>Budget:</h2>
-    <span *ngIf="!editBudget">
+    <span *ngIf="!editBudget" class="hover">
         <div>{{ data.spent_total }} / {{ data.budget }} € <button mat-icon-button (click)="toggleEditBudget()"><mat-icon>edit</mat-icon></button></div>
     </span>
     <span *ngIf="editBudget">
