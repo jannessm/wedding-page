@@ -5,8 +5,12 @@ $ALGO = 'AES-128-CBC';
 
 function read_file($filename) {
     global $ALGO, $fileKey;
-    $content = file_get_contents($filename);
-    return openssl_decrypt($content, $ALGO, md5('password'), 0, $fileKey);
+    if (file_exists($filename)) {
+        $content = file_get_contents($filename);
+        return openssl_decrypt($content, $ALGO, md5('password'), 0, $fileKey);
+    } else {
+        return "{}"; // empty json
+    } 
 }
 
 function write_file($filename, $content) {

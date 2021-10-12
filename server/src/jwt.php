@@ -1,5 +1,6 @@
 <?php
     use Firebase\JWT\JWT;
+    use Firebase\JWT\ExpiredException;
     require_once($BASE . 'vendor/autoload.php');
     require_once($BASE . 'config/secrets.php');
 
@@ -71,7 +72,11 @@
         }
         global $jwtPublicKey, $serverName;
 
-        $token = JWT::decode($jwt, $jwtPublicKey, ['RS256']);
+        try {
+            $token = JWT::decode($jwt, $jwtPublicKey, ['RS256']);
+        } catch (ExpiredException $e) {
+            return;
+        }
 
         return $token;
     }

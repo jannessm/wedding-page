@@ -3,7 +3,7 @@ import { Observable, of, Subject } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { ApiResponse, API_STATUS, DataResponse } from 'src/models/api';
 import { User, UserResponse } from 'src/models/user';
-import { ApiService } from '../api/api.service';
+import { UserApiService } from '../api/user-api/user-api.service';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable({
@@ -15,7 +15,7 @@ export class CacheService {
   data: Subject<UserResponse>;
 
   constructor(
-    private apiService: ApiService,
+    private apiService: UserApiService,
     private authService: AuthService,
   ) {
     this.data = new Subject<UserResponse>();

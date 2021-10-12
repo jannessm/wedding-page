@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, Subscriber } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApiService } from '../api/api.service';
+import { UserApiService } from '../api/user-api/user-api.service';
 import { User } from 'src/models/user';
 import { API_STATUS, DataResponse } from 'src/models/api';
 import { LocalStorageService } from '../local-storage/local-storage.service';
@@ -22,7 +22,10 @@ export class AuthService {
 
   loggedUser: User | null = null;
 
-  constructor(private api: ApiService, private lsService: LocalStorageService) {
+  constructor(
+    private api: UserApiService,
+    private lsService: LocalStorageService
+  ) {
 
     
     if (!!this.lsService.jwt) {

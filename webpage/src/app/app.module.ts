@@ -55,6 +55,7 @@ import { VectorPipe } from './vector.pipe';
 import { SongsComponent } from './components/admin/songs/songs.component';
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { WipComponent } from './components/wip/wip.component';
+import { CostComponent } from './components/admin/cost/cost.component';
  
 
 
@@ -80,7 +81,8 @@ import { WipComponent } from './components/wip/wip.component';
     VectorPipe,
     SongsComponent,
     ScheduleComponent,
-    WipComponent
+    WipComponent,
+    CostComponent
   ],
   imports: [
     BrowserModule,

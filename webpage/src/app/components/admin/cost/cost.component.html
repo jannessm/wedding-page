@@ -1,0 +1,17 @@
+<div>
+    <h2>Budget:</h2>
+    <span *ngIf="!editBudget">
+        <div>{{ data.spent_total }} / {{ data.budget }} € <button mat-icon-button (click)="toggleEditBudget()"><mat-icon>edit</mat-icon></button></div>
+    </span>
+    <span *ngIf="editBudget">
+        <div>{{ data.spent_total }} / 
+            <mat-form-field appearance="outline">
+                <mat-label>Budget</mat-label>
+                <input matInput #budgetInput [(ngModel)]="data.budget" type="number" min="1">
+                <mat-error *ngIf="greaterThan0Error">Das Budget muss größer als 0 sein.</mat-error>
+                <mat-error *ngIf="notANumberError">Das Budget muss eine Nummer sein.</mat-error>
+            </mat-form-field>
+            € <button mat-icon-button (click)="changeBudget()"><mat-icon>done</mat-icon></button>
+        </div>
+    </span>
+</div>

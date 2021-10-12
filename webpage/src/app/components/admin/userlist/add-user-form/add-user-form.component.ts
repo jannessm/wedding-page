@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import {randomPassword, lower, upper, digits} from 'secure-random-password';
-import { ApiService } from 'src/app/services/api/api.service';
+import { UserApiService } from 'src/app/services/api/user-api/user-api.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { API_STATUS, ErrorResponse } from 'src/models/api';
 import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, DIETS, Guest, User } from 'src/models/user';
@@ -30,7 +30,7 @@ export class AddUserFormComponent {
   agesLabels = AGE_CATEGORY_LABELS;
   agesIcons = AGE_CATEGORY_ICONS;
 
-  constructor(private fb: FormBuilder, private apiService: ApiService, private userService: UserService) {
+  constructor(private fb: FormBuilder, private apiService: UserApiService, private userService: UserService) {
     this.guests = fb.array([
       fb.group({
         'name': ['', Validators.required],

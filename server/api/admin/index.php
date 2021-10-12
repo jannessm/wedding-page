@@ -5,63 +5,63 @@
     $BASE = __DIR__ . '/../../';
 
     require_once($BASE . 'autoload.php');
+    require_once('user.php');
+    require_once('budget.php');
 
     // check JWT
     if (!validJWT()) {
         respondErrorMsg(401, "Unauthorized");
+        exit();
     }
 
     // check admin rights
     $user = decodeToken(readToken())->user;
     if (!$user->isAdmin) {
         respondErrorMsg(401, "Unauthorized: Admin rights needed");
+        exit();
     }
 
     // get user data
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['user'])) {
         $user_data = json_decode(read_file($BASE . 'data'), true);
         respondJSON(200, filterUser($user_data));
+        exit();
     }
 
     // add user
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['user'])) {
-        include($BASE . 'api/admin/user.php');
+        addUser();
+        exit();
     }
     
     // update users
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-user'])) {
-        $payload = json_decode(file_get_contents("php://input"), true);
-        $user_data = json_decode(read_file($BASE . 'data'), true);
-
-        foreach ($payload as $user => $userObj) {
-            $payload[$user]['password'] = $user_data[$user]['password'];
-        }
-
-        write_file($BASE . 'data', json_encode($payload));
-        respondJSON(201, "");
+        updateUser();
+        exit();
     }
 
     // delete user
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['delete-user'])) {
-        $payload = json_decode(file_get_contents("php://input"), true);
-        $user_data = json_decode(read_file($BASE . 'data'), true);
-
-        unset($user_data[$payload['name']]);
-
-        write_file($BASE . 'data', json_encode($user_data));
-        
-        respondJSON(201, filterUser($user_data));
+        deleteUser();
+        exit();
     }
 
     // reset passwort for user
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['reset-pwd'])) {
-        $payload = json_decode(file_get_contents("php://input"), true);
-        $user_data = json_decode(read_file($BASE . 'data'), true);
-
-        $user_data[$payload['name']]['password'] = md5($user_data[$payload['name']]['firstPassword']);
-        $user_data[$payload['name']]['firstLogin'] = true;
-
-        write_file($BASE . 'data', json_encode($user_data));
-        
-        respondJSON(201, "done");
+        resetPwd();
+        exit();
     }
+
+    // get budget data
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['get-budget-data'])) {
+        getBudgetData();
+        exit();
+    }
+
+    // update budget
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-budget'])) {
+        updateBudget();
+        exit();
+    }
+
+    respondErrorMsg(401, "endpoint not found.");

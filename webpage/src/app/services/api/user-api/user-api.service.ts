@@ -3,13 +3,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiResponse } from 'src/models/api';
 import { User, UserResponse } from 'src/models/user';
-import { LocalStorageService } from '../local-storage/local-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ApiService {
-
+export class UserApiService {
   BASE_API = 'http://localhost:8080/api/'
 
   constructor(private http: HttpClient) {}
@@ -58,5 +56,4 @@ export class ApiService {
   resetPwd(user: string): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.BASE_API + "admin/?reset-pwd", {name: user});
   }
-
 }

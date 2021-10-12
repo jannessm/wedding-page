@@ -3,10 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import md5 from 'md5-ts';
 import { ConfirmValidator } from 'src/app/confirm-validator';
-import { ApiService } from 'src/app/services/api/api.service';
+import { UserApiService } from 'src/app/services/api/user-api/user-api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { API_STATUS } from 'src/models/api';
-import { User } from 'src/models/user';
 
 @Component({
   selector: 'app-change-password',
@@ -19,7 +18,7 @@ export class ChangePasswordComponent implements OnInit {
 
   constructor(
     fb: FormBuilder,
-    private apiService: ApiService,
+    private apiService: UserApiService,
     private router: Router,
     public authService: AuthService
   ) {
