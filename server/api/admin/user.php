@@ -1,6 +1,7 @@
 <?php
 
 function addUser() {
+    global $BASE;
     $payload = json_decode(file_get_contents("php://input"), true);
     $user_data = json_decode(read_file($BASE . 'data'), true);
     
@@ -42,6 +43,7 @@ function addUser() {
 }
 
 function updateUser() {
+    global $BASE;
     $payload = json_decode(file_get_contents("php://input"), true);
     $user_data = json_decode(read_file($BASE . 'data'), true);
 
@@ -54,6 +56,7 @@ function updateUser() {
 }
 
 function deleteUser() {
+    global $BASE;
     $payload = json_decode(file_get_contents("php://input"), true);
     $user_data = json_decode(read_file($BASE . 'data'), true);
 
@@ -65,6 +68,7 @@ function deleteUser() {
 }
 
 function resetPwd() {
+    global $BASE;
     $payload = json_decode(file_get_contents("php://input"), true);
     $user_data = json_decode(read_file($BASE . 'data'), true);
 

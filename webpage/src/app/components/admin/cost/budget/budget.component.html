@@ -1,0 +1,18 @@
+<div>
+    {{ spent }} / 
+    <span *ngIf="!editMode">
+        {{ budget }} €
+        <button mat-icon-button (click)="toggleEditMode()">
+            <mat-icon>edit</mat-icon>
+        </button>
+    </span>
+    <span *ngIf="editMode && control">
+        <mat-form-field appearance="outline">
+            <mat-label>Budget</mat-label>
+            <input matInput [formControl]="control" type="number" min="1">
+            <mat-error *ngIf="control.hasError('min')">Das Budget muss größer als 0 sein.</mat-error>
+            <mat-error *ngIf="control.hasError('pattern') || control.hasError('required')">Das Budget muss eine Zahl sein.</mat-error>
+        </mat-form-field>
+        € <button mat-icon-button (click)="applyChanges()"><mat-icon>done</mat-icon></button>
+    </span>
+</div>

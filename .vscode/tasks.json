@@ -1,7 +1,7 @@
 {
     "version": "2.0.0",
     "presentation": {
-      "echo": false,
+      "echo": true,
       "reveal": "always",
       "focus": false,
       "panel": "dedicated",
@@ -22,7 +22,7 @@
         // Try start the task on folder open
         "runOptions": {
           "runOn": "folderOpen"
-        }
+        },
       },
       {
         // The name that shows up in terminal tab
@@ -40,12 +40,18 @@
       {
         "label": "Frontend",
         "type": "shell",
-        "command": "cd webpage; npm start",
+        "command": "npm start",
         "isBackground": true,
         "problemMatcher": [],
         "presentation": {
           "group": "wedding-page"
-        }
+        },
+        "osx": {
+          "command": "source /Users/jannes/miniconda3/bin/activate node; npm start"
+        },
+        "options": {
+          "cwd": "${workspaceFolder}/webpage",
+        },
       }
     ]
   }

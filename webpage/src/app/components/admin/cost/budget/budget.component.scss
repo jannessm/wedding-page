@@ -1,0 +1,11 @@
+div {
+    line-height: 48px;
+
+    button {
+        display: none;            
+    }
+
+    &:hover button {
+        display: inline-block;
+    }
+}

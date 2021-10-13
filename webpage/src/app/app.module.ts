@@ -12,6 +12,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -56,6 +57,8 @@ import { SongsComponent } from './components/admin/songs/songs.component';
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { WipComponent } from './components/wip/wip.component';
 import { CostComponent } from './components/admin/cost/cost.component';
+import { CategoryComponent } from './components/admin/cost/category/category.component';
+import { BudgetComponent } from './components/admin/cost/budget/budget.component';
  
 
 
@@ -82,7 +85,9 @@ import { CostComponent } from './components/admin/cost/cost.component';
     SongsComponent,
     ScheduleComponent,
     WipComponent,
-    CostComponent
+    CostComponent,
+    CategoryComponent,
+    BudgetComponent
   ],
   imports: [
     BrowserModule,
@@ -97,6 +102,7 @@ import { CostComponent } from './components/admin/cost/cost.component';
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
+    MatChipsModule,
     MatDialogModule,
     MatDividerModule,
     MatExpansionModule,

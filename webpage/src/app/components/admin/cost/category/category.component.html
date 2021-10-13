@@ -1,0 +1,26 @@
+<div *ngIf="category">
+    <span *ngIf="!editMode">{{category.label}}</span>
+    <mat-form-field *ngIf="editMode && form" appearance="outline" [formGroup]="form">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="label">
+        <mat-error>Die Kategorie muss einen Namen haben.</mat-error>
+    </mat-form-field>
+    :
+    {{ category.spent }} / 
+    <span *ngIf="!editMode">
+        {{ category.budget }} €
+        <button mat-icon-button (click)="toggleEditMode()">
+            <mat-icon>edit</mat-icon>
+        </button>
+    </span>
+    <span *ngIf="editMode && form">
+        <mat-form-field appearance="outline" [formGroup]="form">
+            <mat-label>Budget</mat-label>
+            <input matInput formControlName="budget" type="number" min="1">
+            <mat-error *ngIf="form.controls['budget'].hasError('min')">Das Budget muss größer als 0 sein.</mat-error>
+            <mat-error *ngIf="form.controls['budget'].hasError('pattern') || form.controls['budget'].hasError('required')">Das Budget muss eine Zahl sein.</mat-error>
+        </mat-form-field>
+        € <button mat-icon-button (click)="applyChanges()"><mat-icon>done</mat-icon></button>
+    </span>
+    <button mat-icon-button (click)="deleteCategory()"><mat-icon>delete</mat-icon></button>
+</div>

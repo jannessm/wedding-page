@@ -5,8 +5,8 @@
     $BASE = __DIR__ . '/../../';
 
     require_once($BASE . 'autoload.php');
-    require_once('user.php');
-    require_once('budget.php');
+    include('user.php');
+    include('budget.php');
 
     // check JWT
     if (!validJWT()) {
@@ -61,6 +61,18 @@
     // update budget
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-budget'])) {
         updateBudget();
+        exit();
+    }
+
+    // update categories (also add some)
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-categories'])) {
+        updateCategories();
+        exit();
+    }
+
+    // delete a category
+    if ($_SERVER['REQUEST_METHOD'] === 'DELETE' && isset($_GET['delete-category']) && isset($_GET['id'])) {
+        deleteCategory();
         exit();
     }
 

@@ -1,21 +1,9 @@
 div {
     padding: 16px;
 
-    .hover {
-        line-height: 48px;
-
-        button {
-            display: none;            
-        }
-
-        &:hover button {
-            display: inline-block;
-        }
-    }
-
-    .edit {
-        mat-error {
-            display: inline-block;
-        }
+    .categories {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
     }
 }
