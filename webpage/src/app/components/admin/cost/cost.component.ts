@@ -42,8 +42,6 @@ export class CostComponent {
 
   toggleEditBudget() {
     this.editBudget = !this.editBudget;
-    this.notANumberError = false;
-    this.greaterThan0Error = false;
     this.oldBudget = this.data.budget;
     
     this.changeDetector.markForCheck()
@@ -52,11 +50,12 @@ export class CostComponent {
 
   changeBudget() {
     if (this.budgetInput) {
+      this.notANumberError = false;
+      this.greaterThan0Error = false;
 
-      let budget = -1;
-      try {
-        budget = parseInt(this.budgetInput.value);
-      } catch (e) {
+      const budget = parseInt(this.budgetInput.value);
+
+      if (isNaN(budget)) {
         this.notANumberError = true;
         return;
       }

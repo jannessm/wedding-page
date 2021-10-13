@@ -3,7 +3,7 @@
     <span *ngIf="!editBudget" class="hover">
         <div>{{ data.spent_total }} / {{ data.budget }} € <button mat-icon-button (click)="toggleEditBudget()"><mat-icon>edit</mat-icon></button></div>
     </span>
-    <span *ngIf="editBudget">
+    <span *ngIf="editBudget" class="edit">
         <div>{{ data.spent_total }} / 
             <mat-form-field appearance="outline">
                 <mat-label>Budget</mat-label>
