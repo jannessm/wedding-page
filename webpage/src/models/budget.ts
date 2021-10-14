@@ -15,10 +15,10 @@ export interface Category {
 
 export interface CostCenter {
     id: string;
+    title: string;
     category: string;
     amount: number;
     paid: boolean;
-    title: string;
-    description: string;
     per_person: boolean;
+    editMode?: boolean;
 }

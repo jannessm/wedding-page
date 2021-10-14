@@ -4,7 +4,9 @@
         <div>gesamt: <app-budget [spent]="data.spent_total" [budget]="data.budget" (change)="changeBudget($event)"></app-budget></div>
     </span>
 
-    <h3>Kategorien:</h3>
+    <h3>Kategorien: 
+        <button mat-icon-button (click)="addCategory()"><mat-icon>add</mat-icon></button>
+    </h3>
     <span class="categories">
         <app-category 
             *ngFor="let category of categories"
@@ -13,7 +15,8 @@
             (delete)="deleteCategory($event)">
         </app-category>
     </span>
-    <button mat-icon-button (click)="addCategory()"><mat-icon>add</mat-icon></button>   
 
+    <h3>Kostenstellen:</h3>
+    <app-cost-centers [costCenters]="cost_centers" [categories]="categories"></app-cost-centers>
 </div>
 <div *ngIf="!data">Keine Daten gefunden.</div>

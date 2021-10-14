@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
-import { BudgetData, Category } from 'src/models/budget';
+import { Component, ViewChild } from '@angular/core';
+import { BudgetData, Category, CostCenter } from 'src/models/budget';
 import { BudgetService } from 'src/app/services/budget/budget.service';
-import { FormControl, Validators } from '@angular/forms';
 
 import { v4 as uuid } from 'uuid';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-costs',
@@ -14,6 +16,11 @@ export class CostComponent {
   data: BudgetData | undefined;
 
   categories: Category[] = [];
+
+  cost_centers = new MatTableDataSource<CostCenter>();
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  @ViewChild(MatSort) sort: MatSort | undefined;
 
   constructor(
     private budgetService: BudgetService,
@@ -27,6 +34,7 @@ export class CostComponent {
     if (data) {
       this.data = data;
       this.categories = this.data.categories.map(v => Object.assign({}, v));
+      this.cost_centers.data = this.data.cost_centers;
     }
   }
 

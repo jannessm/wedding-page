@@ -1,6 +1,10 @@
 div {
     padding: 16px;
 
+    h3 {
+        line-height: 48px;
+    }
+
     .categories {
         display: flex;
         gap: 24px;

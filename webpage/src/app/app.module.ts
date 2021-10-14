@@ -59,6 +59,7 @@ import { WipComponent } from './components/wip/wip.component';
 import { CostComponent } from './components/admin/cost/cost.component';
 import { CategoryComponent } from './components/admin/cost/category/category.component';
 import { BudgetComponent } from './components/admin/cost/budget/budget.component';
+import { CostCentersComponent } from './components/admin/cost/cost-centers/cost-centers.component';
  
 
 
@@ -87,7 +88,8 @@ import { BudgetComponent } from './components/admin/cost/budget/budget.component
     WipComponent,
     CostComponent,
     CategoryComponent,
-    BudgetComponent
+    BudgetComponent,
+    CostCentersComponent
   ],
   imports: [
     BrowserModule,
