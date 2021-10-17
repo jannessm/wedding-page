@@ -17,7 +17,7 @@
 
 <div class="mobile">
   <mat-accordion *ngIf='authService._isLoggedIn && authService.loggedUser && !authService.loggedUser.firstLogin'>
-    <mat-expansion-panel hideToggle>
+    <mat-expansion-panel [expanded]="menuExpanded" (opened)="menuExpanded = true" hideToggle>
       <mat-expansion-panel-header><span class="logo"><mat-icon [svgIcon]="'wedding'"></mat-icon></span>
   
         <button mat-icon-button aria-label="Menü" class="menu-button">
@@ -25,7 +25,7 @@
         </button>
       </mat-expansion-panel-header>
 
-      <button *ngFor="let item of navItems" mat-button [routerLink]='item.link' [class.active]="router.isActive(item.link, true)">{{item.text}}</button>
+      <button *ngFor="let item of navItems" mat-button (click)="nav(item.link)" [class.active]="router.isActive(item.link, true)">{{item.text}}</button>
 
       <button mat-button routerLink='/user/change-password'>Passwort ändern</button>
       <button mat-button *ngIf="authService.loggedUser.isAdmin" routerLink='/user/admin'>Admin</button>

@@ -15,14 +15,14 @@ $ openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub
 ```
 2. put the keys in `server/config` dir
 3. start php server with root of `/server`
-4. follow installation instructions under server
-5. run the angular 
+4. follow installation instructions under `server/README.md`
+5. run the angular app
 
 
 ## publish
 1. build angular app `npm run build`
 2. set correct host in `server/config/secrets.php`
-3. copy files to server in one directory:
+3. copy files from server in final webpage directory:
 ```
 - /
   - api/
@@ -32,4 +32,6 @@ $ openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub
   - src/
   - vendor/
   - .htaccess
+  - autoload.php
 ```
+4. copy dist files for angular in same directory

@@ -1,16 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
-import { LocalStorageService } from './services/local-storage/local-storage.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'Tina und Jannes';
 
   navItems = [
@@ -20,13 +19,14 @@ export class AppComponent implements OnInit {
     {text: 'Geschenketipps', link:'/user/gifts'},
     {text: 'Unterkünfte', link:'/user/accomondations'},
   ];
+
+  menuExpanded = false;
   
   constructor(
     public authService: AuthService,
     public router: Router,
     iconRegistry: MatIconRegistry,
     domSaniziter: DomSanitizer,
-    private activeRoute: ActivatedRoute
   ) {
     iconRegistry.addSvgIcon('vegan', domSaniziter.bypassSecurityTrustResourceUrl('/assets/vegan.svg'));
     iconRegistry.addSvgIcon('vegetarian', domSaniziter.bypassSecurityTrustResourceUrl('/assets/milk-bottle.svg'));
@@ -41,7 +41,11 @@ export class AppComponent implements OnInit {
     iconRegistry.addSvgIcon('excel', domSaniziter.bypassSecurityTrustResourceUrl('/assets/excel.svg'));
   }
 
-  ngOnInit() { }
+  nav(link: string) {
+    this.menuExpanded = false;
+    console.log(this.menuExpanded);
+    this.router.navigate([link]);
+  }
 
   logout() {
     this.authService.logout();

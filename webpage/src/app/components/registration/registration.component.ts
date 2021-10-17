@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CacheService } from 'src/app/services/cache/cache.service';
 import { ALLERGIES, ALLERGIES_LABELS } from 'src/models/allergies';
+import { API_STATUS } from 'src/models/api';
 import { DIETS, DIET_LABELS, User } from 'src/models/user';
 import { getYoutubeID, isYoutubeLink } from 'src/models/youtube';
 
@@ -24,7 +26,13 @@ export class RegistrationComponent {
 
   youtubeURLs: SafeResourceUrl[] = [];
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private sanitizer: DomSanitizer, private cacheService: CacheService) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private sanitizer: DomSanitizer,
+    private cacheService: CacheService,
+    private snackbar: MatSnackBar
+  ) {
     this.user = this.authService.loggedUser;
 
     if (!!this.user) {
@@ -57,7 +65,13 @@ export class RegistrationComponent {
     });
 
     if (!!this.user) {
-      this.cacheService.updateUserNonAdmin(this.user).subscribe();
+      this.cacheService.updateUserNonAdmin(this.user).subscribe( resp => {
+        if (resp && resp.status === API_STATUS.SUCCESS) {
+          this.snackbar.open('Erfolgreich gespeichert!', 'Ok');
+        } else {
+          this.snackbar.open('Speichern Fehlgeschlagen!', 'Ok');
+        }
+      });
     }
   }
 
