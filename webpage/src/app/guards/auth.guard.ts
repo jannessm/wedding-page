@@ -18,11 +18,11 @@ export class AuthGuard implements CanActivate {
     return this.authService.isLoggedIn().pipe(
       map(loggedIn => {
         // is logged in and its not the first login => continue routing
-        if (loggedIn && !this.authService.loggedUser?.firstLogin) {
+        if (loggedIn && this.authService.loggedUser && !this.authService.loggedUser.firstLogin) {
           return true;
         
         // is logged in and is first login => change password (but only if page is different from /user/change-password)
-        } else if (loggedIn && this.authService.loggedUser?.firstLogin) {
+        } else if (loggedIn && this.authService.loggedUser && this.authService.loggedUser.firstLogin) {
           if (url !== '/user/change-password') {
             this.authService.redirectUrl = url;
             return this.router.parseUrl('user/change-password');
