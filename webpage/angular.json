@@ -41,6 +41,7 @@
             },
             "scripts": [
               "node_modules/cookieconsent/build/cookieconsent.min.js",
+              "node_modules/exceljs/dist/exceljs.min.js"
             ]
           },
           "configurations": {

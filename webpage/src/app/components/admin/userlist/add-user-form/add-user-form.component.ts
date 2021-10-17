@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import {randomPassword, lower, upper, digits} from 'secure-random-password';
 import { UserApiService } from 'src/app/services/api/user-api/user-api.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { API_STATUS, ErrorResponse } from 'src/models/api';
@@ -120,10 +119,8 @@ export class AddUserFormComponent {
   }
 
   randomPassword(len = 8): string {
-    return randomPassword({
-      length: len,
-      characters: [lower, upper, digits],
-    });
+    const chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789" // without similar symbols
+    return Array<string>(len).fill('').reduce((pwd) => pwd + chars[Math.floor(Math.random() * chars.length)]);
   }
 
 }

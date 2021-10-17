@@ -32,7 +32,6 @@
     "md5-ts": "^0.1.6",
     "ngx-cookieconsent": "^2.2.3",
     "rxjs": "~6.6.0",
-    "secure-random-password": "^0.2.3",
     "tslib": "^2.3.0",
     "uuid": "^8.3.2",
     "zone.js": "~0.11.4"
