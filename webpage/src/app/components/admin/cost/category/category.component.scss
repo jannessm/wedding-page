@@ -1,5 +1,5 @@
 @use '~@angular/material' as mat;
-@import 'colors.scss';
+@use 'colors';
 
 div {
     line-height: 48px;
@@ -15,7 +15,7 @@ div {
     }
 
     &:hover {
-        border: mat.get-color-from-palette($webpage-primary) solid 2px;
+        border: mat.get-color-from-palette(colors.$webpage-primary) solid 2px;
         border-radius: 5px;
     }
 }

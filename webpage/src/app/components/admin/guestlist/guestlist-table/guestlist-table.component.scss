@@ -1,11 +1,11 @@
-@import 'colors.scss';
-@import 'vars.scss';
+@use 'colors';
+@use 'vars';
 
 mat-form-field, table, tr {
     width: 100%;
 
     .user {
-        color: $secondary-text;
+        color: colors.$secondary-text;
     }
 
     .icon-column {
@@ -20,7 +20,7 @@ mat-form-field, table, tr {
 .div-table {
     overflow-y: auto;
 
-    @media (max-width: $breakpoint) {
+    @media (max-width: vars.$breakpoint) {
         margin-left: -24px;
         margin-right: -24px;
     }

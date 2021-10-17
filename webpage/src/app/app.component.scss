@@ -1,7 +1,7 @@
 @use '~@angular/material' as mat;
 
-@import "vars.scss";
-@import "colors.scss";
+@use "vars";
+@use "colors";
 
 .background {
     background: url('/assets/background.JPG') center;
@@ -15,21 +15,21 @@
 }
 
 .desktop {
-    @media (min-width: $breakpoint) {
+    @media (min-width: vars.$breakpoint) {
         display: block;
     }
 
-    @media (max-width: $breakpoint) {
+    @media (max-width: vars.$breakpoint) {
         display: none;
     }
 }
 
 .mobile {
-    @media (min-width: $breakpoint) {
+    @media (min-width: vars.$breakpoint) {
         display: none;
     }
 
-    @media (max-width: $breakpoint) {
+    @media (max-width: vars.$breakpoint) {
         display: block;
 
         [mat-icon-button] {
@@ -57,22 +57,22 @@ mat-toolbar, mat-accordion {
     }
     .logo {
         flex: 1 0 max(100px, 20%);
-        color: mat.get-color-from-palette($webpage-primary, 700);
+        color: mat.get-color-from-palette(colors.$webpage-primary, 700);
         text-align: center;
     }
 
     .active {
-        background: mat.get-color-from-palette($webpage-accent, 50);
-        color: $secondary-text;
+        background: mat.get-color-from-palette(colors.$webpage-accent, 50);
+        color: colors.$secondary-text;
     }
 }
 
 .content {
 
-    @media (min-width: $breakpoint) {
+    @media (min-width: vars.$breakpoint) {
         padding: 128px;
     }
-    @media (max-width: $breakpoint) {
+    @media (max-width: vars.$breakpoint) {
         padding: 64px 0;
     }
 }
