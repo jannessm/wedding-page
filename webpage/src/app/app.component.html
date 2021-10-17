@@ -16,19 +16,6 @@
 </div>
 
 <div class="mobile">
-  <!-- <mat-toolbar *ngIf='authService._isLoggedIn && authService.loggedUser && !authService.loggedUser.firstLogin'>
-    <span class="logo"><mat-icon [svgIcon]="'wedding'"></mat-icon></span>
-  
-    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menü" class="menu-button">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      <button *ngFor="let item of navItems" mat-button [routerLink]='item.link' [class.active]="router.isActive(item.link, true)">{{item.text}}</button>
-
-      <button mat-button *ngIf="authService.loggedUser.isAdmin" routerLink='/user/admin'>Admin</button>
-      <button mat-button (click)='logout()'>Logout</button>
-    </mat-menu>
-  </mat-toolbar> -->
   <mat-accordion *ngIf='authService._isLoggedIn && authService.loggedUser && !authService.loggedUser.firstLogin'>
     <mat-expansion-panel hideToggle>
       <mat-expansion-panel-header><span class="logo"><mat-icon [svgIcon]="'wedding'"></mat-icon></span>
@@ -40,6 +27,7 @@
 
       <button *ngFor="let item of navItems" mat-button [routerLink]='item.link' [class.active]="router.isActive(item.link, true)">{{item.text}}</button>
 
+      <button mat-button routerLink='/user/change-password'>Passwort ändern</button>
       <button mat-button *ngIf="authService.loggedUser.isAdmin" routerLink='/user/admin'>Admin</button>
       <button mat-button (click)='logout()'>Logout</button>
     </mat-expansion-panel>

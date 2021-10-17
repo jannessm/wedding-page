@@ -39,7 +39,7 @@ export class ChangePasswordComponent implements OnInit {
   changePassword() {
     if (this.authService.loggedUser) {
       this.apiService.changePassword(
-        this.authService.loggedUser?.name,
+        this.authService.loggedUser.name,
         md5(this.form.controls.old_pw.value),
         md5(this.form.controls.pw1.value)
       ).subscribe(resp => {

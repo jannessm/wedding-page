@@ -11,6 +11,7 @@ function addUser() {
     
     } else if (isset($payload['name'])) {
         $newUser = array(
+            'name' => $payload['name'],
             'isAdmin' => $payload['isAdmin'],
             'firstPassword' => $payload['firstPassword'],
             'firstLogin' => $payload['firstLogin'],

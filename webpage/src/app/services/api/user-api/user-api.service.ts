@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { ApiResponse } from 'src/models/api';
 import { User, UserResponse } from 'src/models/user';
 
@@ -8,7 +9,7 @@ import { User, UserResponse } from 'src/models/user';
   providedIn: 'root'
 })
 export class UserApiService {
-  BASE_API = 'http://localhost:8080/api/'
+  BASE_API = environment.api_base
 
   constructor(private http: HttpClient) {}
 

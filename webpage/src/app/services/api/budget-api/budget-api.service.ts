@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { ApiResponse } from 'src/models/api';
 import { Category } from 'src/models/budget';
 
@@ -9,7 +10,7 @@ import { Category } from 'src/models/budget';
 })
 export class BudgetApiService {
 
-  BASE_API = 'http://localhost:8080/api/admin/?'
+  BASE_API = environment.api_base + 'admin/?'
 
   constructor(private http: HttpClient) {}
 

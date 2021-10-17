@@ -6,8 +6,6 @@
 
     require_once($BASE . 'autoload.php');
 
-    
-
     if (!validJWT() && !isset($POST) && !isset($_GET['login'])) {
         respondErrorMsg(401, "No valid credentials nor valid JWT.");
     }
