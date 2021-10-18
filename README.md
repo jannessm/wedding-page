@@ -14,8 +14,10 @@ $ ssh-keygen -t rsa -b 4096 -m PEM -f jwtRS256.key
 $ openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub
 ```
 2. put the keys in `server/config` dir
+3. run `composer install` in the `server` dir
 3. start php server with root of `/server`
 4. follow installation instructions under `server/README.md`
+6. run `npm install` in the `webpage` dir
 5. run the angular app
 
 
