@@ -34,7 +34,7 @@ export class CostComponent {
     if (data) {
       this.data = data;
       this.categories = this.data.categories.map(v => Object.assign({}, v));
-      this.cost_centers.data = this.data.cost_centers;
+      this.cost_centers.data = this.data.cost_centers.map(v => Object.assign({editMode: false}, v));
     }
   }
 

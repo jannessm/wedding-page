@@ -21,4 +21,5 @@ export interface CostCenter {
     paid: boolean;
     per_person: boolean;
     editMode?: boolean;
+    isNew?: boolean;
 }
