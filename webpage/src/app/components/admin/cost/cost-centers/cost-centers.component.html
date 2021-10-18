@@ -24,15 +24,14 @@
             <td mat-cell *matCellDef="let row">
                 <mat-chip *ngIf="!row.editMode">{{getCategoryLabel(row.category)}}</mat-chip>
                 <mat-form-field *ngIf="row.editMode" appearance="outline">
-                    <input type="text"
-                    matInput
-                    [(ngModel)]="row.category"
-                    [matAutocomplete]="auto" (input)="filterCategories($event, row)">
-                <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let option of getFilteredCategories(row.id)" [value]="option.id">
-                      {{option.label}}
-                    </mat-option>
-                </mat-autocomplete>
+                    <mat-select [(ngModel)]="row.category">
+                        <mat-select-trigger>
+                            {{displayCategory(row.category)}}
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let option of categories" [value]="option.id">
+                          {{option.label}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
             </td>
             <td mat-footer-cell *matFooterCellDef>  </td>
