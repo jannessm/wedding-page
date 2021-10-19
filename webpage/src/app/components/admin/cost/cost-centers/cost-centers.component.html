@@ -1,4 +1,6 @@
 <h3>Kostenstellen:</h3><button mat-icon-button (click)="addCostCenter()"><mat-icon>add</mat-icon></button>
+<p>Unter Kosten werden die gesamten Kosten angezeigt. Bei Kosten pro Person, werden die Kosten mit der Anzahl an Gästen auf der Gästeliste mutlipliziert.</p>
+<div>Geladene Gäste: <h4>{{guests}}</h4></div>
 
 <mat-form-field appearance="outline">
     <mat-label>Filter</mat-label>
@@ -22,12 +24,13 @@
         <ng-container matColumnDef="category">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Kategorie </th>
             <td mat-cell *matCellDef="let row">
-                <mat-chip *ngIf="!row.editMode">{{getCategoryLabel(row.category)}}</mat-chip>
+                <span *ngIf="!row.editMode">{{getCategoryLabel(row.category)}}</span>
                 <mat-form-field *ngIf="row.editMode" appearance="outline">
                     <mat-select [(ngModel)]="row.category">
                         <mat-select-trigger>
                             {{displayCategory(row.category)}}
                         </mat-select-trigger>
+                        <mat-option [value]=""></mat-option>
                         <mat-option *ngFor="let option of categories" [value]="option.id">
                           {{option.label}}
                         </mat-option>
@@ -48,7 +51,7 @@
         </ng-container>
 
         <ng-container matColumnDef="per_person">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Pro Gast </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Pro Gast ({{guests}}) </th>
             <td mat-cell *matCellDef="let row">
                 <mat-icon *ngIf="row.per_person && !row.editMode">done</mat-icon>
 
@@ -60,7 +63,8 @@
         <ng-container matColumnDef="costs">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Kosten </th>
             <td mat-cell *matCellDef="let row">
-                <span *ngIf="!row.editMode">{{row.amount * guests}} €</span>
+                <span *ngIf="!row.editMode && row.per_person">{{row.amount * guests}} €</span>
+                    <span *ngIf="!row.editMode && !row.per_person">{{row.amount}} €</span>
                 <mat-form-field *ngIf="row.editMode" appearance="outline">
                     <input matInput type="number" min="0.0" [(ngModel)]="row.amount">
                     <mat-error>Der Betrag darf nicht leer und muss positiv sein.</mat-error>

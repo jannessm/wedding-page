@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { CacheService } from 'src/app/services/cache/cache.service';
 
 @Component({
   selector: 'app-costs',
@@ -14,6 +15,9 @@ import { MatSort } from '@angular/material/sort';
 })
 export class CostComponent {
   data: BudgetData | undefined;
+
+  guests = 0;
+  spent_total = 0;
 
   categories: Category[] = [];
 
@@ -24,17 +28,28 @@ export class CostComponent {
 
   constructor(
     private budgetService: BudgetService,
+    private cacheService: CacheService
   ) { }
 
   ngOnInit(): void {
     this.budgetService.getData().subscribe(data => this.handleData(data));
+    this.cacheService.data.subscribe(data => {
+      this.guests = Object.values(data).reduce((guests, user) => user.guests.length + guests, 0);
+    });
   }
 
   handleData(data: BudgetData | undefined) {
     if (data) {
       this.data = data;
+      console.log(data);
+      
+      if (!this.data.cost_centers.map) {
+        this.data.cost_centers = Object.values(this.data.cost_centers);
+      }
+
       this.categories = this.data.categories.map(v => Object.assign({}, v));
       this.cost_centers.data = this.data.cost_centers.map(v => Object.assign({editMode: false}, v));
+      this.updateSpent();
     }
   }
 
@@ -89,6 +104,23 @@ export class CostComponent {
           }
         });
       }
+  }
+
+  updateSpent() {
+    if (this.data) {
+      this.spent_total = this.getTotalCosts();
+    }
+  }
+
+  getTotalCosts(): number {
+    return this.cost_centers.data.reduce((spent, cc) => {
+      if (cc.per_person) {
+          return spent + cc.amount * this.guests;
+      
+      } else {
+          return spent + cc.amount;
+      }
+    }, 0.0);
   }
 
 }

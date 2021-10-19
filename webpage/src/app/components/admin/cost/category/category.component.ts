@@ -46,7 +46,6 @@ export class CategoryComponent {
         id: this.category.id,
         label: this.form.value['label'],
         budget: this.form.value['budget'],
-        spent: this.category.spent,
         cost_center_ids: this.category.cost_center_ids
       });
     }

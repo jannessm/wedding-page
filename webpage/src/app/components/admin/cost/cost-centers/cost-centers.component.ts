@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -21,12 +21,16 @@ export class CostCentersComponent implements AfterViewInit {
   @Input()
   categories: Category[] | undefined;
 
+  @Input()
+  guests: number = 0;
+
+  @Output()
+  change = new EventEmitter<void>();
+
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
 
   filter = "";
-
-  guests = 100;
 
   displayedColumns: string[] = ['title', 'category', 'per_person', 'costs', 'paid', 'edit', 'delete'];
 
@@ -40,6 +44,7 @@ export class CostCentersComponent implements AfterViewInit {
         this.costCenters.paginator = this.paginator;
         this.costCenters.sort = this.sort;
         clearInterval(interval);
+        this.updateCategorySpent();
       }
     }, 10);
   }
@@ -69,25 +74,26 @@ export class CostCentersComponent implements AfterViewInit {
       d.unshift(newCC);
       this.costCenters.data = d;
       this.oldCostCenteres.set(id, Object.assign({},newCC));
-      console.log(this.oldCostCenteres.get(id));
     }
   }
 
 
   saveChanges(row: CostCenter) {
     if (!this.categories || !this.costCenters) {
-      // this.toggleEditMode(row);
       this.oldCostCenteres.delete(row.id);
       return;
     }
     
-    let oldCategoryId: number | undefined;
+    let oldCategoryId = -1;
     let oldCategory: Category | undefined;
     
-    if (!!row.category && this.categories) {
+    if (!!row.category && this.categories && this.costCenters) {
       oldCategoryId = this.categories.findIndex(c => row.category == c.id);
       oldCategory = Object.assign({}, this.categories[oldCategoryId]);
-      this.categories[oldCategoryId].cost_center_ids.push(row.id);
+
+      if (!this.categories[oldCategoryId].cost_center_ids.includes(row.id)) {
+        this.categories[oldCategoryId].cost_center_ids.push(row.id);
+      }
     }
 
     row.isNew = false;
@@ -115,16 +121,28 @@ export class CostCentersComponent implements AfterViewInit {
 
         if (oldCategoryId && oldCategory) {
           this.categories[oldCategoryId].cost_center_ids = oldCategory.cost_center_ids;
+          this.categories[oldCategoryId].spent = oldCategory.spent;
         }
 
+      } else {
+        this.change.emit();
       }
-      
+
+      this.updateCategorySpent();
       this.oldCostCenteres.delete(row.id);
     });
 
   }
 
-  deleteCostCenter(row: CostCenter) {}
+  deleteCostCenter(row: CostCenter) {
+    this.apiService.deleteCostCenter(row).subscribe(resp => {
+      if (resp && resp.status == API_STATUS.SUCCESS && this.costCenters) {
+        this.costCenters.data = this.costCenters.data.filter(cc => cc.id !== row.id);
+        this.updateCategorySpent();
+        this.change.emit();
+      }
+    })
+  }
 
   toggleEditMode(row: CostCenter) {
     row.editMode = !row.editMode;
@@ -150,6 +168,25 @@ export class CostCentersComponent implements AfterViewInit {
       return !!c ? c.label : '';
     }
     return '';
+  }
+
+  updateCategorySpent() {
+    if (this.categories) {
+      this.categories.forEach(c => {
+
+        if (this.costCenters) {
+          c.spent = this.costCenters.data
+            .filter(cc => c.cost_center_ids.includes(cc.id))
+            .reduce((sum, cc) => {
+              if (cc.per_person) {
+                return sum + cc.amount * this.guests;
+              } else {
+                return sum + cc.amount;
+              }
+            }, 0.0);
+        }
+      })
+    }
   }
 
   getTotalPaid() {

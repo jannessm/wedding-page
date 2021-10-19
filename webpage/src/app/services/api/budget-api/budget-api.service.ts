@@ -41,7 +41,7 @@ export class BudgetApiService {
     });
   }
 
-  deleteCostCenters(costCenter: CostCenter): Observable<ApiResponse> {
-    return this.http.delete<ApiResponse>(this.BASE_API + 'delete-cost-centers&id=' + costCenter.id);
+  deleteCostCenter(costCenter: CostCenter): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(this.BASE_API + 'delete-cost-center&id=' + costCenter.id);
   }
 }

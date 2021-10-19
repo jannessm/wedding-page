@@ -5,14 +5,13 @@
 @use 'colors.scss';
 @use 'vars.scss';
 // Plus imports for other components in your app.
-@import url('https://fonts.googleapis.com/css2?family=Halant:wght@300;500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@300;400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Birthstone+Bounce:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bitter:wght@200;400&display=swap');
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
 $custom-typography: mat.define-typography-config(
-    $font-family: "Shippori Mincho, serif !important",
+    $font-family: "Bitter, serif !important",
     $headline: mat.define-typography-level(64px, $font-family: "Birthstone Bounce !important"),
     $title: mat.define-typography-level(20px, $letter-spacing: 2px !important),
     $subheading-2: mat.define-typography-level(18px, $letter-spacing: 4px !important),

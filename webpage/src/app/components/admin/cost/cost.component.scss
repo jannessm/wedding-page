@@ -1,6 +1,10 @@
 div {
     padding: 16px;
 
+    div:not(:first-child) {
+        margin-top: 24px;
+    }
+
     h3 {
         line-height: 48px;
     }
@@ -9,5 +13,14 @@ div {
         display: flex;
         gap: 24px;
         flex-wrap: wrap;
+    }
+
+    app-budget {
+        display: inline-block;
+    }
+
+
+    p {
+        color: grey;
     }
 }

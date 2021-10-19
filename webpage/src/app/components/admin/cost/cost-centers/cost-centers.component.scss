@@ -1,4 +1,4 @@
-h3 {
+h3, h4 {
     display: inline-block;
 }
 mat-form-field, table {
@@ -6,4 +6,7 @@ mat-form-field, table {
 }
 mat-checkbox {
     margin-left: 32px;
+}
+p {
+    color: grey;
 }

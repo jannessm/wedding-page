@@ -76,12 +76,13 @@
         exit();
     }
 
+    // update cost centers
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-cost-centers'])) {
         updateCostCenters();
         exit();
     }
 
-    // delete a category
+    // delete a cost center
     if ($_SERVER['REQUEST_METHOD'] === 'DELETE' && isset($_GET['delete-cost-center']) && isset($_GET['id'])) {
         deleteCostCenter();
         exit();

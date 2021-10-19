@@ -1,7 +1,7 @@
 <div>
-    {{ spent }} / 
+    <h4>{{ spent }}</h4> / 
     <span *ngIf="!editMode">
-        {{ budget }} €
+        <h4>{{ budget }}</h4> €
         <button mat-icon-button (click)="toggleEditMode()">
             <mat-icon>edit</mat-icon>
         </button>

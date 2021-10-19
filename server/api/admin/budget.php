@@ -8,7 +8,6 @@ function getBudgetData() {
     if (!isset($payload['budget'])) {
         $payload = array(
             "budget" => 10000,
-            "spent_total" => 0,
             "categories" => array(),
             "cost_centers" => array()
         );
@@ -70,7 +69,7 @@ function updateCostCenters() {
 
     write_file($BASE . 'budget-data', json_encode($data));
 
-    respondJSON(201, "updated categories");
+    respondJSON(201, "updated cost centers");
 }
 
 function deleteCostCenter() {
@@ -80,22 +79,22 @@ function deleteCostCenter() {
 
     $categories = $data['categories'];
     foreach($categories as $c) {
-        $categories['cost_center_ids'] = array_filter(
-            $categories['cost_center_ids'],
+        $c['cost_center_ids'] = array_values(array_filter(
+            $c['cost_center_ids'],
             function ($id) use ($cost_center_id) {
-                return strcmp($id, $cost_center_id) >= 0;
+                return strcmp($id, $cost_center_id) !== 0;
             }
-        );
+        ));
     }
-    
-    $data['cost_centers'] = array_filter(
-        $categories['cost_centers'],
+
+    $data['cost_centers'] = array_values(array_filter(
+        $data['cost_centers'],
         function ($cc) use ($cost_center_id) {
-            return strcmp($cc['id'], $cost_center_id) < 0;
+            return strcmp($cc['id'], $cost_center_id) !== 0;
         }
-    );
+    ));
 
     write_file($BASE . 'budget-data', json_encode($data));
 
-    respondJSON(201, "updated categories");
+    respondJSON(201, "deleted cost center");
 }
