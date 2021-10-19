@@ -16,7 +16,7 @@ $ openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub
 
 ## publish
 1. build angular app `npm run build`
-2. set correct host in `server/config/secrets.php`
+2. set correct host in `server/config/secrets.php` and `webpage/src/environments/environment.prod.ts`
 3. copy files from server in final webpage directory:
 ```
 - /
