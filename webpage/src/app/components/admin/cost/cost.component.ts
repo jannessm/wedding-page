@@ -23,6 +23,8 @@ export class CostComponent {
 
   cost_centers = new MatTableDataSource<CostCenter>();
 
+  category_total = 0;
+
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
 
@@ -34,7 +36,9 @@ export class CostComponent {
   ngOnInit(): void {
     this.budgetService.getData().subscribe(data => this.handleData(data));
     this.cacheService.data.subscribe(data => {
-      this.guests = Object.values(data).reduce((guests, user) => user.guests.length + guests, 0);
+      this.guests = Object.values(data).reduce((guests, user) => 
+        user.guests.reduce((comingGuests, g) => g.isComing != false ? comingGuests + 1 : 0,0) + guests
+      , 0);
     });
   }
 
@@ -49,6 +53,7 @@ export class CostComponent {
 
       this.categories = this.data.categories.map(v => Object.assign({}, v));
       this.cost_centers.data = this.data.cost_centers.map(v => Object.assign({editMode: false}, v));
+      this.category_total = this.categories.reduce((sum, c) => sum + c.budget, 0.0);
       this.updateSpent();
     }
   }

@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { BudgetApiService } from 'src/app/services/api/budget-api/budget-api.service';
 import { API_STATUS } from 'src/models/api';
-import { Category, CostCenter } from 'src/models/budget';
+import { Category, CostCenter, FilterKeywords } from 'src/models/budget';
 
 import { v4 as uuid } from 'uuid';
 
@@ -45,6 +45,7 @@ export class CostCentersComponent implements AfterViewInit {
         this.costCenters.sort = this.sort;
         clearInterval(interval);
         this.updateCategorySpent();
+        this.costCenters.filterPredicate = this.filterCostCenters.bind(this);
       }
     }, 10);
   }
@@ -217,6 +218,13 @@ export class CostCentersComponent implements AfterViewInit {
 
   displayCategory(category_id: string): string {
     return this.categories?.find(c => c.id == category_id)?.label || '';
+  }
+
+  filterCostCenters(data: CostCenter, filter: string) {
+    filter = filter.toLowerCase();
+    const searchString = `${data.amount} ${this.displayCategory(data.category)} ${data.title} ${data.paid ? FilterKeywords.PAID : ''} ${data.per_person ? FilterKeywords.PER_PERSON : ''}`.trim().toLocaleLowerCase();
+
+    return searchString.includes(filter);
   }
 
 }

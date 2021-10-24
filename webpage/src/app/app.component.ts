@@ -3,6 +3,8 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
+import { registerLocaleData } from '@angular/common';
+import localDe from '@angular/common/locales/de';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +30,7 @@ export class AppComponent {
     iconRegistry: MatIconRegistry,
     domSaniziter: DomSanitizer,
   ) {
+    registerLocaleData(localDe, 'de');
     iconRegistry.addSvgIcon('vegan', domSaniziter.bypassSecurityTrustResourceUrl('/assets/vegan.svg'));
     iconRegistry.addSvgIcon('vegetarian', domSaniziter.bypassSecurityTrustResourceUrl('/assets/milk-bottle.svg'));
     iconRegistry.addSvgIcon('gluten-free', domSaniziter.bypassSecurityTrustResourceUrl('/assets/gluten-free.svg'));
