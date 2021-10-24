@@ -22,3 +22,8 @@ export interface CostCenter {
     editMode?: boolean;
     isNew?: boolean;
 }
+
+export enum FilterKeywords {
+    PAID = 'bezahlt',
+    PER_PERSON = 'pPers'
+}

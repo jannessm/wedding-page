@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -61,6 +61,7 @@ import { CategoryComponent } from './components/admin/cost/category/category.com
 import { BudgetComponent } from './components/admin/cost/budget/budget.component';
 import { CostCentersComponent } from './components/admin/cost/cost-centers/cost-centers.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { environment } from 'src/environments/environment';
  
 
 
@@ -125,6 +126,10 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi:true},
+    {
+      provide: LOCALE_ID,
+      useValue: environment.locale // 'de' for Germany, 'fr' for France ...
+    },
     AuthGuard,
     IsLoggedGuard,
   ],

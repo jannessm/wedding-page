@@ -6,9 +6,9 @@
         <mat-error>Die Kategorie muss einen Namen haben.</mat-error>
     </mat-form-field>
     :
-    <h4>{{ category.spent }}</h4> / 
+    <h4>{{ category.spent | currency:'EUR':'symbol' }}</h4> / 
     <span *ngIf="!editMode">
-        <h4>{{ category.budget }}</h4> €
+        <h4>{{ category.budget | currency:'EUR':'symbol' }}</h4>
         <button mat-icon-button (click)="toggleEditMode()">
             <mat-icon>edit</mat-icon>
         </button>
