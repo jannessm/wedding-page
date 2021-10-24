@@ -31,7 +31,12 @@
 
     function validJWT() {
         global $serverName;
-        $token = decodeToken(readToken());
+        
+        try {
+            $token = decodeToken(readToken());
+        } catch (Exception $e) {
+            return false;
+        }
 
         if(!$token) {
             return false;

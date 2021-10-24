@@ -60,6 +60,7 @@ import { CostComponent } from './components/admin/cost/cost.component';
 import { CategoryComponent } from './components/admin/cost/category/category.component';
 import { BudgetComponent } from './components/admin/cost/budget/budget.component';
 import { CostCentersComponent } from './components/admin/cost/cost-centers/cost-centers.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
  
 
 
@@ -89,7 +90,8 @@ import { CostCentersComponent } from './components/admin/cost/cost-centers/cost-
     CostComponent,
     CategoryComponent,
     BudgetComponent,
-    CostCentersComponent
+    CostCentersComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

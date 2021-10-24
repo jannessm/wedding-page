@@ -13,6 +13,7 @@ import { RegistrationComponent } from './components/registration/registration.co
 import { IsLoggedGuard } from './guards/is-logged.guard';
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { WipComponent } from './components/wip/wip.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {path: 'user', canActivate: [AuthGuard], children: [
@@ -29,7 +30,8 @@ const routes: Routes = [
   ]},
   {path: 'login', component: LoginComponent, canActivate:[IsLoggedGuard]},
   {path: 'cookies', component: CookieComponent},
-  {path: '', redirectTo: '/user/program', pathMatch: 'full'}
+  {path: '', redirectTo: '/user/program', pathMatch: 'full'},
+  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({

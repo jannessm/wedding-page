@@ -16,7 +16,8 @@
 
     // check admin rights
     $user = decodeToken(readToken())->user;
-    if (!$user->isAdmin) {
+    $user_data = json_decode(read_file($BASE . 'data'), true);
+    if (!$user_data[$user->name]['isAdmin']) {
         respondErrorMsg(401, "Unauthorized: Admin rights needed");
         exit();
     }
