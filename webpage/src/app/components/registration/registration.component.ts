@@ -53,12 +53,12 @@ export class RegistrationComponent {
   }
 
   saveChanges() {
+    console.log('hi');
     this.form.controls.forEach((guest, id) => {
       if (!!this.user) {
         this.user.guests[id].isComing = (<FormGroup>guest).controls.isComing.value;
         this.user.guests[id].diet = (<FormGroup>guest).controls.diet.value;
         this.user.guests[id].allergies = (<FormGroup>guest).controls.allergies.value;
-        this.user.guests[id].otherAllergies = (<FormGroup>guest).controls.otherAllergies.value;
         this.user.guests[id].otherAllergies = (<FormGroup>guest).controls.otherAllergies.value;
         this.user.guests[id].song = (<FormGroup>guest).controls.song.value;
       }

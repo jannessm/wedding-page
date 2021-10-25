@@ -14,6 +14,7 @@ if ($user_data[$username] && $user_data[$username]['password'] == $payload['pwd'
     
     unset($user_data[$username]['password']);
     $jwtData = $user_data[$username];
+    $jwtData['name'] = $username;
     $jwt_and_expire_date = generateJWT($jwtData);
 
     respondJSON(201, $jwt_and_expire_date);
