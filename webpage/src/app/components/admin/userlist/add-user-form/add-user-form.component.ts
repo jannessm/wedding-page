@@ -76,7 +76,6 @@ export class AddUserFormComponent {
       guests
     }).subscribe(resp => {
       if (resp.status === API_STATUS.ERROR) {
-        console.log((<ErrorResponse>resp).message);
         this.form.controls.username.setErrors({'userExists': true});
       } else {
         this.resetForm();

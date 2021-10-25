@@ -53,7 +53,6 @@ export class RegistrationComponent {
   }
 
   saveChanges() {
-    console.log('hi');
     this.form.controls.forEach((guest, id) => {
       if (!!this.user) {
         this.user.guests[id].isComing = (<FormGroup>guest).controls.isComing.value;

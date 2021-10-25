@@ -87,7 +87,6 @@ export class CacheService {
   }
 
   updateUserNonAdmin(updatedUser: User): Observable<undefined | ApiResponse> {
-    console.log(this._lastDataObject);
     if (this._lastDataObject) {
       return this.apiService.updateUser(updatedUser).pipe(
         tap(resp => {
