@@ -63,7 +63,7 @@ export class AddUserFormComponent {
   }
 
   addUser() {
-    const user = this.form.controls.username.value;
+    const user = (this.form.controls.username.value as string).toLowerCase();
     const pwd = this.form.controls.firstPassword.value;
     const isAdmin = this.form.controls.admin.value;
     const guests = this.getGuests();
@@ -119,7 +119,7 @@ export class AddUserFormComponent {
   }
 
   randomPassword(len = 8): string {
-    const chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789" // without similar symbols
+    const chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXY3456789" // without similar symbols
     return Array<string>(len).fill('').reduce((pwd) => pwd + chars[Math.floor(Math.random() * chars.length)]);
   }
 

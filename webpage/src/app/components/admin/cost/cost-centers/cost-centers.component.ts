@@ -222,7 +222,7 @@ export class CostCentersComponent implements AfterViewInit {
 
   filterCostCenters(data: CostCenter, filter: string) {
     filter = filter.toLowerCase();
-    const searchString = `${data.amount} ${this.displayCategory(data.category)} ${data.title} ${data.paid ? FilterKeywords.PAID : ''} ${data.per_person ? FilterKeywords.PER_PERSON : ''}`.trim().toLocaleLowerCase();
+    const searchString = `${data.amount} ${this.displayCategory(data.category)} ${data.title} ${data.paid ? FilterKeywords.PAID : ''} ${data.per_person ? FilterKeywords.PER_PERSON : ''}`.trim().toLowerCase();
 
     return searchString.includes(filter);
   }
