@@ -4,14 +4,15 @@ function addUser() {
     global $BASE;
     $payload = json_decode(file_get_contents("php://input"), true);
     $user_data = json_decode(read_file($BASE . 'data'), true);
+    $username = strtolower($payload['name']);
     
     // if user already exists return error
-    if (isset($payload['name']) && isset($user_data[$payload['name']])) {
+    if (isset($username) && isset($user_data[$username])) {
         respondErrorMsg(401, 'user already exists');
     
-    } else if (isset($payload['name'])) {
+    } else if (isset($username)) {
         $newUser = array(
-            'name' => $payload['name'],
+            'name' => $username,
             'isAdmin' => $payload['isAdmin'],
             'firstPassword' => $payload['firstPassword'],
             'firstLogin' => $payload['firstLogin'],
@@ -33,7 +34,7 @@ function addUser() {
             ));
         }
     
-        $user_data[$payload['name']] = $newUser;
+        $user_data[$username] = $newUser;
     
         write_file($BASE . 'data', json_encode($user_data));
     
@@ -60,8 +61,9 @@ function deleteUser() {
     global $BASE;
     $payload = json_decode(file_get_contents("php://input"), true);
     $user_data = json_decode(read_file($BASE . 'data'), true);
+    $username = strtolower($payload['name']);
 
-    unset($user_data[$payload['name']]);
+    unset($user_data[$username]);
 
     write_file($BASE . 'data', json_encode($user_data));
     
@@ -72,9 +74,10 @@ function resetPwd() {
     global $BASE;
     $payload = json_decode(file_get_contents("php://input"), true);
     $user_data = json_decode(read_file($BASE . 'data'), true);
+    $username = strtolower($payload['name']);
 
-    $user_data[$payload['name']]['password'] = md5($user_data[$payload['name']]['firstPassword']);
-    $user_data[$payload['name']]['firstLogin'] = true;
+    $user_data[$username]['password'] = md5($user_data[$username]['firstPassword']);
+    $user_data[$username]['firstLogin'] = true;
 
     write_file($BASE . 'data', json_encode($user_data));
     

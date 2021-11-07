@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.authService.login(
-      this.form.controls.username.value,
+      (this.form.controls.username.value as string).toLowerCase(),
       md5(this.form.controls.password.value)
     ).subscribe(user => {
       // no user data returned === wrong credentials

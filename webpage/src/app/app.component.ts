@@ -46,7 +46,6 @@ export class AppComponent {
 
   nav(link: string) {
     this.menuExpanded = false;
-    console.log(this.menuExpanded);
     this.router.navigate([link]);
   }
 
