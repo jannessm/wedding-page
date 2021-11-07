@@ -27,8 +27,8 @@
 
       <button *ngFor="let item of navItems" mat-button (click)="nav(item.link)" [class.active]="router.isActive(item.link, true)">{{item.text}}</button>
 
-      <button mat-button routerLink='/user/change-password'>Passwort ändern</button>
-      <button mat-button *ngIf="authService.loggedUser.isAdmin" routerLink='/user/admin'>Admin</button>
+      <button mat-button (click)="nav('/user/change-password')">Passwort ändern</button>
+      <button mat-button *ngIf="authService.loggedUser.isAdmin" (click)="nav('/user/admin')">Admin</button>
       <button mat-button (click)='logout()'>Logout</button>
     </mat-expansion-panel>
     
@@ -39,4 +39,4 @@
 <div class="content">
   <router-outlet></router-outlet>
 </div>
-<div class="version">v1.2.2</div>
+<div class="version">v1.2.3</div>
