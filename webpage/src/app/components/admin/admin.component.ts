@@ -11,7 +11,7 @@ import { CacheService } from 'src/app/services/cache/cache.service';
 export class AdminComponent implements OnInit {
   page = 0;
 
-  pages = ['user', 'guests', 'songs', 'costs'];
+  pages = ['guests', 'user', 'songs', 'costs'];
 
   constructor(private activatedRoute: ActivatedRoute, private location: Location, private cacheService: CacheService) {
     this.activatedRoute.paramMap.subscribe(params => {
