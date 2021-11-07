@@ -78,9 +78,8 @@ export class AllergiesVector implements Vector {
         if (b.vector.length !== this.vector.length) {
             throw Error("array cant be added");
         }
-        return new AllergiesVector().from(
-            this.vector.map((v, i) => v + b.vector[i])
-        );
+        this.vector = this.vector.map((v, i) => v + b.vector[i]);
+        return this;
     }
 
     copy(): AllergiesVector {
