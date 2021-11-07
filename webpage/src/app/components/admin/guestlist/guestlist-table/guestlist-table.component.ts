@@ -16,7 +16,7 @@ import { ExcelService } from 'src/app/services/excel/excel.service';
   styleUrls: ['./guestlist-table.component.scss']
 })
 export class GuestlistTableComponent implements AfterViewInit, OnDestroy {
-  displayedColumns: string[] = ['user', 'name', 'lastname', 'age', 'diet', 'isRegistered', 'edit', 'delete'];
+  displayedColumns: string[] = ['user', 'name', 'lastname', 'age', 'diet', 'isComing', 'edit', 'delete'];
   dataSource: MatTableDataSource<GuestTable>;
 
   @Input()
