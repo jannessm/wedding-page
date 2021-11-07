@@ -26,7 +26,7 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.cacheService.getData();
+    this.cacheService.getData().subscribe();
   }
 
 }

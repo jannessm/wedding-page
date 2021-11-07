@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { merge, Observable, of, Subject } from 'rxjs';
+import { filter, flatMap, map, tap } from 'rxjs/operators';
 import { ApiResponse, API_STATUS, DataResponse } from 'src/models/api';
 import { User, UserResponse } from 'src/models/user';
 import { UserApiService } from '../api/user-api/user-api.service';
@@ -20,7 +20,13 @@ export class CacheService {
   ) {
     this.data = new Subject<UserResponse>();
 
-    this.getData();
+    this.authService.loggedStateChanges.subscribe(() => {
+      this._lastDataObject = undefined;
+      this._initialized = false;
+      this.data.next({});
+    });
+
+    this.getData().subscribe();
   }
 
   handleData(resp: ApiResponse) {
@@ -29,22 +35,34 @@ export class CacheService {
     this.data.next(users);
   }
 
-  getData() {
+  getData(): Observable<undefined> {
     if (this.authService.loggedUser?.isAdmin && !this._initialized) {
-      this.apiService.getUsers().subscribe(resp => {
+      return this.apiService.getUsers().pipe(tap(resp => {
         if (resp.status === API_STATUS.SUCCESS) {
           this.handleData(resp);
           this._initialized = true;
         }
-      })
+      }), map(() => undefined));
+    
     } else if (this.authService.loggedUser?.isAdmin) {
       this.data.next(this._lastDataObject);
+    
+    } else if (this.authService.loggedUser) {
+      const user = this.authService.loggedUser;
+      const data: UserResponse = {};
+      data[user.name] = user;
+      this._lastDataObject = data;
+      this.data.next(data);
     }
+    
+    return of(undefined);
   }
 
   getUserObject(username: string): User | undefined {
     if (this._lastDataObject) {
       return this._lastDataObject[username];
+    } else {
+      this.getData().subscribe();
     }
     return;
   }
@@ -64,7 +82,7 @@ export class CacheService {
       }
       return this.apiService.updateUsers(this._lastDataObject);
     } else {
-      return of();
+      return merge(this.getData(), this.updateUser()).pipe(filter(x => !!x));
     }
   }
 
@@ -74,6 +92,9 @@ export class CacheService {
         tap(resp => {
           if (resp.status === API_STATUS.SUCCESS && this._lastDataObject) {
             const user = this._lastDataObject[updatedUser.name];
+
+            // make sure firstLogin is done
+            user.firstLogin = false;
 
             user.guests.forEach((guest, id) => {
               guest.isComing = updatedUser.guests[id].isComing;
@@ -88,7 +109,7 @@ export class CacheService {
         })
       );
     } else {
-      return of();
+      return merge(this.getData(), this.updateUserNonAdmin(updatedUser)).pipe(filter(x => !!x));
     }
   }
 

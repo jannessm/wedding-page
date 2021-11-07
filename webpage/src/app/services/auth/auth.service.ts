@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Observable, of, Subscriber } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserApiService } from '../api/user-api/user-api.service';
@@ -22,9 +22,11 @@ export class AuthService {
 
   loggedUser: User | null = null;
 
+  loggedStateChanges = new EventEmitter<undefined>();
+
   constructor(
     private api: UserApiService,
-    private lsService: LocalStorageService
+    private lsService: LocalStorageService,
   ) {
 
     
@@ -68,6 +70,7 @@ export class AuthService {
           let r = <DataResponse>resp;
                 
           this.lsService.jwt = r.payload;
+          this.loggedStateChanges.next();
           return this.setJWT(r.payload);
         
         }
@@ -81,6 +84,7 @@ export class AuthService {
     this.loggedUser = null;
     this._isLoggedIn = false;
     this.lsService.jwt = undefined;
+    this.loggedStateChanges.next();
   }
 
   setJWT(jwt: string): User {

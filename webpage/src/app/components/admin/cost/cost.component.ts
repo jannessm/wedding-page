@@ -45,7 +45,6 @@ export class CostComponent {
   handleData(data: BudgetData | undefined) {
     if (data) {
       this.data = data;
-      console.log(data);
       
       if (!this.data.cost_centers.map) {
         this.data.cost_centers = Object.values(this.data.cost_centers);

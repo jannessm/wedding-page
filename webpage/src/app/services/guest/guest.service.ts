@@ -174,7 +174,7 @@ export class GuestService {
             return false;
           
           } else {
-            this.cacheService.getData();
+            this.cacheService.getData().subscribe();
             return true;
           }
         }));

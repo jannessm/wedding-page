@@ -59,7 +59,6 @@ export class RegistrationComponent {
         this.user.guests[id].diet = (<FormGroup>guest).controls.diet.value;
         this.user.guests[id].allergies = (<FormGroup>guest).controls.allergies.value;
         this.user.guests[id].otherAllergies = (<FormGroup>guest).controls.otherAllergies.value;
-        this.user.guests[id].otherAllergies = (<FormGroup>guest).controls.otherAllergies.value;
         this.user.guests[id].song = (<FormGroup>guest).controls.song.value;
       }
     });
