@@ -1,1 +1,14 @@
-<p>accomondations works!</p>
+<div>
+    <h1>Unterkünfte</h1>
+    <br>
+    <p>Wir haben hier ein paar Unterkunftsvorschläge zusammengestellt. Allerdings gibt es viele weitere Angebote in der Umgebung. Schaut euch auch gerne andere Unterkünfte, wie Ferienwohnungen oder Pensionen in der Nähe an. Dafür empfehlen wir die Portale <a href="https://booking.com">booking.com</a> oder auch <a href="https://airbnb.com">Airbnb</a>.</p>
+    <br>
+    <br>
+    <a *ngFor="let accomondation of accomondations; let idx=index" class="container" [href]="accomondation.href" [ngClass]="idx % 2 === 1 ? 'rev' : ''">
+        <div>
+            <h2>{{accomondation.label}}</h2>
+            {{accomondation.description}}
+        </div>
+        <div [style.background-image]="'url(' + accomondation.img + ')'" class="img"></div>
+    </a>
+</div>

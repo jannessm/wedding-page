@@ -32,7 +32,7 @@ export class CostCentersComponent implements AfterViewInit {
 
   filter = "";
 
-  displayedColumns: string[] = ['title', 'category', 'per_person', 'costs', 'paid', 'edit', 'delete'];
+  displayedColumns: string[] = ['title', 'category', 'per_person', 'amount', 'paid', 'edit', 'delete'];
 
   constructor(
     private apiService: BudgetApiService

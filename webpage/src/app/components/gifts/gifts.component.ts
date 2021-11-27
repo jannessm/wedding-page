@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GiftsComponent implements OnInit {
 
+  gifts = ['Gutes Wetter', 'Liebe', 'Gute Laune und Spaß mit euch', 'Segen', 'Eine kleine Finanzspritze für unsere gemeinsame Zukunft']
+
   constructor() { }
 
   ngOnInit(): void {

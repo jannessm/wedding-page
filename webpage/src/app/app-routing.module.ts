@@ -18,10 +18,8 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 const routes: Routes = [
   {path: 'user', canActivate: [AuthGuard], children: [
     {path: 'registration', component: RegistrationComponent},
-    // {path: 'accomondations', component: AccomondationsComponent},
-    {path: 'accomondations', component: WipComponent},
-    // {path: 'gifts', component: GiftsComponent},
-    {path: 'gifts', component: WipComponent},
+    {path: 'accomondations', component: AccomondationsComponent},
+    {path: 'gifts', component: GiftsComponent},
     {path: 'program', component: ScheduleComponent},
     {path: 'dress-code', component: DressCodeComponent},
     {path: 'admin', component: AdminComponent, canActivate: [AdminGuard]},
