@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { GuestService } from 'src/app/services/guest/guest.service';
 import { GuestTable } from 'src/models/guest-table';
-import { getYoutubeID, isYoutubeLink } from 'src/models/youtube';
+import { getYoutubeID, isYoutubeLink, removeYoutubeLink } from 'src/models/youtube';
 
 @Component({
   selector: 'app-songs',
@@ -10,7 +10,7 @@ import { getYoutubeID, isYoutubeLink } from 'src/models/youtube';
   styleUrls: ['./songs.component.scss']
 })
 export class SongsComponent {
-  songs: {guest: string, song: SafeResourceUrl, songName: string, youtube: boolean}[] = [];
+  songs: {guest: string, songLink: SafeResourceUrl, songName: string, youtube: boolean}[] = [];
 
   constructor(private guestService: GuestService, private sanitizer: DomSanitizer) {
 
@@ -26,13 +26,15 @@ export class SongsComponent {
   handleData(guests: GuestTable[]) {
     this.songs = guests.filter(guest => !!guest.song).map(guest => {
       let youtube = false;
-      if (guest.song.includes('youtu')) {
+      
+      if (guest.song.includes('https')) {
         youtube = true;
       }
+      
       return {
         guest: guest.name + ' ' + guest.lastname,
-        song: this.getSaveYoutubeURL(guest.song),
-        songName: guest.song,
+        songLink: this.getSaveYoutubeURL(guest.song),
+        songName: removeYoutubeLink(guest.song),
         youtube
       };
     });
@@ -46,5 +48,4 @@ export class SongsComponent {
     return this.sanitizer.bypassSecurityTrustResourceUrl("https://www.youtube.com/embed/" + 
     youtubeId);
   }
-
 }

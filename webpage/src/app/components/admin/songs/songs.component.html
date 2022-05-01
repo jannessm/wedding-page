@@ -4,8 +4,8 @@
     <div>
         <mat-card *ngFor="let song of songs">
             <h4>{{song.guest}}</h4>
-            <iframe *ngIf="song.youtube" height="315" [src]="song.song" frameborder="0" allowfullscreen></iframe>
-            <h2 *ngIf="!song.youtube" >{{song.songName}}</h2>
+            <h2>{{song.songName}}</h2>
+            <iframe *ngIf="song.youtube" height="315" [src]="song.songLink" frameborder="0" allowfullscreen></iframe>
         </mat-card>
     </div>
 </div>
