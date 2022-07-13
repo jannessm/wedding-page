@@ -86,33 +86,6 @@ export class CacheService {
     }
   }
 
-  updateUserNonAdmin(updatedUser: User): Observable<undefined | ApiResponse> {
-    if (this._lastDataObject) {
-      return this.apiService.updateUser(updatedUser).pipe(
-        tap(resp => {
-          if (resp.status === API_STATUS.SUCCESS && this._lastDataObject) {
-            const user = this._lastDataObject[updatedUser.name];
-
-            // make sure firstLogin is done
-            user.firstLogin = false;
-
-            user.guests.forEach((guest, id) => {
-              guest.isComing = updatedUser.guests[id].isComing;
-              guest.diet = updatedUser.guests[id].diet;
-              guest.allergies = updatedUser.guests[id].allergies;
-              guest.otherAllergies = updatedUser.guests[id].otherAllergies;
-              guest.song = updatedUser.guests[id].song;
-            });
-
-            this.authService.loggedUser = user;
-          }
-        })
-      );
-    } else {
-      return merge(this.getData(), this.updateUserNonAdmin(updatedUser)).pipe(filter(x => !!x));
-    }
-  }
-
   deleteUser(username: string): Observable<boolean> {
     return this.apiService.deleteUser(username).pipe(
       map(resp => {

@@ -1,7 +1,7 @@
     <h1>Sag uns wer kommt!</h1>
     <form *ngIf="!!user">
         <mat-card *ngFor="let guestControl of form.controls; index as idx">
-            <h3>{{user.guests[idx].name}} {{user.guests[idx].lastname}}</h3>
+            <h3>{{guests_arr[idx].name}} {{guests_arr[idx].lastname}}</h3>
             <span [formGroup]="$any(guestControl)">
                 <mat-label>Rückmeldung*</mat-label>
                 <mat-radio-group formControlName="isComing">

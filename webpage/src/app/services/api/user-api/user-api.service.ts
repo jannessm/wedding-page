@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ApiResponse } from 'src/models/api';
-import { User, UserResponse } from 'src/models/user';
+import { Guest, User, UserResponse } from 'src/models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -42,12 +42,16 @@ export class UserApiService {
     return this.http.get<ApiResponse>(this.BASE_API + "admin/?user");
   }
 
+  getGuests(user: User): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.BASE_API + "auth/?guests", user);
+  }
+
   updateUsers(user: UserResponse): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.BASE_API + 'admin/?update-user', user);
   }
 
-  updateUser(user: User): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.BASE_API + 'auth/?update-user', user);
+  updateGuests(guests: Guest[]): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.BASE_API + 'auth/?update-guests', {guests});
   }
 
   deleteUser(user: string): Observable<ApiResponse> {

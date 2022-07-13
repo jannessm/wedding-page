@@ -1,20 +1,21 @@
 <?php
 
 $payload = json_decode(file_get_contents("php://input"), true);
-$user_data = json_decode(read_file($BASE . 'data'), true);
+$user_pdo = new User($PDO);
 $username = strtolower($payload['user']);
+$user = $user_pdo->get($username);
 
 // workaround for user without password
-if (isset($user_data[$username]) && !isset($user_data[$username]['password'])) {
-    $user_data[$username]['password'] = md5($user_data[$username]['firstPassword']);
+if (isset($user) && !isset($user['password'])) {
+    $user['password'] = md5($user['first_password']);
 }
 
 // check credentials and generate jwt on success
-if ($user_data[$username] && $user_data[$username]['password'] == $payload['pwd']) {
+if ($user && str_replace('"', '', $user['password']) == $payload['pwd']) {
     
-    unset($user_data[$username]['password']);
-    $jwtData = $user_data[$username];
-    $jwtData['name'] = $username;
+    unset($user['password']);
+    unset($user['first_password']);
+    $jwtData = $user;
     $jwt_and_expire_date = generateJWT($jwtData);
 
     respondJSON(201, $jwt_and_expire_date);
