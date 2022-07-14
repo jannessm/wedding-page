@@ -6,6 +6,7 @@
 
     require_once($BASE . 'autoload.php');
     require_once('user.php');
+    require_once('guests.php');
 
     $USER = new User($PDO);
 
@@ -37,16 +38,16 @@
         addUser();
         exit();
     }
+
+    // add guests
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['guests'])) {
+        addGuests();
+        exit();
+    }
     
     // update admin rights
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-admin-rights'])) {
         updateAdminRights();
-        exit();
-    }
-
-    // update users
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-user'])) {
-        updateUser();
         exit();
     }
 

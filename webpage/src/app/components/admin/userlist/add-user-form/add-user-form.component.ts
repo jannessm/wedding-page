@@ -2,8 +2,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { UserApiService } from 'src/app/services/api/user-api/user-api.service';
+import { GuestService } from 'src/app/services/guest/guest.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { API_STATUS, ErrorResponse } from 'src/models/api';
+import { UserTable } from 'src/models/guest-table';
 import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, DIETS, Guest, User } from 'src/models/user';
 
 import { v4 as uuid } from 'uuid';
@@ -29,7 +31,7 @@ export class AddUserFormComponent {
   agesLabels = AGE_CATEGORY_LABELS;
   agesIcons = AGE_CATEGORY_ICONS;
 
-  constructor(private fb: FormBuilder, private apiService: UserApiService, private userService: UserService) {
+  constructor(private fb: FormBuilder, private userService: UserService, private guestService: GuestService) {
     this.guests = fb.array([
       fb.group({
         'name': ['', Validators.required],
@@ -68,20 +70,23 @@ export class AddUserFormComponent {
     const isAdmin = this.form.controls.admin.value;
     const guests = this.getGuests();
 
-    // this.userService.addUser(<User>{
-    //   name: user,
-    //   firstPassword: pwd,
-    //   isAdmin,
-    //   firstLogin: true,
-    //   guests
-    // }).subscribe(resp => {
-    //   if (resp.status === API_STATUS.ERROR) {
-    //     this.form.controls.username.setErrors({'userExists': true});
-    //   } else {
-    //     this.resetForm();
-    //     this.form.setErrors(null);
-    //   }
-    // });
+    this.userService.addUser(<UserTable>{
+      name: user,
+      firstPassword: pwd,
+      isAdmin,
+      newIsAdmin: isAdmin,
+      firstLogin: true,
+      guests: guests.map(g => g.lastname ? g.name + ' ' + g.lastname : g.name).join(', ')
+    }).subscribe(resp => {
+      if (resp.status === API_STATUS.ERROR) {
+        this.form.controls.username.setErrors({'userExists': true});
+      } else {
+        this.resetForm();
+        this.form.setErrors(null);
+      }
+    });
+
+    // this.guestService.addGuest(guests);
   }
 
   getGuests(): Guest[] {

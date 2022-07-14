@@ -1,34 +1,22 @@
 <?php
 
-function addUser() {
+function addGuests() {
     global $PDO;
     $payload = json_decode(file_get_contents("php://input"), true);
-    $USER = new User($PDO);
+    $GUESTS = new Guests($PDO);
 
     $username = strtolower($payload['name']);
 
-    $user_data = $USER->get($username);
-
-    // if user already exists return error
-    if (isset($username) && isset($user_data) && $user_data !== false) {
-        respondErrorMsg(401, 'user already exists');
-    
-    } else if (isset($username)) {
-        $newUser = array(
-            'name' => $username,
-            'is_admin' => $payload['isAdmin'],
-            'first_password' => $payload['firstPassword'],
-            'password' => md5($payload['firstPassword'])
-        );
-
-        $USER->add($newUser);
-
-        $user = $USER->get($username);
-    
-        respondJSON(201, $USER->filter($user));
-    } else {
-        respondErrorMsg(401, 'invalid request');
+    foreach($payload['guests'] as $guest) {
+        try {
+            $GUESTS->add($guest);
+        } catch (PDOException $e) {
+            respondErrorMsg(401, 'invalid request');
+            break;
+        }
     }
+
+    respondJSON(201, "done");
 }
 
 function updateAdminRights() {

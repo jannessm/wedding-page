@@ -74,25 +74,6 @@ export class CacheService {
     return;
   }
 
-  addUser(user: User): Observable<ApiResponse> {
-    return this.apiService.addUser(user).pipe(tap(resp => {
-      if (resp.status === API_STATUS.SUCCESS) {
-        this.handleData(resp);
-      }
-    }));
-  }
-
-  // updateUser(): Observable<undefined | ApiResponse> {
-  //   if (this._lastDataObject) {
-  //     if (this.authService.loggedUser) {
-  //       // this.authService.loggedUser = this._lastDataObject[this.authService.loggedUser.name];
-  //     }
-  //     return this.apiService.updateUsers(this._lastDataObject);
-  //   } else {
-  //     return merge(this.getData(), this.updateUser()).pipe(filter(x => !!x));
-  //   }
-  // }
-
   deleteUser(username: string): Observable<boolean> {
     return this.apiService.deleteUser(username).pipe(
       map(resp => {

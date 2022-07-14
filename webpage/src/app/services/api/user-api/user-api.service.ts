@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ApiResponse, DataResponse } from 'src/models/api';
+import { UserTable } from 'src/models/guest-table';
 import { Guest, User, UserResponse } from 'src/models/user';
 
 @Injectable({
@@ -34,7 +35,7 @@ export class UserApiService {
     });
   }
 
-  addUser(user: User): Observable<ApiResponse> {
+  addUser(user: UserTable): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.BASE_API + "admin/?user", user);
   }
 

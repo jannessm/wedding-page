@@ -12,13 +12,7 @@ if (isset($user) && !isset($user['password'])) {
 
 // check credentials and generate jwt on success
 if ($user && str_replace('"', '', $user['password']) == $payload['pwd']) {
-    $user['isAdmin'] = $user['is_admin'] == 1;
-    $user['firstLogin'] = $user['first_login'] == 1;
-    unset($user['password']);
-    unset($user['first_password']);
-    unset($user['is_admin']);
-    unset($user['first_login']);
-    $jwtData = $user;
+    $jwtData = $user_pdo->filter($user);
     $jwt_and_expire_date = generateJWT($jwtData);
 
     respondJSON(201, $jwt_and_expire_date);

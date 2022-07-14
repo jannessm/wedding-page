@@ -24,21 +24,36 @@ class Guests {
     public function add($guest, $user_id) {
         $sql = 'INSERT INTO guests VALUES (:uuid, :name, :last_name, :diet, :song, :allergies, :other_allergies, :is_coming, :user_id);';
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':uuid', $guest->uuid);
-        $stmt->bindValue(':name', $guest->name);
-        $stmt->bindValue(':last_name', $guest->lastname);
-        $stmt->bindValue(':diet', $guest->diet);
-        $stmt->bindValue(':song', $guest->song);
-        $stmt->bindValue(':allergies', json_encode($guest->allergies));
-        $stmt->bindValue(':other_allergies', $guest->otherAllergies);
-        $stmt->bindValue(':user_id', $user_id);
 
-        if (property_exists($guest, 'is_coming'))
-            $stmt->bindValue(':is_coming', $guest->is_coming);
-        else if (property_exists($guest, 'isComing'))
-            $stmt->bindValue(':is_coming', $guest->isComing);
-        else
-            $stmt->bindValue(':is_coming', FALSE);
+        if (is_array($guest)) {
+
+            $stmt->bindValue(':uuid', $guest['uuid']);
+            $stmt->bindValue(':name', $guest['name']);
+            $stmt->bindValue(':last_name', $guest['lastname']);
+            $stmt->bindValue(':diet', $guest['diet']);
+            $stmt->bindValue(':song', $guest['song']);
+            $stmt->bindValue(':allergies', json_encode($guest['allergies']));
+            $stmt->bindValue(':other_allergies', $guest['otherAllergies']);
+            $stmt->bindValue(':user_id', $user_id);
+            $stmt->bindValue(':is_coming', $guest['is_coming']);
+
+        } else {
+            $stmt->bindValue(':uuid', $guest->uuid);
+            $stmt->bindValue(':name', $guest->name);
+            $stmt->bindValue(':last_name', $guest->lastname);
+            $stmt->bindValue(':diet', $guest->diet);
+            $stmt->bindValue(':song', $guest->song);
+            $stmt->bindValue(':allergies', json_encode($guest->allergies));
+            $stmt->bindValue(':other_allergies', $guest->otherAllergies);
+            $stmt->bindValue(':user_id', $user_id);
+    
+            if (property_exists($guest, 'is_coming'))
+                $stmt->bindValue(':is_coming', $guest->is_coming);
+            else if (property_exists($guest, 'isComing'))
+                $stmt->bindValue(':is_coming', $guest->isComing);
+            else
+                $stmt->bindValue(':is_coming', FALSE);
+        }
 
         $stmt->execute();
     }

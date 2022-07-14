@@ -31,16 +31,24 @@ class User {
     public function add($user) {
         $sql = 'INSERT INTO user VALUES (:name, :is_admin, :first_login, :first_password, :password);';
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':name', $user->name);
-        $stmt->bindValue(':is_admin', $user->isAdmin);
-        $stmt->bindValue(':first_login', $user->firstLogin);
-        $stmt->bindValue(':first_password', $user->firstPassword);
-        $stmt->bindValue(':password', json_encode($user->password));
-
-        if (property_exists($user, 'isAdmin'))
+        if (!is_array($user)) {
+            $stmt->bindValue(':name', $user->name);
             $stmt->bindValue(':is_admin', $user->isAdmin);
-        else
-            $stmt->bindValue(':is_admin', 0);
+            $stmt->bindValue(':first_login', $user->firstLogin);
+            $stmt->bindValue(':first_password', $user->firstPassword);
+            $stmt->bindValue(':password', json_encode($user->password));
+    
+            if (property_exists($user, 'isAdmin'))
+                $stmt->bindValue(':is_admin', $user->isAdmin);
+            else
+                $stmt->bindValue(':is_admin', 0);
+        } else {
+            $stmt->bindValue(':name', $user['name']);
+            $stmt->bindValue(':is_admin', $user['is_admin']);
+            $stmt->bindValue(':first_login', TRUE);
+            $stmt->bindValue(':first_password', $user['first_password']);
+            $stmt->bindValue(':password', json_encode($user['password']));
+        }
 
         $stmt->execute();
     }
@@ -85,5 +93,22 @@ class User {
         $sql = 'UPDATE user SET is_admin=:is_admin where name=:name;';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':name' => $name, ':is_admin' => $is_admin]);
+    }
+
+    public function delete($name) {
+        $sql = 'DELETE FROM user WHERE name=:name;';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':name' => $name]);
+    }
+
+    public function filter($user) {
+        $user['isAdmin'] = $user['is_admin'] == 1;
+        $user['firstLogin'] = $user['first_login'] == 1;
+        unset($user['password']);
+        unset($user['first_password']);
+        unset($user['is_admin']);
+        unset($user['first_login']);
+
+        return $user;
     }
 }

@@ -53,8 +53,8 @@ export class UserService {
     this.users.next(usersData);
   }
 
-  addUser(user: User): Observable<ApiResponse> {
-    // this._lastDataObject.push(user);
+  addUser(user: UserTable): Observable<ApiResponse> {
+    this._lastDataObject.push(user);
     this.users.next(this._lastDataObject);
     return this.apiService.addUser(user);
   }
@@ -85,26 +85,24 @@ export class UserService {
   }
 
   deleteUser(row: UserTable): Observable<boolean> {
-    // if (row.name === this.authService.loggedUser?.name) {
-    //   this.snackBar.open("Der aktuelle Benutzer kann nicht gelöscht werden.", "OK");
-    //   return of(false);
-    // }
+    if (row.name === this.authService.loggedUser?.name) {
+      this.snackBar.open("Der aktuelle Benutzer kann nicht gelöscht werden.", "OK");
+      return of(false);
+    }
 
-    // const user = this.cacheService.getUserObject(row.name);
-    // if (!!user) {
-    //   return this.cacheService.deleteUser(row.name)
-    //     .pipe(map(resp => {
-    //       if (!resp) {
-    //         this.snackBar.open("Benutzer konnte nicht gelöscht werden.", "OK");
-    //         return false;
-          
-    //       } else {
-    //         return true;
-    //       }
-    //     }));
-    // }
-
-    return of(false);
+    return this.apiService.deleteUser(row.name)
+      .pipe(map(resp => {
+        if (!resp) {
+          this.snackBar.open("Benutzer konnte nicht gelöscht werden.", "OK");
+          return false;
+        
+        } else {
+          const id = this._lastDataObject.indexOf(row);
+          this._lastDataObject.splice(id, 1);
+          this.users.next(this._lastDataObject);
+          return true;
+        }
+      }));
   }
 
   resetPwd(username: string) {
