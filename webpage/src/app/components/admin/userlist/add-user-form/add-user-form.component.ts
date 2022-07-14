@@ -68,20 +68,20 @@ export class AddUserFormComponent {
     const isAdmin = this.form.controls.admin.value;
     const guests = this.getGuests();
 
-    this.userService.addUser(<User>{
-      name: user,
-      firstPassword: pwd,
-      isAdmin,
-      firstLogin: true,
-      guests
-    }).subscribe(resp => {
-      if (resp.status === API_STATUS.ERROR) {
-        this.form.controls.username.setErrors({'userExists': true});
-      } else {
-        this.resetForm();
-        this.form.setErrors(null);
-      }
-    });
+    // this.userService.addUser(<User>{
+    //   name: user,
+    //   firstPassword: pwd,
+    //   isAdmin,
+    //   firstLogin: true,
+    //   guests
+    // }).subscribe(resp => {
+    //   if (resp.status === API_STATUS.ERROR) {
+    //     this.form.controls.username.setErrors({'userExists': true});
+    //   } else {
+    //     this.resetForm();
+    //     this.form.setErrors(null);
+    //   }
+    // });
   }
 
   getGuests(): Guest[] {

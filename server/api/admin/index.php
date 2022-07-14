@@ -5,7 +5,10 @@
     $BASE = __DIR__ . '/../../';
 
     require_once($BASE . 'autoload.php');
-    include('user.php');
+    require_once('user.php');
+
+    $USER = new User($PDO);
+
     include('budget.php');
 
     // check JWT
@@ -15,17 +18,17 @@
     }
 
     // check admin rights
-    $user = decodeToken(readToken())->user;
-    $user_data = json_decode(read_file($BASE . 'data'), true);
-    if (!$user_data[$user->name]['isAdmin']) {
+    $user = decodeToken(readToken())->user->name;
+    $user_db = $USER->get($user);
+
+    if (!$user_db['is_admin']) {
         respondErrorMsg(401, "Unauthorized: Admin rights needed");
         exit();
     }
 
     // get user data
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['user'])) {
-        $user_data = json_decode(read_file($BASE . 'data'), true);
-        respondJSON(200, filterUser($user_data));
+        respondJSON(200, $USER->get_all());
         exit();
     }
 
@@ -35,6 +38,12 @@
         exit();
     }
     
+    // update admin rights
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-admin-rights'])) {
+        updateAdminRights();
+        exit();
+    }
+
     // update users
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-user'])) {
         updateUser();

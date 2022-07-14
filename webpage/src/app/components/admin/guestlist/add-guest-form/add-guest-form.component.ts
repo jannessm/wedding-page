@@ -63,22 +63,22 @@ export class AddGuestFormComponent implements OnDestroy {
     const lastname = this.form.controls.lastname.value.trim();
     const age = this.form.controls.age.value;
 
-    this.guestService.addGuest(user, <Guest>{
-      uuid: uuid(),
-      name,
-      lastname,
-      age,
-      diet: DIETS.NORMAL,
-      allergies: [],
-      otherAllergies: "",
-      song: "",
-      isComing: null
-    }).subscribe(resp => {
-      if (!!resp) {
-        this.resetForm();
-        this.form.setErrors(null);
-      }
-    });
+    // this.guestService.addGuest(user, <Guest>{
+    //   uuid: uuid(),
+    //   name,
+    //   lastname,
+    //   age,
+    //   diet: DIETS.NORMAL,
+    //   allergies: [],
+    //   otherAllergies: "",
+    //   song: "",
+    //   isComing: null
+    // }).subscribe(resp => {
+    //   if (!!resp) {
+    //     this.resetForm();
+    //     this.form.setErrors(null);
+    //   }
+    // });
   }
 
   resetForm() {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { merge, Observable, of, Subject } from 'rxjs';
-import { filter, flatMap, map, tap } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { ApiResponse, API_STATUS, DataResponse } from 'src/models/api';
 import { User, UserResponse } from 'src/models/user';
 import { UserApiService } from '../api/user-api/user-api.service';
@@ -30,7 +30,7 @@ export class CacheService {
   }
 
   handleData(resp: ApiResponse) {
-    const users = (<DataResponse>resp).payload;
+    let users = (<DataResponse>resp).payload;
     this._lastDataObject = users;
     this.data.next(users);
   }
@@ -50,7 +50,7 @@ export class CacheService {
     } else if (this.authService.loggedUser) {
       const user = this.authService.loggedUser;
       const data: UserResponse = {};
-      data[user.name] = user;
+      // data[user.name] = user;
       this._lastDataObject = data;
       this.data.next(data);
     }
@@ -60,7 +60,14 @@ export class CacheService {
 
   getUserObject(username: string): User | undefined {
     if (this._lastDataObject) {
-      return this._lastDataObject[username];
+      // return this._lastDataObject[username];
+      return {
+        "name": "hi",
+        "firstLogin": false,
+        "firstPassword": "xxx",
+        "isAdmin": true,
+        "guests": "test, test"
+      };
     } else {
       this.getData().subscribe();
     }
@@ -75,16 +82,16 @@ export class CacheService {
     }));
   }
 
-  updateUser(): Observable<undefined | ApiResponse> {
-    if (this._lastDataObject) {
-      if (this.authService.loggedUser) {
-        this.authService.loggedUser = this._lastDataObject[this.authService.loggedUser.name];
-      }
-      return this.apiService.updateUsers(this._lastDataObject);
-    } else {
-      return merge(this.getData(), this.updateUser()).pipe(filter(x => !!x));
-    }
-  }
+  // updateUser(): Observable<undefined | ApiResponse> {
+  //   if (this._lastDataObject) {
+  //     if (this.authService.loggedUser) {
+  //       // this.authService.loggedUser = this._lastDataObject[this.authService.loggedUser.name];
+  //     }
+  //     return this.apiService.updateUsers(this._lastDataObject);
+  //   } else {
+  //     return merge(this.getData(), this.updateUser()).pipe(filter(x => !!x));
+  //   }
+  // }
 
   deleteUser(username: string): Observable<boolean> {
     return this.apiService.deleteUser(username).pipe(

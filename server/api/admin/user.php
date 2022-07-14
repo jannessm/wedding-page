@@ -44,6 +44,16 @@ function addUser() {
     }
 }
 
+function updateAdminRights() {
+    global $PDO;
+    $USER = new User($PDO);
+    $payload = json_decode(file_get_contents("php://input"), true);
+
+    $USER->update_admin_rights($payload['name'], $payload['is_admin']);
+
+    respondJSON(201, "done");
+}
+
 function updateUser() {
     global $BASE;
     $payload = json_decode(file_get_contents("php://input"), true);
@@ -71,17 +81,16 @@ function deleteUser() {
 }
 
 function resetPwd() {
-    global $BASE;
+    global $BASE, $PDO;
     $payload = json_decode(file_get_contents("php://input"), true);
-    $user_data = json_decode(read_file($BASE . 'data'), true);
+
+    $USER = new User($PDO);
     $username = strtolower($payload['name']);
+    $user_data = $USER->get($username);
 
-    $user_data[$username]['password'] = md5($user_data[$username]['firstPassword']);
-    $user_data[$username]['firstLogin'] = true;
-
-    write_file($BASE . 'data', json_encode($user_data));
+    $USER->update_password($username, md5($user_data['first_password']), TRUE);
     
-    respondJSON(201, "done");
+    respondJSON(201, $user_data['first_password']);
 }
 
 ?>

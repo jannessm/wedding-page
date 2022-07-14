@@ -8,5 +8,6 @@ export interface GuestTable extends Guest{
 export interface UserTable {
     name: string;
     isAdmin: boolean;
-    guests: string[];
+    newIsAdmin: boolean;
+    guests: string;
 }

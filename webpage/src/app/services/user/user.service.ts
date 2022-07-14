@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApiResponse, API_STATUS } from 'src/models/api';
+import { ApiResponse, API_STATUS, DataResponse } from 'src/models/api';
 import { UserTable } from 'src/models/guest-table';
 import { User, UserResponse } from 'src/models/user';
+import { UserApiService } from '../api/user-api/user-api.service';
 import { AuthService } from '../auth/auth.service';
 import { CacheService } from '../cache/cache.service';
 import { DialogService } from '../dialog/dialog.service';
@@ -18,15 +19,15 @@ export class UserService {
   _lastDataObject: UserTable[] = [];
 
   constructor(
-    private cacheService: CacheService,
+    private apiService: UserApiService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private dialogService: DialogService,
   ) {
     this.users = new Subject<UserTable[]>();
     
-    this.cacheService.data.subscribe(data => {
-      this.parseData(data);
+    this.apiService.getUsers().subscribe(data => {
+      this.parseData(<UserResponse>(<DataResponse>data).payload);
     });
   }
 
@@ -34,15 +35,15 @@ export class UserService {
 
     const usersData: UserTable[] = [];
 
-    Object.keys(users).forEach(username => {
+    console.log(users);
 
-      const origUser = users[username];
+    Object.values(users).forEach(origUser => {
 
       const user: UserTable = {
-        name: username,
+        name: origUser.name,
         isAdmin: origUser.isAdmin,
-        guests: origUser.guests
-          .map( guest => !!guest.lastname ? `${guest.name} ${guest.lastname}` : guest.name)
+        guests: origUser.guests,
+        newIsAdmin: origUser.isAdmin
       };
 
       usersData.push(user);
@@ -53,32 +54,28 @@ export class UserService {
   }
 
   addUser(user: User): Observable<ApiResponse> {
-    return this.cacheService.addUser(user);
+    // this._lastDataObject.push(user);
+    this.users.next(this._lastDataObject);
+    return this.apiService.addUser(user);
   }
 
   updateUser(updatedUser: UserTable): Observable<boolean> {
-    let update = false;
+    let update = updatedUser.isAdmin != updatedUser.newIsAdmin;
 
     if (updatedUser.name === this.authService.loggedUser?.name && updatedUser.isAdmin !== this.authService.loggedUser?.isAdmin) {
       this.snackBar.open("Rechte des aktuellen Admins können nicht übernommen werden.", "OK");
       updatedUser.isAdmin = !updatedUser.isAdmin;
       return of(false);
     }
-    
-    const user = this.cacheService.getUserObject(updatedUser.name);
-    if (!!user && user.isAdmin !== updatedUser.isAdmin) {
-      user.isAdmin = updatedUser.isAdmin;
-      update = true;
-    }
 
-    if (update && !!user) {
-      return this.cacheService.updateUser().pipe(
+    if (update) {
+      return this.apiService.updateAdminRights(updatedUser.name, updatedUser.newIsAdmin).pipe(
         map(resp => {
           if (!resp || resp.status == API_STATUS.ERROR) {
             this.snackBar.open("Änderungen konnten nicht gespeichert werden.", "OK");
-            user.isAdmin = !updatedUser.isAdmin;
             return false;
           } else {
+            updatedUser.isAdmin = updatedUser.newIsAdmin;
             return true;
           }
         }));
@@ -88,37 +85,33 @@ export class UserService {
   }
 
   deleteUser(row: UserTable): Observable<boolean> {
-    if (row.name === this.authService.loggedUser?.name) {
-      this.snackBar.open("Der aktuelle Benutzer kann nicht gelöscht werden.", "OK");
-      return of(false);
-    }
+    // if (row.name === this.authService.loggedUser?.name) {
+    //   this.snackBar.open("Der aktuelle Benutzer kann nicht gelöscht werden.", "OK");
+    //   return of(false);
+    // }
 
-    const user = this.cacheService.getUserObject(row.name);
-    if (!!user) {
-      return this.cacheService.deleteUser(row.name)
-        .pipe(map(resp => {
-          if (!resp) {
-            this.snackBar.open("Benutzer konnte nicht gelöscht werden.", "OK");
-            return false;
+    // const user = this.cacheService.getUserObject(row.name);
+    // if (!!user) {
+    //   return this.cacheService.deleteUser(row.name)
+    //     .pipe(map(resp => {
+    //       if (!resp) {
+    //         this.snackBar.open("Benutzer konnte nicht gelöscht werden.", "OK");
+    //         return false;
           
-          } else {
-            return true;
-          }
-        }));
-    }
+    //       } else {
+    //         return true;
+    //       }
+    //     }));
+    // }
 
     return of(false);
   }
 
   resetPwd(username: string) {
-    this.cacheService.resetUserPwd(username).subscribe(success => {
+    console.log('reset for', username);
+    this.apiService.resetPwd(username).subscribe(success => {
       if (success) {
-        let password = "";
-
-        const user = this.cacheService.getUserObject(username);
-        if (!!user) {
-          password = user.firstPassword;
-        }
+        let password = success.payload;
 
         this.dialogService.openInfoDialog(`Passwort wurde auf "${password}" zurückgesetzt.`);
       }

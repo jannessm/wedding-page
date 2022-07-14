@@ -9,8 +9,10 @@ $token = decodeToken(readToken());
 
 $user = $user_pdo->get($token->user->name);
 
-unset($user->password);
-unset($user->first_password);
+$user['isAdmin'] = $user['is_admin'] == 1;
+unset($user['password']);
+unset($user['first_password']);
+unset($user['is_admin']);
 
 // refresh jwt
 respondJSON(201, generateJWT($user));

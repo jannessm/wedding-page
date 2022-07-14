@@ -64,13 +64,13 @@ export class ExcelService {
 
     const sheet = this.createWorksheet(workbook, "Benutzerliste", columns);
 
-    user.forEach(u => {
-      sheet.addRow({
-        'user': u.name, 
-        'guests': u.guests.map(guest => `${guest.name} ${guest.lastname}`).join(', '),
-        'password': u.firstPassword
-      });
-    });
+    // user.forEach(u => {
+    //   sheet.addRow({
+    //     'user': u.name, 
+    //     'guests': u.guests.map(guest => `${guest.name} ${guest.lastname}`).join(', '),
+    //     'password': u.firstPassword
+    //   });
+    // });
 
 
     return await workbook.xlsx.writeBuffer();

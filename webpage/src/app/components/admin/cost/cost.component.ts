@@ -36,9 +36,10 @@ export class CostComponent {
   ngOnInit(): void {
     this.budgetService.getData().subscribe(data => this.handleData(data));
     this.cacheService.data.subscribe(data => {
-      this.guests = Object.values(data).reduce((guests, user) => 
-        user.guests.reduce((comingGuests, g) => g.isComing != false ? comingGuests + 1 : 0,0) + guests
-      , 0);
+      // this.guests = Object.values(data).reduce((guests, user) => 
+      //   user.guests.reduce((comingGuests, g) => g.isComing != false ? comingGuests + 1 : 0,0) + guests
+      // , 0);
+      this.guests = 0;
     });
   }
 

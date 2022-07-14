@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ApiResponse } from 'src/models/api';
+import { ApiResponse, DataResponse } from 'src/models/api';
 import { Guest, User, UserResponse } from 'src/models/user';
 
 @Injectable({
@@ -46,8 +46,12 @@ export class UserApiService {
     return this.http.post<ApiResponse>(this.BASE_API + "auth/?guests", user);
   }
 
-  updateUsers(user: UserResponse): Observable<ApiResponse> {
+  updateUser(user: UserResponse): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.BASE_API + 'admin/?update-user', user);
+  }
+
+  updateAdminRights(username: string, isAdmin: boolean): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.BASE_API + 'admin/?update-admin-rights', {name: username, is_admin: isAdmin});
   }
 
   updateGuests(guests: Guest[]): Observable<ApiResponse> {
@@ -58,7 +62,7 @@ export class UserApiService {
     return this.http.post<ApiResponse>(this.BASE_API + "admin/?delete-user", {name: user});
   }
 
-  resetPwd(user: string): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.BASE_API + "admin/?reset-pwd", {name: user});
+  resetPwd(user: string): Observable<DataResponse> {
+    return this.http.post<DataResponse>(this.BASE_API + "admin/?reset-pwd", {name: user});
   }
 }

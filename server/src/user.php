@@ -56,9 +56,34 @@ class User {
         return $user;
     }
 
-    public function update_password($name, $new_password) {
-        $sql = 'UPDATE user SET password=:new_password, first_login=0 where name=:name;';
+    public function get_all() {
+        $sql = 'SELECT name, is_admin, first_login, first_password, guests FROM user INNER JOIN (
+            SELECT user_id, group_concat(guests, ", ") as guests FROM (
+                SELECT user_id, name || " " || last_name as guests FROM guests
+            ) GROUP BY user_id
+        ) ON user_id = user.name;';
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':new_password' => $new_password, ':name' => $name]);
+        $stmt->execute();
+
+        $users = [];
+        while ($user = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $user['isAdmin'] = $user['is_admin'] == 1;
+            unset($user['is_admin']);
+            array_push($users, $user);
+        }
+
+        return $users;
+    }
+
+    public function update_password($name, $new_password, $first_login = 0) {
+        $sql = 'UPDATE user SET password=:new_password, first_login=:first_login where name=:name;';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':new_password' => $new_password, ':name' => $name, ':first_login' => $first_login]);
+    }
+
+    public function update_admin_rights($name, $is_admin) {
+        $sql = 'UPDATE user SET is_admin=:is_admin where name=:name;';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':name' => $name, ':is_admin' => $is_admin]);
     }
 }

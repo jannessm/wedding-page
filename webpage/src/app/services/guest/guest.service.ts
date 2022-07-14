@@ -43,114 +43,114 @@ export class GuestService {
   parseData(users: UserResponse) {
     const guestsData: GuestTable[] = [];
 
-    Object.keys(users).forEach(username => {
+    // Object.keys(users).forEach(username => {
 
-      const origUser = users[username];
-      origUser.guests.map( guest => {
-        if (!guest.uuid) {
-          guest.uuid = uuid()
-        }
+    //   const origUser = users[username];
+    //   origUser.guests.map( guest => {
+    //     if (!guest.uuid) {
+    //       guest.uuid = uuid()
+    //     }
 
-        return <GuestTable>{
-          user: username,
-          uuid: guest.uuid,
-          name: guest.name,
-          lastname: guest.lastname,
-          age: guest.age,
-          isComing: guest.isComing,
-          diet: guest.diet,
-          song: guest.song,
-          editMode: false,
-          allergies: guest.allergies,
-          otherAllergies: guest.otherAllergies
-        }
-      }).forEach(val => guestsData.push(val));
-    });
+    //     return <GuestTable>{
+    //       user: username,
+    //       uuid: guest.uuid,
+    //       name: guest.name,
+    //       lastname: guest.lastname,
+    //       age: guest.age,
+    //       isComing: guest.isComing,
+    //       diet: guest.diet,
+    //       song: guest.song,
+    //       editMode: false,
+    //       allergies: guest.allergies,
+    //       otherAllergies: guest.otherAllergies
+    //     }
+    //   }).forEach(val => guestsData.push(val));
+    // });
 
     this.countData(guestsData);
     this.guests.next(guestsData);
   }
 
-  addGuest(username: string, newGuest: Guest): Observable<boolean> {
-    const user = this.cacheService.getUserObject(username);
-    if (!user) {
-      this.snackBar.open("Benutzer nicht gefunden.", "Ok");
-      return of(false);
-    }
+  // addGuest(username: string, newGuest: Guest): Observable<boolean> {
+  //   const user = this.cacheService.getUserObject(username);
+  //   if (!user) {
+  //     this.snackBar.open("Benutzer nicht gefunden.", "Ok");
+  //     return of(false);
+  //   }
 
-    const origGuestIds = user.guests.map(guest => guest.uuid);
+  //   const origGuestIds = user.guests.map(guest => guest.uuid);
 
-    const guestExists = user.guests.reduce((exists, guest) => guest.uuid === newGuest.uuid || exists, false);
+  //   const guestExists = user.guests.reduce((exists, guest) => guest.uuid === newGuest.uuid || exists, false);
 
-    if (guestExists) {
-      this.snackBar.open("Gast existiert bereits.", "Ok");
-      return of(false);
-    }
+  //   if (guestExists) {
+  //     this.snackBar.open("Gast existiert bereits.", "Ok");
+  //     return of(false);
+  //   }
 
-    user.guests.push(newGuest);
+    // user.guests.push(newGuest);
 
-    return this.cacheService.updateUser().pipe(
-      map(resp => {
-        if (resp?.status !== API_STATUS.SUCCESS) {
-          // reset guests
-          user.guests = user.guests.filter(guest => guest.uuid in origGuestIds);
-          this.snackBar.open("Etwas ist schief gelaufen.", "Ok");
-          return false;
-        } else {
-          this.cacheService.data.next(this.cacheService._lastDataObject);
-          return true;
-        }
-      }));
-  }
+    // return this.cacheService.updateUser().pipe(
+    //   map(resp => {
+    //     if (resp?.status !== API_STATUS.SUCCESS) {
+    //       // reset guests
+    //       user.guests = user.guests.filter(guest => guest.uuid in origGuestIds);
+    //       this.snackBar.open("Etwas ist schief gelaufen.", "Ok");
+    //       return false;
+    //     } else {
+    //       this.cacheService.data.next(this.cacheService._lastDataObject);
+    //       return true;
+    //     }
+    //   }));
+  // }
 
   updateGuest(username: string, updatedGuest: Guest): Observable<Guest | boolean> {
     let oldGuest: Guest;
     const user = this.cacheService.getUserObject(username);
     
     if (!!user) {
-      user.guests.forEach(guest => {
-        if (guest.uuid === updatedGuest.uuid) {
-          // copy old data for restoring if needed
-          oldGuest = {
-            name: guest.name,
-            lastname: guest.lastname,
-            age: guest.age,
-            allergies: guest.allergies,
-            otherAllergies: guest.otherAllergies,
-            diet: guest.diet,
-            isComing: guest.isComing,
-            uuid: guest.uuid,
-            song: guest.song
-          };
+      // user.guests.forEach(guest => {
+      //   if (guest.uuid === updatedGuest.uuid) {
+      //     // copy old data for restoring if needed
+      //     oldGuest = {
+      //       name: guest.name,
+      //       lastname: guest.lastname,
+      //       age: guest.age,
+      //       allergies: guest.allergies,
+      //       otherAllergies: guest.otherAllergies,
+      //       diet: guest.diet,
+      //       isComing: guest.isComing,
+      //       uuid: guest.uuid,
+      //       song: guest.song
+      //     };
 
 
-          guest.name = updatedGuest.name;
-          guest.lastname = updatedGuest.lastname;
-          guest.age = updatedGuest.age;
-          guest.allergies = updatedGuest.allergies;
-          guest.otherAllergies = updatedGuest.otherAllergies;
-          guest.diet = updatedGuest.diet;
-          guest.isComing = updatedGuest.isComing;
-        }
-      });
+      //     guest.name = updatedGuest.name;
+      //     guest.lastname = updatedGuest.lastname;
+      //     guest.age = updatedGuest.age;
+      //     guest.allergies = updatedGuest.allergies;
+      //     guest.otherAllergies = updatedGuest.otherAllergies;
+      //     guest.diet = updatedGuest.diet;
+      //     guest.isComing = updatedGuest.isComing;
+      //   }
+      // });
 
-      return this.cacheService.updateUser().pipe(
-        map(resp => {
-          if (!!resp && resp.status == API_STATUS.ERROR) {
-            this.snackBar.open("Änderungen konnten nicht gespeichert werden.", "OK");
+      // return this.cacheService.updateUser().pipe(
+      //   map(resp => {
+      //     if (!!resp && resp.status == API_STATUS.ERROR) {
+      //       this.snackBar.open("Änderungen konnten nicht gespeichert werden.", "OK");
 
-            updatedGuest.name = oldGuest.name;
-            updatedGuest.lastname = oldGuest.lastname;
-            updatedGuest.age = oldGuest.age;
-            updatedGuest.allergies = oldGuest.allergies;
-            updatedGuest.otherAllergies = oldGuest.otherAllergies;
-            updatedGuest.diet = oldGuest.diet;
-            updatedGuest.isComing = oldGuest.isComing;
+      //       updatedGuest.name = oldGuest.name;
+      //       updatedGuest.lastname = oldGuest.lastname;
+      //       updatedGuest.age = oldGuest.age;
+      //       updatedGuest.allergies = oldGuest.allergies;
+      //       updatedGuest.otherAllergies = oldGuest.otherAllergies;
+      //       updatedGuest.diet = oldGuest.diet;
+      //       updatedGuest.isComing = oldGuest.isComing;
 
-            return oldGuest;
-          }
-          return true;
-      }));
+      //       return oldGuest;
+      //     }
+      //     return true;
+      // }));
     }
 
     this.snackBar.open("Änderungen konnten nicht gespeichert werden.", "OK");
@@ -160,25 +160,25 @@ export class GuestService {
   deleteGuest(username: string, guestId: string): Observable<boolean> {
     const user = this.cacheService.getUserObject(username);
     
-    if (!!user) {
-      const oldGuests = user.guests;
+    // if (!!user) {
+    //   const oldGuests = user.guests;
 
-      user.guests = user.guests.filter(guest => guest.uuid !== guestId);
+    //   user.guests = user.guests.filter(guest => guest.uuid !== guestId);
 
-      return this.cacheService.updateUser()
-        .pipe(map(resp => {
-          if (!!resp && resp.status == API_STATUS.ERROR) {
-            this.snackBar.open("Gast konnte nicht gelöscht werden.", "OK");
+    //   return this.cacheService.updateUser()
+    //     .pipe(map(resp => {
+    //       if (!!resp && resp.status == API_STATUS.ERROR) {
+    //         this.snackBar.open("Gast konnte nicht gelöscht werden.", "OK");
 
-            user.guests = oldGuests;
-            return false;
+    //         user.guests = oldGuests;
+    //         return false;
           
-          } else {
-            this.cacheService.getData().subscribe();
-            return true;
-          }
-        }));
-    }
+    //       } else {
+    //         this.cacheService.getData().subscribe();
+    //         return true;
+    //       }
+    //     }));
+    // }
 
     return of(false);
   }
