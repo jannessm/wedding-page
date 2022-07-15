@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { GuestApiService } from 'src/app/services/api/guest-api/guest-api.service';
 import { UserApiService } from 'src/app/services/api/user-api/user-api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { CacheService } from 'src/app/services/cache/cache.service';
@@ -35,6 +36,7 @@ export class RegistrationComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private apiService: UserApiService,
+    private guestApi: GuestApiService,
     private sanitizer: DomSanitizer,
     private cacheService: CacheService,
     private snackbar: MatSnackBar
@@ -45,7 +47,7 @@ export class RegistrationComponent {
     this.form = fb.array([]);
     
     if (!!this.user) {
-      this.guests = this.apiService.getGuests(this.user).pipe(map(resp => {
+      this.guests = this.guestApi.getGuestsForUser(this.user.name).pipe(map(resp => {
         if (resp && resp.status == API_STATUS.SUCCESS) {
           return <Guest[]> (<DataResponse>resp).payload;
         }
@@ -85,7 +87,7 @@ export class RegistrationComponent {
     });
 
     if (!!this.user) {
-      this.apiService.updateGuests(this.guests_arr).subscribe( resp => {
+      this.guestApi.updateGuests(this.guests_arr).subscribe( resp => {
         if (resp && resp.status === API_STATUS.SUCCESS) {
           this.snackbar.open('Erfolgreich gespeichert!', 'Ok');
         } else {

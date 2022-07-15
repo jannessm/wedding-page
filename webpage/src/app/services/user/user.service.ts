@@ -35,8 +35,6 @@ export class UserService {
 
     const usersData: UserTable[] = [];
 
-    console.log(users);
-
     Object.values(users).forEach(origUser => {
 
       const user: UserTable = {
@@ -106,7 +104,6 @@ export class UserService {
   }
 
   resetPwd(username: string) {
-    console.log('reset for', username);
     this.apiService.resetPwd(username).subscribe(success => {
       if (success) {
         let password = success.payload;

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject, Subscriber } from 'rxjs';
 import { GuestTable } from 'src/models/guest-table';
-import { AGE_CATEGORIES, DIETS, Guest, UserResponse } from 'src/models/user';
+import { AGE_CATEGORIES, DIETS, Guest, GuestResponse, UserResponse } from 'src/models/user';
 
 import { v4 as uuid } from 'uuid';
 import { API_STATUS } from 'src/models/api';
@@ -10,6 +10,8 @@ import { map } from 'rxjs/operators';
 import { CacheService } from '../cache/cache.service';
 import { AllergiesVector, RegisteredVector } from 'src/models/vector';
 import { ALLERGIES } from 'src/models/allergies';
+import { UserApiService } from '../api/user-api/user-api.service';
+import { GuestApiService } from '../api/guest-api/guest-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,44 +32,35 @@ export class GuestService {
   otherAllergies: string[] = [];
 
   constructor(
-    private cacheService: CacheService,
+    private apiService: GuestApiService,
     private snackBar: MatSnackBar,
   ) {
     this.guests = new Subject<GuestTable[]>();
     
-    this.cacheService.data.subscribe(data => {
-      this.parseData(data);
+    this.apiService.getGuests().subscribe(data => {
+      this.parseData(<GuestResponse>(data.payload));
     })
   }
 
-  parseData(users: UserResponse) {
-    const guestsData: GuestTable[] = [];
-
-    // Object.keys(users).forEach(username => {
-
-    //   const origUser = users[username];
-    //   origUser.guests.map( guest => {
-    //     if (!guest.uuid) {
-    //       guest.uuid = uuid()
-    //     }
-
-    //     return <GuestTable>{
-    //       user: username,
-    //       uuid: guest.uuid,
-    //       name: guest.name,
-    //       lastname: guest.lastname,
-    //       age: guest.age,
-    //       isComing: guest.isComing,
-    //       diet: guest.diet,
-    //       song: guest.song,
-    //       editMode: false,
-    //       allergies: guest.allergies,
-    //       otherAllergies: guest.otherAllergies
-    //     }
-    //   }).forEach(val => guestsData.push(val));
-    // });
+  parseData(guests: GuestResponse) {
+    const guestsData: GuestTable[] = Object.values(guests).map( guest => {
+      return <GuestTable>{
+        user: guest.user_id,
+        uuid: guest.uuid,
+        name: guest.name,
+        lastname: guest.lastname,
+        age: guest.age,
+        isComing: guest.isComing,
+        diet: guest.diet,
+        song: guest.song,
+        editMode: false,
+        allergies: guest.allergies,
+        otherAllergies: guest.otherAllergies
+      }
+    });
 
     this.countData(guestsData);
+    this._lastDataObject = guestsData;
     this.guests.next(guestsData);
   }
 
@@ -105,9 +98,8 @@ export class GuestService {
 
   updateGuest(username: string, updatedGuest: Guest): Observable<Guest | boolean> {
     let oldGuest: Guest;
-    const user = this.cacheService.getUserObject(username);
     
-    if (!!user) {
+    // if (!!user) {
       // user.guests.forEach(guest => {
       //   if (guest.uuid === updatedGuest.uuid) {
       //     // copy old data for restoring if needed
@@ -151,14 +143,14 @@ export class GuestService {
       //     }
       //     return true;
       // }));
-    }
+    // }
 
     this.snackBar.open("Änderungen konnten nicht gespeichert werden.", "OK");
     return of(false);
   }
 
   deleteGuest(username: string, guestId: string): Observable<boolean> {
-    const user = this.cacheService.getUserObject(username);
+    // const user = this.cacheService.getUserObject(username);
     
     // if (!!user) {
     //   const oldGuests = user.guests;
@@ -197,7 +189,6 @@ export class GuestService {
     this.otherAllergies = [];
 
     guests.forEach((guest: GuestTable) => {
-      const registered = guest.isComing ? 1 : 0;
 
       switch(guest.age) {
         case AGE_CATEGORIES.ADULT:

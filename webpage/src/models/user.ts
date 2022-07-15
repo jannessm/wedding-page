@@ -12,6 +12,10 @@ export interface UserResponse {
     [key: number]: User;
 }
 
+export interface GuestResponse {
+    [key: number]: Guest;
+}
+
 export interface Guest {
     uuid: string;
     name: string;

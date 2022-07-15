@@ -43,20 +43,12 @@ export class UserApiService {
     return this.http.get<ApiResponse>(this.BASE_API + "admin/?user");
   }
 
-  getGuests(user: User): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.BASE_API + "auth/?guests", user);
-  }
-
   updateUser(user: UserResponse): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.BASE_API + 'admin/?update-user', user);
   }
 
   updateAdminRights(username: string, isAdmin: boolean): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.BASE_API + 'admin/?update-admin-rights', {name: username, is_admin: isAdmin});
-  }
-
-  updateGuests(guests: Guest[]): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.BASE_API + 'auth/?update-guests', {guests});
   }
 
   deleteUser(user: string): Observable<ApiResponse> {

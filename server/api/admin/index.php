@@ -9,6 +9,7 @@
     require_once('guests.php');
 
     $USER = new User($PDO);
+    $GUESTS = new Guests($PDO);
 
     include('budget.php');
 
@@ -30,6 +31,12 @@
     // get user data
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['user'])) {
         respondJSON(200, $USER->get_all());
+        exit();
+    }
+
+    // get guest data
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['guests'])) {
+        respondJSON(200, $GUESTS->get_all());
         exit();
     }
 
