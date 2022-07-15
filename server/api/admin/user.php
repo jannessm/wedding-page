@@ -40,7 +40,7 @@ function updateAdminRights() {
 }
 
 function deleteUser() {
-    global $USER;
+    global $USER, $GUESTS;
     $payload = json_decode(file_get_contents("php://input"), true);
     
     $username = strtolower($payload['name']);
@@ -49,6 +49,7 @@ function deleteUser() {
 
     if ($user !== false) {
         $USER->delete($username);
+        $GUESTS->delete_guests_of_user($username);
         respondJSON(201, $USER->filter($user));
     }
 }

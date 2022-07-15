@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/user/user.service';
 import { UserTable } from 'src/models/guest-table';
 
 import { saveAs } from 'file-saver';
+import { GuestService } from 'src/app/services/guest/guest.service';
 
 @Component({
   selector: 'app-user-table',
@@ -34,7 +35,12 @@ export class UserTableComponent implements OnDestroy, AfterViewInit {
 
   userSubscription: Subscription;
 
-  constructor(private userService: UserService, private dialogService: DialogService, private excelService: ExcelService, private cacheService: CacheService) {
+  constructor(
+    private userService: UserService,
+    private guestService: GuestService,
+    private dialogService: DialogService,
+    private excelService: ExcelService,
+    private cacheService: CacheService) {
 
     this.dataSource = new MatTableDataSource<UserTable>([]);
     this.userSubscription = this.userService.users.subscribe( users => {
@@ -79,7 +85,11 @@ export class UserTableComponent implements OnDestroy, AfterViewInit {
     return this.dialogService.openConfirmDialog(`Soll der Benutzer ${row.name} gelöscht werden?`).afterClosed()
       .subscribe(result => {
         if (result === 'ok') {
-          this.userService.deleteUser(row).subscribe();
+          this.userService.deleteUser(row).subscribe(success => {
+            if (success) {
+              this.guestService.updateData();
+            }
+          });
         }
       });
   }

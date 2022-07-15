@@ -83,10 +83,11 @@ export class AddUserFormComponent {
       } else {
         this.resetForm();
         this.form.setErrors(null);
+        guests.forEach(guest => this.guestService.addGuest(user, guest).subscribe());
+
+        this.guestService.updateData();
       }
     });
-
-    // this.guestService.addGuest(guests);
   }
 
   getGuests(): Guest[] {

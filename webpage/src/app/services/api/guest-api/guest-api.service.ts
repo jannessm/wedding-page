@@ -14,6 +14,10 @@ export class GuestApiService {
 
   constructor(private http: HttpClient) {}
 
+  addGuests(user: string, guests: Guest[]): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.BASE_API + "admin/?guests", {user, guests});
+  }
+
   getGuests(): Observable<DataResponse> {
     return this.http.get<DataResponse>(this.BASE_API + "admin/?guests");
   }

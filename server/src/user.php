@@ -65,7 +65,7 @@ class User {
     }
 
     public function get_all() {
-        $sql = 'SELECT name, is_admin, first_login, first_password, guests FROM user INNER JOIN (
+        $sql = 'SELECT name, is_admin, first_login, first_password, guests FROM user LEFT JOIN (
             SELECT user_id, group_concat(guests, ", ") as guests FROM (
                 SELECT user_id, name || " " || last_name as guests FROM guests
             ) GROUP BY user_id

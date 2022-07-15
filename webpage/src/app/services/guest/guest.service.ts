@@ -37,6 +37,10 @@ export class GuestService {
   ) {
     this.guests = new Subject<GuestTable[]>();
     
+    this.updateData();
+  }
+
+  updateData() {
     this.apiService.getGuests().subscribe(data => {
       this.parseData(<GuestResponse>(data.payload));
     })
@@ -64,37 +68,33 @@ export class GuestService {
     this.guests.next(guestsData);
   }
 
-  // addGuest(username: string, newGuest: Guest): Observable<boolean> {
-  //   const user = this.cacheService.getUserObject(username);
-  //   if (!user) {
-  //     this.snackBar.open("Benutzer nicht gefunden.", "Ok");
-  //     return of(false);
-  //   }
+  addGuest(user: string, newGuest: Guest): Observable<boolean> {
 
-  //   const origGuestIds = user.guests.map(guest => guest.uuid);
-
-  //   const guestExists = user.guests.reduce((exists, guest) => guest.uuid === newGuest.uuid || exists, false);
-
-  //   if (guestExists) {
-  //     this.snackBar.open("Gast existiert bereits.", "Ok");
-  //     return of(false);
-  //   }
-
-    // user.guests.push(newGuest);
-
-    // return this.cacheService.updateUser().pipe(
-    //   map(resp => {
-    //     if (resp?.status !== API_STATUS.SUCCESS) {
-    //       // reset guests
-    //       user.guests = user.guests.filter(guest => guest.uuid in origGuestIds);
-    //       this.snackBar.open("Etwas ist schief gelaufen.", "Ok");
-    //       return false;
-    //     } else {
-    //       this.cacheService.data.next(this.cacheService._lastDataObject);
-    //       return true;
-    //     }
-    //   }));
-  // }
+    return this.apiService.addGuests(user, [newGuest]).pipe(
+      map(resp => {
+        if (resp?.status !== API_STATUS.SUCCESS) {
+          // reset guests
+          this.snackBar.open("Etwas ist schief gelaufen.", "Ok");
+          return false;
+        } else {
+          this._lastDataObject?.push({
+            user: user,
+            uuid: newGuest.uuid,
+            name: newGuest.name,
+            lastname: newGuest.lastname,
+            song: newGuest.song,
+            age: newGuest.age,
+            isComing: newGuest.isComing,
+            allergies: newGuest.allergies,
+            otherAllergies: newGuest.otherAllergies,
+            diet: newGuest.diet,
+            editMode: false
+          });
+          this.guests.next(this._lastDataObject);
+          return true;
+        }
+      }));
+  }
 
   updateGuest(updatedGuest: Guest): Observable<Guest | boolean> {
 

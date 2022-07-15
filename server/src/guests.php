@@ -35,7 +35,7 @@ class Guests {
             $stmt->bindValue(':allergies', json_encode($guest['allergies']));
             $stmt->bindValue(':other_allergies', $guest['otherAllergies']);
             $stmt->bindValue(':user_id', $user_id);
-            $stmt->bindValue(':is_coming', $guest['is_coming']);
+            $stmt->bindValue(':is_coming', $guest['isComing']);
             $stmt->bindValue(':age', $guest['age']);
 
         } else {
@@ -121,6 +121,12 @@ class Guests {
         $sql = 'DELETE FROM guests WHERE uuid=:uuid';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':uuid' => $guest_id]);
+    }
+
+    public function delete_guests_of_user($user) {
+        $sql = 'DELETE FROM guests WHERE user_id=:user';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':user' => $user]);
     }
 
     public function filter($guest) {

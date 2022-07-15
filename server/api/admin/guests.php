@@ -4,11 +4,11 @@ function addGuests() {
     global $GUESTS;
     $payload = json_decode(file_get_contents("php://input"), true);
 
-    $username = strtolower($payload['name']);
+    $username = strtolower($payload['user']);
 
     foreach($payload['guests'] as $guest) {
         try {
-            $GUESTS->add($guest);
+            $GUESTS->add($guest, $username);
         } catch (PDOException $e) {
             respondErrorMsg(401, 'invalid request');
             break;

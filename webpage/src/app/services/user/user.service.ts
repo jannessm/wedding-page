@@ -8,6 +8,7 @@ import { User, UserResponse } from 'src/models/user';
 import { UserApiService } from '../api/user-api/user-api.service';
 import { AuthService } from '../auth/auth.service';
 import { DialogService } from '../dialog/dialog.service';
+import { GuestService } from '../guest/guest.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,12 +20,17 @@ export class UserService {
 
   constructor(
     private apiService: UserApiService,
+    private guestService: GuestService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private dialogService: DialogService,
   ) {
     this.users = new Subject<UserTable[]>();
     
+    this.updateData();
+  }
+
+  updateData() {
     this.apiService.getUsers().subscribe(data => {
       this.parseData(<UserResponse>(<DataResponse>data).payload);
     });
