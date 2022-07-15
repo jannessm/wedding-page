@@ -96,83 +96,47 @@ export class GuestService {
     //   }));
   // }
 
-  updateGuest(username: string, updatedGuest: Guest): Observable<Guest | boolean> {
-    let oldGuest: Guest;
+  updateGuest(updatedGuest: Guest): Observable<Guest | boolean> {
+
+    const oldGuest = this._lastDataObject?.find(guest => guest.uuid == updatedGuest.uuid);
     
-    // if (!!user) {
-      // user.guests.forEach(guest => {
-      //   if (guest.uuid === updatedGuest.uuid) {
-      //     // copy old data for restoring if needed
-      //     oldGuest = {
-      //       name: guest.name,
-      //       lastname: guest.lastname,
-      //       age: guest.age,
-      //       allergies: guest.allergies,
-      //       otherAllergies: guest.otherAllergies,
-      //       diet: guest.diet,
-      //       isComing: guest.isComing,
-      //       uuid: guest.uuid,
-      //       song: guest.song
-      //     };
+    if (!!oldGuest) {
+      return this.apiService.updateGuests([updatedGuest]).pipe(
+        map(resp => {
+          if (!!resp && resp.status == API_STATUS.ERROR) {
+            this.snackBar.open("Änderungen konnten nicht gespeichert werden.", "OK");
 
+            updatedGuest.name = oldGuest.name;
+            updatedGuest.lastname = oldGuest.lastname;
+            updatedGuest.age = oldGuest.age;
+            updatedGuest.allergies = oldGuest.allergies;
+            updatedGuest.otherAllergies = oldGuest.otherAllergies;
+            updatedGuest.diet = oldGuest.diet;
+            updatedGuest.isComing = oldGuest.isComing;
 
-      //     guest.name = updatedGuest.name;
-      //     guest.lastname = updatedGuest.lastname;
-      //     guest.age = updatedGuest.age;
-      //     guest.allergies = updatedGuest.allergies;
-      //     guest.otherAllergies = updatedGuest.otherAllergies;
-      //     guest.diet = updatedGuest.diet;
-      //     guest.isComing = updatedGuest.isComing;
-      //   }
-      // });
-
-      // return this.cacheService.updateUser().pipe(
-      //   map(resp => {
-      //     if (!!resp && resp.status == API_STATUS.ERROR) {
-      //       this.snackBar.open("Änderungen konnten nicht gespeichert werden.", "OK");
-
-      //       updatedGuest.name = oldGuest.name;
-      //       updatedGuest.lastname = oldGuest.lastname;
-      //       updatedGuest.age = oldGuest.age;
-      //       updatedGuest.allergies = oldGuest.allergies;
-      //       updatedGuest.otherAllergies = oldGuest.otherAllergies;
-      //       updatedGuest.diet = oldGuest.diet;
-      //       updatedGuest.isComing = oldGuest.isComing;
-
-      //       return oldGuest;
-      //     }
-      //     return true;
-      // }));
-    // }
+            return oldGuest;
+          }
+          return true;
+      }));
+    }
 
     this.snackBar.open("Änderungen konnten nicht gespeichert werden.", "OK");
     return of(false);
   }
 
-  deleteGuest(username: string, guestId: string): Observable<boolean> {
-    // const user = this.cacheService.getUserObject(username);
-    
-    // if (!!user) {
-    //   const oldGuests = user.guests;
-
-    //   user.guests = user.guests.filter(guest => guest.uuid !== guestId);
-
-    //   return this.cacheService.updateUser()
-    //     .pipe(map(resp => {
-    //       if (!!resp && resp.status == API_STATUS.ERROR) {
-    //         this.snackBar.open("Gast konnte nicht gelöscht werden.", "OK");
-
-    //         user.guests = oldGuests;
-    //         return false;
-          
-    //       } else {
-    //         this.cacheService.getData().subscribe();
-    //         return true;
-    //       }
-    //     }));
-    // }
-
-    return of(false);
+  deleteGuest(guestId: string): Observable<boolean> {
+    return this.apiService.deleteGuest(guestId)
+      .pipe(map(resp => {
+        if (!!resp && resp.status == API_STATUS.ERROR) {
+          this.snackBar.open("Gast konnte nicht gelöscht werden.", "OK");
+          return false;
+        
+        } else {
+          this._lastDataObject = this._lastDataObject?.filter(guest => guest.uuid !== guestId);
+          this.guests.next(this._lastDataObject);
+          return true;
+        }
+      }));
   }
 
   countData(guests: GuestTable[]) {

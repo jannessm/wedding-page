@@ -80,7 +80,7 @@ export class GuestlistTableComponent implements AfterViewInit, OnDestroy {
   }
 
   saveChanges(row: GuestTable) {
-    this.guestService.updateGuest(row.user, {
+    this.guestService.updateGuest({
       uuid: row.uuid,
       name: row.name,
       lastname: row.lastname,
@@ -97,7 +97,7 @@ export class GuestlistTableComponent implements AfterViewInit, OnDestroy {
     return this.dialogService.openConfirmDialog(`Soll der Gast ${row.name} gelöscht werden?`).afterClosed()
       .subscribe(result => {
         if (result === 'ok') {
-          this.guestService.deleteGuest(row.user, row.uuid).subscribe();
+          this.guestService.deleteGuest(row.uuid).subscribe();
         }
       });
   }

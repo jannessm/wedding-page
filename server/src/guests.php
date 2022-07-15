@@ -117,6 +117,12 @@ class Guests {
         $stmt->execute();
     }
 
+    public function delete($guest_id) {
+        $sql = 'DELETE FROM guests WHERE uuid=:uuid';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':uuid' => $guest_id]);
+    }
+
     public function filter($guest) {
 
         $guest['lastname'] = $guest['last_name'];

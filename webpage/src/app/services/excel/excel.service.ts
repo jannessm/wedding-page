@@ -64,8 +64,6 @@ export class ExcelService {
 
     const sheet = this.createWorksheet(workbook, "Benutzerliste", columns);
 
-    console.log(user);
-
     user.forEach(u => {
       sheet.addRow({
         'user': u.name, 

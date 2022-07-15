@@ -64,6 +64,12 @@
         exit();
     }
 
+    // delete guest
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['delete-guest'])) {
+        deleteGuest();
+        exit();
+    }
+
     // reset passwort for user
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['reset-pwd'])) {
         resetPwd();

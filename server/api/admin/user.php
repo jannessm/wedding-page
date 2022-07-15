@@ -1,9 +1,8 @@
 <?php
 
 function addUser() {
-    global $PDO;
+    global $USER;
     $payload = json_decode(file_get_contents("php://input"), true);
-    $USER = new User($PDO);
 
     $username = strtolower($payload['name']);
 
@@ -32,8 +31,7 @@ function addUser() {
 }
 
 function updateAdminRights() {
-    global $PDO;
-    $USER = new User($PDO);
+    global $USER;
     $payload = json_decode(file_get_contents("php://input"), true);
 
     $USER->update_admin_rights(strtolower($payload['name']), $payload['is_admin']);
@@ -42,9 +40,8 @@ function updateAdminRights() {
 }
 
 function deleteUser() {
-    global $PDO;
+    global $USER;
     $payload = json_decode(file_get_contents("php://input"), true);
-    $USER = new User($PDO);
     
     $username = strtolower($payload['name']);
 
@@ -57,10 +54,9 @@ function deleteUser() {
 }
 
 function resetPwd() {
-    global $BASE, $PDO;
+    global $USER;
     $payload = json_decode(file_get_contents("php://input"), true);
 
-    $USER = new User($PDO);
     $username = strtolower($payload['name']);
     $user_data = $USER->get($username);
 

@@ -1,9 +1,8 @@
 <?php
 
 function addGuests() {
-    global $PDO;
+    global $GUESTS;
     $payload = json_decode(file_get_contents("php://input"), true);
-    $GUESTS = new Guests($PDO);
 
     $username = strtolower($payload['name']);
 
@@ -17,6 +16,17 @@ function addGuests() {
     }
 
     respondJSON(201, "done");
+}
+
+function deleteGuest() {
+    global $GUESTS;
+    $payload = json_decode(file_get_contents("php://input"), true);
+
+    $old_guest = $GUESTS->get($payload['guest_id']);
+
+    $GUESTS->delete($payload['guest_id']);
+
+    respondJSON(201, $old_guest);
 }
 
 ?>

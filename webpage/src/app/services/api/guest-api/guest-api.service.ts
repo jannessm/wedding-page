@@ -25,4 +25,8 @@ export class GuestApiService {
   updateGuests(guests: Guest[]): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.BASE_API + 'auth/?update-guests', {guests});
   }
+
+  deleteGuest(guestId: string): Observable<DataResponse> {
+    return this.http.post<DataResponse>(this.BASE_API + 'admin/?delete-guest', {guest_id: guestId});
+  }
 }
