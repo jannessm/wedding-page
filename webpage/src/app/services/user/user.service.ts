@@ -7,7 +7,6 @@ import { UserTable } from 'src/models/guest-table';
 import { User, UserResponse } from 'src/models/user';
 import { UserApiService } from '../api/user-api/user-api.service';
 import { AuthService } from '../auth/auth.service';
-import { CacheService } from '../cache/cache.service';
 import { DialogService } from '../dialog/dialog.service';
 
 @Injectable({
@@ -41,7 +40,8 @@ export class UserService {
         name: origUser.name,
         isAdmin: origUser.isAdmin,
         guests: origUser.guests,
-        newIsAdmin: origUser.isAdmin
+        newIsAdmin: origUser.isAdmin,
+        firstPassword: origUser.firstPassword
       };
 
       usersData.push(user);

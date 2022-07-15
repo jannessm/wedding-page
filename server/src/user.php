@@ -75,9 +75,7 @@ class User {
 
         $users = [];
         while ($user = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-            $user['isAdmin'] = $user['is_admin'] == 1;
-            unset($user['is_admin']);
-            array_push($users, $user);
+            array_push($users, $this->filter($user));
         }
 
         return $users;
@@ -104,6 +102,7 @@ class User {
     public function filter($user) {
         $user['isAdmin'] = $user['is_admin'] == 1;
         $user['firstLogin'] = $user['first_login'] == 1;
+        $user['firstPassword'] = $user['first_password'];
         unset($user['password']);
         unset($user['first_password']);
         unset($user['is_admin']);

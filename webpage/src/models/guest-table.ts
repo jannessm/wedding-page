@@ -10,4 +10,5 @@ export interface UserTable {
     isAdmin: boolean;
     newIsAdmin: boolean;
     guests: string;
+    firstPassword: string;
 }
