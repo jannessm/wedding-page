@@ -29,8 +29,8 @@ class BudgetCostCenters {
         $this->pdo->exec($sql);
     }
 
-    public function add($cost_center) {
-        $sql = 'INSERT INTO budget_cost_centers VALUES (NULL, :title, :category, :amount, :paid, :per_person);';
+    public function add($cost_center, $key=NULL) {
+        $sql = 'INSERT INTO budget_cost_centers VALUES (:id, :title, :category, :amount, :paid, :per_person);';
         $stmt = $this->pdo->prepare($sql);
 
         if (is_array($cost_center)) {
@@ -42,6 +42,7 @@ class BudgetCostCenters {
             $stmt->bindValue(':per_person', $cost_center['per_person']);
 
         } else {
+            $stmt->bindValue(':id', $key);
             $stmt->bindValue(':title', $cost_center->title);
             if (property_exists($cost_center, 'category')) {
                 $stmt->bindValue(':category', $cost_center->category);

@@ -1,9 +1,3 @@
-export interface BudgetData {
-    budget: number;
-    categories: Category[];
-    cost_centers: CostCenter[];
-}
-
 export interface Category {
     id: string;
     label: string;

@@ -1,5 +1,21 @@
 <?php
 
+function getBudgetCategories() {
+    global $CATEGORIES;
+
+    $categories = $CATEGORIES->get_all();
+
+    respondJSON(200, $categories);
+}
+
+function getBudgetCostCenters() {
+    global $COSTCENTERS;
+
+    $cost_centers = $COSTCENTERS->get_all();
+
+    respondJSON(200, $cost_centers);
+}
+
 function getBudgetData() {
     global $BASE;
     $payload = json_decode(read_file($BASE . 'budget-data'), true);

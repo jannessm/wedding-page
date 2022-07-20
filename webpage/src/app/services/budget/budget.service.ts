@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { API_STATUS, DataResponse } from 'src/models/api';
-import { BudgetData, Category } from 'src/models/budget';
+import { Category, CostCenter } from 'src/models/budget';
 import { BudgetApiService } from '../api/budget-api/budget-api.service';
 
 @Injectable({
@@ -16,10 +16,19 @@ export class BudgetService {
     private snackbar: MatSnackBar
   ) {}
 
-  getData(): Observable<BudgetData | undefined> {
-    return this.apiService.getBudgetData().pipe(map(resp => {
+  getCategories(): Observable<Category[] | undefined> {
+    return this.apiService.getBudgetCategories().pipe(map(resp => {
       if (resp && resp.status == API_STATUS.SUCCESS) {
-        return <BudgetData> (<DataResponse>resp).payload;
+        return <Category[]> (<DataResponse>resp).payload;
+      }
+      return;
+    }));
+  }
+
+  getCostCenters(): Observable<CostCenter[] | undefined> {
+    return this.apiService.getBudgetCostCenters().pipe(map(resp => {
+      if (resp && resp.status == API_STATUS.SUCCESS) {
+        return <CostCenter[]> (<DataResponse>resp).payload;
       }
       return;
     }));

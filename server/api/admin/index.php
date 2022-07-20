@@ -7,11 +7,12 @@
     require_once($BASE . 'autoload.php');
     require_once('user.php');
     require_once('guests.php');
+    require_once('budget.php');
 
     $USER = new User($PDO);
     $GUESTS = new Guests($PDO);
-
-    include('budget.php');
+    $CATEGORIES = new BudgetCategories($PDO);
+    $COSTCENTERS = new BudgetCostCenters($PDO);
 
     // check JWT
     if (!validJWT()) {
@@ -76,9 +77,15 @@
         exit();
     }
 
-    // get budget data
-    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['get-budget-data'])) {
-        getBudgetData();
+    // get budget categories
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['categories'])) {
+        getBudgetCategories();
+        exit();
+    }
+
+    // get budget cost_centers
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cost_centers'])) {
+        getBudgetCostCenters();
         exit();
     }
 

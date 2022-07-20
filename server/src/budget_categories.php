@@ -25,16 +25,17 @@ class BudgetCategories {
         $this->pdo->exec($sql);
     }
 
-    public function add($category) {
-        $sql = 'INSERT INTO budget_categories (label, budget) VALUES (:label, :budget);';
+    public function add($category, $key=NULL) {
+        $sql = 'INSERT INTO budget_categories VALUES (:id, :label, :budget);';
         $stmt = $this->pdo->prepare($sql);
 
         if (is_array($category)) {
-
+            $stmt->bindValue(':id', $key);
             $stmt->bindValue(':label', $category['label']);
             $stmt->bindValue(':budget', $category['budget']);
 
         } else {
+            $stmt->bindValue(':id', $key);
             $stmt->bindValue(':label', $category->label);
             $stmt->bindValue(':budget', $category->budget);
         }
@@ -65,7 +66,7 @@ class BudgetCategories {
     }
 
     public function get_all() {
-        $sql = 'SELECT * FROM budget_categories;';
+        $sql = 'select * from budget_categories;';
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
 

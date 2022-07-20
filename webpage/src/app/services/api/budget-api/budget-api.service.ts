@@ -14,8 +14,12 @@ export class BudgetApiService {
 
   constructor(private http: HttpClient) {}
 
-  getBudgetData(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.BASE_API + 'get-budget-data');
+  getBudgetCategories(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(this.BASE_API + 'categories');
+  }
+
+  getBudgetCostCenters(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(this.BASE_API + 'cost_centers');
   }
 
   updateBudget(budget: number): Observable<ApiResponse> {
