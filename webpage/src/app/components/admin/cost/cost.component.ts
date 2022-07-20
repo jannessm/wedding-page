@@ -60,42 +60,42 @@ export class CostComponent {
   }
 
   changeBudget(new_budget: number) {
-  //   this.budgetService.updateBudget(new_budget).subscribe(success => {
-  //     if (success) {
-  //       this.data.budget = new_budget;
-  //     }
-  //   });
+    if (typeof(new_budget) == 'number') {
+      this.budgetService.updateBudget(new_budget).subscribe(success => {
+        if (success) {
+          this.budget_total = new_budget;
+        }
+      });
+    }
   }
 
   addCategory() {
-    const new_id = uuid();
-    this.categories.push({
-      id: new_id,
+    const new_category: Category = {
+      id: -1, // will be ignored
       label: "Neue Kategorie",
       budget: 100,
-      spent: 0,
-      cost_center_ids: []
-    });
+    }
 
-    this.updateCategory(this.categories[this.categories.length - 1]);
+    this.budgetService.addCategory(new_category).subscribe(new_category => {
+      if (new_category) {
+        new_category.spent = 0;
+        this.categories.push(new_category);
+      }
+    });
   }
 
   updateCategory(category: Category) {
-    // const old_category = this.categories.find(c => c.id === category.id);
-    // const value_changed = !!old_category && (old_category.label !== category.label || old_category.budget !==  category.budget);
-    
-    // if (value_changed && !!old_category) {
-    //   old_category.label = category.label;
-    //   old_category.budget = category.budget;
-      
-    //   this.budgetService.updateCategories(this.categories).subscribe(success => {
-    //     if (success && this.data) {
-    //       this.data.categories = this.categories.map(v => Object.assign({}, v));
-    //     } else if (this.data) {
-    //       this.categories = this.data.categories.map(v => Object.assign({}, v));
-    //     }
-    //   });
-    // }
+    if (!!category.budget) {
+      this.budgetService.updateCategory(category).subscribe(success => {
+        if (success) {
+          const c = this.categories.find(c => c.id == category.id);
+          if (c) {
+            c.budget = category.budget;
+            c.label = category.label;
+          }
+        }
+      });
+    }
   }
 
   deleteCategory(category: Category) {

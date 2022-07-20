@@ -47,11 +47,6 @@
 
     $categories = [];
 
-    $CATEGORIES->add([
-        "label" => "total",
-        "budget" => 10000
-    ]);
-
     foreach($budget_data->categories as $key => $category) {
         try {
             $CATEGORIES->add($category, $key + 1);

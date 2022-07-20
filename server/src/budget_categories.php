@@ -17,12 +17,27 @@ class BudgetCategories {
     }
 
     public function create_table() {
-        $sql = "CREATE TABLE IF NOT EXISTS `budget_categories` (
-                `id` INTEGER PRIMARY KEY AUTOINCREMENT,
-                `label` TINYTEXT NOT NULL,
-                `budget` FLOAT NOT NULL
-            );";
-        $this->pdo->exec($sql);
+        try {
+            $sql = "CREATE TABLE `budget_categories` (
+                    `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+                    `label` TINYTEXT NOT NULL,
+                    `budget` FLOAT NOT NULL
+                );";
+            $this->pdo->exec($sql);
+        } catch (PDOException $e) {
+            if ($e->errorInfo[1] != 1) {
+                throw $e;
+            }
+        }
+        
+        if (!isset($e)) {
+            $this->add([
+                "id" => 0,
+                "label" => "total",
+                "budget" => "10000"
+            ]);
+        }
+
     }
 
     public function add($category, $key=NULL) {
@@ -41,6 +56,8 @@ class BudgetCategories {
         }
 
         $stmt->execute();
+
+        return $this->get($this->pdo->lastInsertId());
     }
 
     public function get($id) {
@@ -49,9 +66,9 @@ class BudgetCategories {
         $stmt->bindValue(':id', $id);
         $stmt->execute();
 
-        $guest = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $category = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        return $this->filter($guest);
+        return $category;
     }
 
     public function get_id($label) {
@@ -80,11 +97,20 @@ class BudgetCategories {
 
     public function update($category) {
         $sql = 'UPDATE budget_categories SET label=:label, budget=:budget where id=:id;';
-        
+
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':label', $category['label']);
         $stmt->bindValue(':budget', $category['budget']);
         $stmt->bindValue(':id', $category['id']);
+
+        $stmt->execute();
+    }
+
+    public function update_budget($budget) {
+        $sql = 'UPDATE budget_categories SET budget=:budget where id=1;';
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':budget', $budget);
 
         $stmt->execute();
     }

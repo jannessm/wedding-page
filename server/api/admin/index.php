@@ -95,9 +95,15 @@
         exit();
     }
 
-    // update categories (also add some)
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-categories'])) {
-        updateCategories();
+    // update category
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['add-category'])) {
+        addCategory();
+        exit();
+    }
+
+    // update category
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-category'])) {
+        updateCategory();
         exit();
     }
 

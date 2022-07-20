@@ -35,25 +35,28 @@ function getBudgetData() {
 }
 
 function updateBudget() {
-    global $BASE;
+    global $CATEGORIES;
     $payload = json_decode(file_get_contents("php://input"), true);
-    $data = json_decode(read_file($BASE . 'budget-data'), true);
 
-    $data['budget'] = $payload['budget'];
-
-    write_file($BASE . 'budget-data', json_encode($data));
+    $CATEGORIES->update_budget($payload['budget']);
 
     respondJSON(201, "updated Budget");
 }
 
-function updateCategories() {
-    global $BASE;
+function addCategory() {
+    global $CATEGORIES;
     $payload = json_decode(file_get_contents("php://input"), true);
-    $data = json_decode(read_file($BASE . 'budget-data'), true);
 
-    $data['categories'] = $payload['categories'];
+    $new_category = $CATEGORIES->add($payload['category']);
 
-    write_file($BASE . 'budget-data', json_encode($data));
+    respondJSON(201, $new_category);
+}
+
+function updateCategory() {
+    global $CATEGORIES;
+    $payload = json_decode(file_get_contents("php://input"), true);
+
+    $CATEGORIES->update($payload['category']);
 
     respondJSON(201, "updated categories");
 }

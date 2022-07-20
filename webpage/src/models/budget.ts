@@ -1,15 +1,14 @@
 export interface Category {
-    id: string;
+    id: number;
     label: string;
     budget: number;
     spent?: number;
-    cost_center_ids: string[];
 }
 
 export interface CostCenter {
-    id: string;
+    id: number;
     title: string;
-    category: string;
+    category: number;
     amount: number;
     paid: boolean;
     per_person: boolean;

@@ -19,7 +19,7 @@ export class BudgetService {
   getCategories(): Observable<Category[] | undefined> {
     return this.apiService.getBudgetCategories().pipe(map(resp => {
       if (resp && resp.status == API_STATUS.SUCCESS) {
-        return <Category[]> (<DataResponse>resp).payload;
+        return <Category[]> resp.payload;
       }
       return;
     }));
@@ -28,7 +28,7 @@ export class BudgetService {
   getCostCenters(): Observable<CostCenter[] | undefined> {
     return this.apiService.getBudgetCostCenters().pipe(map(resp => {
       if (resp && resp.status == API_STATUS.SUCCESS) {
-        return <CostCenter[]> (<DataResponse>resp).payload;
+        return <CostCenter[]> resp.payload;
       }
       return;
     }));
@@ -45,8 +45,19 @@ export class BudgetService {
     }));
   }
 
-  updateCategories(categories: Category[]): Observable<boolean> {
-    return this.apiService.updateCategories(categories).pipe(map(resp => {
+  addCategory(category: Category): Observable<Category | undefined> {
+    return this.apiService.addCategory(category).pipe(map(resp => {
+      if (resp && resp.status === API_STATUS.SUCCESS) {
+        return <Category> resp.payload;
+      } else {
+        this.snackbar.open("Kategory konnte nicht hinzugefügt werden.", "Ok");
+        return;
+      }
+    }))
+  }
+
+  updateCategory(category: Category): Observable<boolean> {
+    return this.apiService.updateCategory(category).pipe(map(resp => {
       if (resp && resp.status === API_STATUS.SUCCESS) {        
         return true;
       } else {
