@@ -34,7 +34,7 @@ class User {
         if (!is_array($user)) {
             $stmt->bindValue(':name', $user->name);
             $stmt->bindValue(':is_admin', $user->isAdmin);
-            $stmt->bindValue(':first_login', $user->firstLogin);
+            $stmt->bindValue(':first_login', $user->firstLogin == 1);
             $stmt->bindValue(':first_password', $user->firstPassword);
             $stmt->bindValue(':password', json_encode($user->password));
     
