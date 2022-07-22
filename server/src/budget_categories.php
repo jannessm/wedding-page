@@ -32,10 +32,9 @@ class BudgetCategories {
         
         if (!isset($e)) {
             $this->add([
-                "id" => 0,
                 "label" => "total",
                 "budget" => "10000"
-            ]);
+            ], 1);
         }
 
     }

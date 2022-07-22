@@ -28,7 +28,13 @@ export class BudgetService {
   getCostCenters(): Observable<CostCenter[] | undefined> {
     return this.apiService.getBudgetCostCenters().pipe(map(resp => {
       if (resp && resp.status == API_STATUS.SUCCESS) {
-        return <CostCenter[]> resp.payload;
+        const cost_center = <CostCenter[]> resp.payload
+        cost_center.forEach(element => {
+          if (typeof(element.amount) === 'string') {
+            element.amount = parseFloat(element.amount);
+          }
+        });
+        return cost_center;
       }
       return;
     }));
