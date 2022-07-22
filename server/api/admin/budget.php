@@ -62,18 +62,10 @@ function updateCategory() {
 }
 
 function deleteCategory() {
-    global $BASE;
+    global $CATEGORIES;
     $category_id = $_GET['id'];
-    $data = json_decode(read_file($BASE . 'budget-data'), true);
 
-    foreach($data['categories'] as $key => $category) {
-        if ($category['id'] == $category_id) {
-            array_splice($data['categories'], $key, 1);
-            break;
-        }
-    }
-
-    write_file($BASE . 'budget-data', json_encode($data));
+    $CATEGORIES->delete($category_id);
 
     respondJSON(201, "deleted category");
 }

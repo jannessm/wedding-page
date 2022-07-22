@@ -99,17 +99,14 @@ export class CostComponent {
   }
 
   deleteCategory(category: Category) {
-      // const old_category_id = this.categories.findIndex(c => c.id === category.id);
-      // if (old_category_id >= 0) {
-      //   this.budgetService.deleteCategory(category).subscribe(success => {
-      //     if (success && this.data) {
-      //       this.categories.splice(old_category_id, 1);
-      //       this.data.categories = this.categories.map(v => Object.assign({}, v));
-      //     } else if (this.data) {
-      //       this.categories = this.data.categories.map(v => Object.assign({}, v));
-      //     }
-      //   });
-      // }
+      const old_category_id = this.categories.findIndex(c => c.id === category.id);
+      if (old_category_id >= 0) {
+        this.budgetService.deleteCategory(category).subscribe(success => {
+          if (success) {
+            this.categories.splice(old_category_id, 1);
+          }
+        });
+      }
   }
 
   updateSpent() {
