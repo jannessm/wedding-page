@@ -1,64 +1,38 @@
 <?php
 
-$ALGO = 'AES-128-CBC';
+$BASE = './';
 
-function read_file($filename) {
-    global $ALGO, $fileKey;
-    if (file_exists($filename)) {
-        $content = file_get_contents($filename);
-        return openssl_decrypt($content, $ALGO, md5('password'), 0, $fileKey);
-    } else {
-        return "{}"; // empty json
-    } 
+if (!file_exists('config/secrets.php')) {
+    $conf = '<?php
+$serverName = localhost;
+$sqliteFile = $BASE . "data.db";
+    ';
+
+    file_put_contents('config/secrets.php', $conf);
 }
 
-function write_file($filename, $content) {
-    global $ALGO, $fileKey;
-    $encrypted = openssl_encrypt($content, $ALGO, md5('password'), 0, $fileKey);
-    file_put_contents($filename, $encrypted);
-}
+require_once('config/secrets.php');
 
-if (!file_exists('data')) {
-    require_once('src/pwd.php');
+if (!file_exists('data.db')) {
+    require_once('./autoload.php');
 
+    $u = new User($PDO);
+    $g = new Guests($PDO);
+    $cat = new BudgetCategories($PDO);
+    $cc = new BudgetCostCenters($PDO);
 
-    if (!isset($_GET['user'])) {
-        echo "No username specified. Please read the documentation how to install this server.";
-        exit();
-    }
-    if (!isset($_GET['pwd'])) {
-        echo "No admin password specified. Please read the documentation how to install this server.";
-    }
-
-
-    // generate data encryption pwd
-    $dataPwd = generatePwd();
-    $host = parse_url($_SERVER['HTTP_HOST'])['host'];
-    $secrets = "<?php
-\$servername = \"$host\";
-
-
-\$jwtPrivateKey = file_get_contents(\$BASE . \"config/jwtRS256.key\");
-\$jwtPublicKey = file_get_contents(\$BASE . \"config/jwtRS256.key.pub\");
-
-\$fileKey = \"$dataPwd\";
-";
-    file_put_contents('config/secrets.php', $secrets);
-
-
-// create admin
     $user = $_GET['user'];
     $pwd = $_GET['pwd'];
 
-    $data = array(
-        'isAdmin' => true,
-        'firstPassword' => $pwd,
-        'firstLogin' => false,
-        'guests' => array(),
-        'password' => md5($pwd)
-    );
+    $new_user = [
+        "name" => $user,
+        "first_password" => $pwd,
+        "is_admin" => True,
+        "first_login" => False,
+        "password" => md5($pwd)
+    ];
 
-    write_file('data', json_encode($data));
+    $u->add($new_user);
 
     echo "DONE!";
 
