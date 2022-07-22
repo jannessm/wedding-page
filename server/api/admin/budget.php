@@ -70,15 +70,11 @@ function deleteCategory() {
     respondJSON(201, "deleted category");
 }
 
-function updateCostCenters() {
-    global $BASE;
+function updateCostCenter() {
+    global $COSTCENTERS;
     $payload = json_decode(file_get_contents("php://input"), true);
-    $data = json_decode(read_file($BASE . 'budget-data'), true);
 
-    $data['categories'] = $payload['categories'];
-    $data['cost_centers'] = $payload['costCenters'];
-
-    write_file($BASE . 'budget-data', json_encode($data));
+    $COSTCENTERS->update($payload['cost_center']);
 
     respondJSON(201, "updated cost centers");
 }

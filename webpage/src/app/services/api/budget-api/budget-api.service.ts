@@ -44,10 +44,9 @@ export class BudgetApiService {
     return this.http.delete<ApiResponse>(this.BASE_API + 'delete-category&id=' + category.id);
   }
 
-  updateCostCenters(categories: Category[], costCenters: CostCenter[]): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.BASE_API + 'update-cost-centers', {
-      categories,
-      costCenters
+  updateCostCenter(costCenter: CostCenter): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.BASE_API + 'update-cost-center', {
+      cost_center: costCenter
     });
   }
 

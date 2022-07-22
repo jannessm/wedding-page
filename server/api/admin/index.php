@@ -89,13 +89,13 @@
         exit();
     }
 
-    // update budget
+    // update budget (id = 0 of budget_categories table)
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-budget'])) {
         updateBudget();
         exit();
     }
 
-    // update category
+    // add category
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['add-category'])) {
         addCategory();
         exit();
@@ -113,9 +113,9 @@
         exit();
     }
 
-    // update cost centers
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-cost-centers'])) {
-        updateCostCenters();
+    // update cost center
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-cost-center'])) {
+        updateCostCenter();
         exit();
     }
 

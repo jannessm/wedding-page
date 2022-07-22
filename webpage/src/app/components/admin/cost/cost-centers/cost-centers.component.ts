@@ -16,7 +16,7 @@ import { v4 as uuid } from 'uuid';
 export class CostCentersComponent implements AfterViewInit {
   @Input()
   costCenters: MatTableDataSource<CostCenter> | undefined;
-  oldCostCenteres = new Map<string, CostCenter>();
+  oldCostCenteres = new Map<number, CostCenter>();
 
   @Input()
   categories: Category[] | undefined;
@@ -45,7 +45,7 @@ export class CostCentersComponent implements AfterViewInit {
         this.costCenters.sort = this.sort;
         clearInterval(interval);
         this.updateCategorySpent();
-        // this.costCenters.filterPredicate = this.filterCostCenters.bind(this);
+        this.costCenters.filterPredicate = this.filterCostCenters.bind(this);
       }
     }, 10);
   }
@@ -91,46 +91,27 @@ export class CostCentersComponent implements AfterViewInit {
     if (!!row.category && this.categories && this.costCenters) {
       oldCategoryId = this.categories.findIndex(c => row.category == c.id);
       oldCategory = Object.assign({}, this.categories[oldCategoryId]);
-
-      // if (!this.categories[oldCategoryId].cost_center_ids.includes(row.id)) {
-      //   this.categories[oldCategoryId].cost_center_ids.push(row.id);
-      // }
     }
 
     row.isNew = false;
 
-    this.apiService.updateCostCenters(
-      this.categories,
-      this.costCenters.data.filter(cc => !cc.isNew)
-        .map(cc => {
-          const ccCopy = Object.assign({}, cc);
-          delete ccCopy.isNew;
-          delete ccCopy.editMode;
-          return ccCopy;
-        })
-    ).subscribe(resp => {
+    this.apiService.updateCostCenter(row).subscribe(resp => {
       if (resp && resp.status === API_STATUS.ERROR && this.categories) {
-        // const oldCostCenter = this.oldCostCenteres.get(row.id);
+        const oldCostCenter = this.oldCostCenteres.get(row.id);
         
-        // if (oldCostCenter) {
-        //   row.amount = oldCostCenter.amount;
-        //   row.category = oldCostCenter.category;
-        //   row.paid = oldCostCenter.paid;
-        //   row.per_person = oldCostCenter.per_person;
-        //   row.title = oldCostCenter.title;
-        // }
-
-        // if (oldCategoryId && oldCategory) {
-        //   // this.categories[oldCategoryId].cost_center_ids = oldCategory.cost_center_ids;
-        //   this.categories[oldCategoryId].spent = oldCategory.spent;
-        // }
+        if (oldCostCenter) {
+          row.amount = oldCostCenter.amount;
+          row.category = oldCostCenter.category;
+          row.paid = oldCostCenter.paid;
+          row.per_person = oldCostCenter.per_person;
+          row.title = oldCostCenter.title;
+        }
 
       } else {
         this.change.emit();
       }
 
       this.updateCategorySpent();
-      // this.oldCostCenteres.delete(row.id);
     });
 
   }
@@ -163,30 +144,20 @@ export class CostCentersComponent implements AfterViewInit {
     }
   }
 
-  getCategoryLabel(id: string): string {
+  getCategoryLabel(id: number): string {
     if (this.categories) {
-      // const c = this.categories.find(c => c.id === id);
-      // return !!c ? c.label : '';
+      const c = this.categories.find(c => c.id === id);
+      return !!c ? c.label : '';
     }
     return '';
   }
 
   updateCategorySpent() {
     if (this.categories) {
-      this.categories.forEach(c => {
-
-        if (this.costCenters) {
-          c.spent = this.costCenters.data
-            // .filter(cc => c.cost_center_ids.includes(cc.id))
-            .reduce((sum, cc) => {
-              if (cc.per_person) {
-                return sum + cc.amount * this.guests;
-              } else {
-                return sum + cc.amount;
-              }
-            }, 0.0);
-        }
-      })
+      this.categories.forEach(category => {
+        category.spent = this.costCenters?.data.filter(cc => cc.category == category.id)
+                                               .reduce((spent, cc) => !cc.per_person ? cc.amount + spent : cc.amount * this.guests + spent, 0.0);
+      });
     }
   }
 
@@ -216,16 +187,16 @@ export class CostCentersComponent implements AfterViewInit {
     }, 0.0) || 0.00;
   }
 
-  displayCategory(category_id: string): string {
-    // return this.categories?.find(c => c.id == category_id)?.label || '';
-    return '';
+  displayCategory(category_id: number): string {
+    console.log(category_id, this.categories);
+    return this.categories?.find(c => c.id == category_id)?.label || '';
   }
 
   filterCostCenters(data: CostCenter, filter: string) {
     filter = filter.toLowerCase();
-    // const searchString = `${data.amount} ${this.displayCategory(data.category)} ${data.title} ${data.paid ? FilterKeywords.PAID : ''} ${data.per_person ? FilterKeywords.PER_PERSON : ''}`.trim().toLowerCase();
+    const searchString = `${data.amount} ${this.displayCategory(data.category)} ${data.title} ${data.paid ? FilterKeywords.PAID : ''} ${data.per_person ? FilterKeywords.PER_PERSON : ''}`.trim().toLowerCase();
 
-    // return searchString.includes(filter);
+    return searchString.includes(filter);
   }
 
 }
