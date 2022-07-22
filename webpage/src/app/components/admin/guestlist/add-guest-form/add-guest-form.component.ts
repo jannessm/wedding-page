@@ -63,7 +63,7 @@ export class AddGuestFormComponent implements OnDestroy {
     const lastname = this.form.controls.lastname.value.trim();
     const age = this.form.controls.age.value;
 
-    this.guestService.addGuest(user, <Guest>{
+    this.guestService.addGuest(user,  <Guest>{
       uuid: uuid(),
       name,
       lastname,
@@ -77,6 +77,7 @@ export class AddGuestFormComponent implements OnDestroy {
       if (!!resp) {
         this.resetForm();
         this.form.setErrors(null);
+        this.userService.updateData();
       }
     });
   }

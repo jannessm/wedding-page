@@ -9,6 +9,7 @@ import { AGE_CATEGORIES, AGE_CATEGORY_ICONS, AGE_CATEGORY_LABELS, DIETS, DIET_IC
 import { ALLERGIES, ALLERGIES_ICONS, ALLERGIES_LABELS } from 'src/models/allergies';
 import { Subscription } from 'rxjs';
 import { ExcelService } from 'src/app/services/excel/excel.service';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-guestlist-table',
@@ -42,7 +43,11 @@ export class GuestlistTableComponent implements AfterViewInit, OnDestroy {
 
   guestSubscription: Subscription;
 
-  constructor(public guestService: GuestService, private dialogService: DialogService, private excelService: ExcelService) {
+  constructor(
+    public guestService: GuestService,
+    private userService: UserService,
+    private dialogService: DialogService,
+    private excelService: ExcelService) {
 
     this.dataSource = new MatTableDataSource<GuestTable>([]);
     this.guestSubscription = this.guestService.guests.subscribe( guests => {
@@ -80,7 +85,7 @@ export class GuestlistTableComponent implements AfterViewInit, OnDestroy {
   }
 
   saveChanges(row: GuestTable) {
-    this.guestService.updateGuest(row.user, {
+    this.guestService.updateGuest({
       uuid: row.uuid,
       name: row.name,
       lastname: row.lastname,
@@ -89,7 +94,7 @@ export class GuestlistTableComponent implements AfterViewInit, OnDestroy {
       diet: row.diet,
       allergies: row.allergies,
       otherAllergies: row.otherAllergies,
-      song: row.song
+      song: row.song,
     }).subscribe();
   }
 
@@ -97,7 +102,11 @@ export class GuestlistTableComponent implements AfterViewInit, OnDestroy {
     return this.dialogService.openConfirmDialog(`Soll der Gast ${row.name} gelöscht werden?`).afterClosed()
       .subscribe(result => {
         if (result === 'ok') {
-          this.guestService.deleteGuest(row.user, row.uuid).subscribe();
+          this.guestService.deleteGuest(row.uuid).subscribe(success => {
+            if (success) {
+              this.userService.updateData();
+            }
+          });
         }
       });
   }

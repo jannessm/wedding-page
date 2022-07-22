@@ -1,21 +1,14 @@
-export interface BudgetData {
-    budget: number;
-    categories: Category[];
-    cost_centers: CostCenter[];
-}
-
 export interface Category {
-    id: string;
+    id: number;
     label: string;
     budget: number;
     spent?: number;
-    cost_center_ids: string[];
 }
 
 export interface CostCenter {
-    id: string;
+    id: number;
     title: string;
-    category: string;
+    category: number | null | undefined;
     amount: number;
     paid: boolean;
     per_person: boolean;

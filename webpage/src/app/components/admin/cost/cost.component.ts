@@ -1,12 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { BudgetData, Category, CostCenter } from 'src/models/budget';
+import { Category, CostCenter } from 'src/models/budget';
 import { BudgetService } from 'src/app/services/budget/budget.service';
 
-import { v4 as uuid } from 'uuid';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { CacheService } from 'src/app/services/cache/cache.service';
+import { GuestService } from 'src/app/services/guest/guest.service';
 
 @Component({
   selector: 'app-costs',
@@ -14,10 +13,9 @@ import { CacheService } from 'src/app/services/cache/cache.service';
   styleUrls: ['./cost.component.scss']
 })
 export class CostComponent {
-  data: BudgetData | undefined;
-
   guests = 0;
   spent_total = 0;
+  budget_total = 0;
 
   categories: Category[] = [];
 
@@ -30,67 +28,70 @@ export class CostComponent {
 
   constructor(
     private budgetService: BudgetService,
-    private cacheService: CacheService
+    private guestService: GuestService
   ) { }
 
   ngOnInit(): void {
-    this.budgetService.getData().subscribe(data => this.handleData(data));
-    this.cacheService.data.subscribe(data => {
-      this.guests = Object.values(data).reduce((guests, user) => 
-        user.guests.reduce((comingGuests, g) => g.isComing != false ? comingGuests + 1 : 0,0) + guests
-      , 0);
+    this.budgetService.getCategories().subscribe(data => this.handleCategories(data));
+    this.budgetService.getCostCenters().subscribe(data => this.handleCostCenters(data));
+    this.guestService.guests.subscribe(data => {
+      this.guests = Object.values(data).reduce((guests, guest) => 
+        guest.isComing != false ? guests + 1 : 0, 0);
     });
   }
 
-  handleData(data: BudgetData | undefined) {
+  handleCostCenters(data: CostCenter[] | undefined) {
     if (data) {
-      this.data = data;
-      
-      if (!this.data.cost_centers.map) {
-        this.data.cost_centers = Object.values(this.data.cost_centers);
-      }
+      this.cost_centers.data = data.map(v => Object.assign({editMode: false}, v));
+      this.category_total = this.categories.reduce((sum, c) => sum + c.budget, 0.0);
+      this.updateSpent();
+    }
+  }
 
-      this.categories = this.data.categories.map(v => Object.assign({}, v));
-      this.cost_centers.data = this.data.cost_centers.map(v => Object.assign({editMode: false}, v));
+  handleCategories(data: Category[] | undefined) {
+    if (data) {
+      this.budget_total = data[0].budget;
+
+      this.categories = data.slice(1).map(v => Object.assign({}, v));
       this.category_total = this.categories.reduce((sum, c) => sum + c.budget, 0.0);
       this.updateSpent();
     }
   }
 
   changeBudget(new_budget: number) {
-    this.budgetService.updateBudget(new_budget).subscribe(success => {
-      if (success && this.data) {
-        this.data.budget = new_budget;
+    if (typeof(new_budget) == 'number') {
+      this.budgetService.updateBudget(new_budget).subscribe(success => {
+        if (success) {
+          this.budget_total = new_budget;
+        }
+      });
+    }
+  }
+
+  addCategory() {
+    const new_category: Category = {
+      id: -1, // will be ignored
+      label: "Neue Kategorie",
+      budget: 100,
+    }
+
+    this.budgetService.addCategory(new_category).subscribe(new_category => {
+      if (new_category) {
+        new_category.spent = 0;
+        this.categories.push(new_category);
       }
     });
   }
 
-  addCategory() {
-    const new_id = uuid();
-    this.categories.push({
-      id: new_id,
-      label: "Neue Kategorie",
-      budget: 100,
-      spent: 0,
-      cost_center_ids: []
-    });
-
-    this.updateCategory(this.categories[this.categories.length - 1]);
-  }
-
   updateCategory(category: Category) {
-    const old_category = this.categories.find(c => c.id === category.id);
-    const value_changed = !!old_category && (old_category.label !== category.label || old_category.budget !==  category.budget);
-    
-    if (value_changed && !!old_category) {
-      old_category.label = category.label;
-      old_category.budget = category.budget;
-      
-      this.budgetService.updateCategories(this.categories).subscribe(success => {
-        if (success && this.data) {
-          this.data.categories = this.categories.map(v => Object.assign({}, v));
-        } else if (this.data) {
-          this.categories = this.data.categories.map(v => Object.assign({}, v));
+    if (!!category.budget) {
+      this.budgetService.updateCategory(category).subscribe(success => {
+        if (success) {
+          const c = this.categories.find(c => c.id == category.id);
+          if (c) {
+            c.budget = category.budget;
+            c.label = category.label;
+          }
         }
       });
     }
@@ -100,20 +101,16 @@ export class CostComponent {
       const old_category_id = this.categories.findIndex(c => c.id === category.id);
       if (old_category_id >= 0) {
         this.budgetService.deleteCategory(category).subscribe(success => {
-          if (success && this.data) {
+          if (success) {
             this.categories.splice(old_category_id, 1);
-            this.data.categories = this.categories.map(v => Object.assign({}, v));
-          } else if (this.data) {
-            this.categories = this.data.categories.map(v => Object.assign({}, v));
           }
         });
       }
   }
 
   updateSpent() {
-    if (this.data) {
-      this.spent_total = this.getTotalCosts();
-    }
+    this.spent_total = this.getTotalCosts();
+    this.updateSpentPerCategory();
   }
 
   getTotalCosts(): number {
@@ -125,6 +122,13 @@ export class CostComponent {
           return spent + cc.amount;
       }
     }, 0.0);
+  }
+
+  updateSpentPerCategory() {
+    this.categories.forEach(category => {
+      category.spent = this.cost_centers.data.filter(cc => cc.category == category.id)
+                                             .reduce((spent, cc) => !cc.per_person ? cc.amount + spent : cc.amount * this.guests + spent, 0.0);
+    });
   }
 
 }

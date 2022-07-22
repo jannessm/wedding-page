@@ -30,7 +30,7 @@ export class IsLoggedGuard implements CanActivate {
         }
       }),
       catchError(() => {
-        return of(this.router.parseUrl('/user/program'));
+        return of(this.router.parseUrl('/program'));
       })
       );
   }

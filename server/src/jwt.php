@@ -15,7 +15,7 @@
             'iss'  => $serverName,                       // Issuer
             'nbf'  => $issuedAt->getTimestamp(),         // Not before
             'exp'  => $expire,                           // Expire
-            'user' => $user,                     // User name
+            'user' => $user,                             // User name
         ];
 
         return JWT::encode(

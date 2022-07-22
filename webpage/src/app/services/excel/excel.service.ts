@@ -67,7 +67,7 @@ export class ExcelService {
     user.forEach(u => {
       sheet.addRow({
         'user': u.name, 
-        'guests': u.guests.map(guest => `${guest.name} ${guest.lastname}`).join(', '),
+        'guests': u.guests,
         'password': u.firstPassword
       });
     });

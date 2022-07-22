@@ -12,25 +12,22 @@ import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { IsLoggedGuard } from './guards/is-logged.guard';
 import { ScheduleComponent } from './components/schedule/schedule.component';
-import { WipComponent } from './components/wip/wip.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
+  {path: 'accomondations', component: AccomondationsComponent},
+  {path: 'gifts', component: GiftsComponent},
+  {path: 'program', component: ScheduleComponent},
+  {path: 'dress-code', component: DressCodeComponent},
   {path: 'user', canActivate: [AuthGuard], children: [
     {path: 'registration', component: RegistrationComponent},
-    // {path: 'accomondations', component: AccomondationsComponent},
-    {path: 'accomondations', component: WipComponent},
-    // {path: 'gifts', component: GiftsComponent},
-    {path: 'gifts', component: WipComponent},
-    {path: 'program', component: ScheduleComponent},
-    {path: 'dress-code', component: DressCodeComponent},
     {path: 'admin', component: AdminComponent, canActivate: [AdminGuard]},
     {path: 'admin/:page', component: AdminComponent, canActivate: [AdminGuard]},
     {path: 'change-password', component: ChangePasswordComponent},
   ]},
   {path: 'login', component: LoginComponent, canActivate:[IsLoggedGuard]},
   {path: 'cookies', component: CookieComponent},
-  {path: '', redirectTo: '/user/program', pathMatch: 'full'},
+  {path: '', redirectTo: '/program', pathMatch: 'full'},
   { path: '**', component: PageNotFoundComponent },
 ];
 

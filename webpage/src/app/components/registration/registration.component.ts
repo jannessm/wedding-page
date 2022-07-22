@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { GuestApiService } from 'src/app/services/api/guest-api/guest-api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { CacheService } from 'src/app/services/cache/cache.service';
 import { ALLERGIES, ALLERGIES_LABELS } from 'src/models/allergies';
-import { API_STATUS } from 'src/models/api';
-import { DIETS, DIET_LABELS, User } from 'src/models/user';
+import { API_STATUS, DataResponse } from 'src/models/api';
+import { DIETS, DIET_LABELS, Guest, User } from 'src/models/user';
 import { getYoutubeID, isYoutubeLink } from 'src/models/youtube';
 
 @Component({
@@ -17,6 +19,8 @@ import { getYoutubeID, isYoutubeLink } from 'src/models/youtube';
 export class RegistrationComponent {
   form: FormArray;
   user: User | null;
+  guests: Observable<Guest[]> | null;
+  guests_arr: Guest[] = [];
 
   diets = Object.values(DIETS);
   dietLabels = DIET_LABELS;
@@ -29,42 +33,56 @@ export class RegistrationComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private guestApi: GuestApiService,
     private sanitizer: DomSanitizer,
-    private cacheService: CacheService,
     private snackbar: MatSnackBar
   ) {
     this.user = this.authService.loggedUser;
+    this.guests = null;
 
+    this.form = fb.array([]);
+    
     if (!!this.user) {
-      this.form = fb.array(this.user.guests.map(guest => 
-        fb.group({
-          'isComing': [guest.isComing, Validators.required],
-          'diet': [guest.diet, Validators.required],
-          'allergies': [guest.allergies],
-          'otherAllergies': [guest.otherAllergies],
-          'song': [guest.song],
-        })
-      ));
-    } else {
-      this.form = fb.array([]);
-    }
+      this.guests = this.guestApi.getGuestsForUser(this.user.name).pipe(map(resp => {
+        if (resp && resp.status == API_STATUS.SUCCESS) {
+          return <Guest[]> (<DataResponse>resp).payload;
+        }
+        return [];
+      }));
 
-    this.user?.guests.forEach(guest => this.youtubeURLs.push(this.getSaveYoutubeURL(guest.song)));
+      this.guests.subscribe(guests => {
+        this.youtubeURLs = [];
+
+        this.form = fb.array(guests.map(guest => 
+          fb.group({
+            'isComing': [guest.isComing, Validators.required],
+            'diet': [guest.diet, Validators.required],
+            'allergies': [guest.allergies],
+            'otherAllergies': [guest.otherAllergies],
+            'song': [guest.song],
+          })
+        ));
+
+        guests.forEach(guest => this.youtubeURLs.push(this.getSaveYoutubeURL(guest.song)));
+
+        this.guests_arr = guests;
+      });
+    }
   }
 
   saveChanges() {
     this.form.controls.forEach((guest, id) => {
-      if (!!this.user) {
-        this.user.guests[id].isComing = (<FormGroup>guest).controls.isComing.value;
-        this.user.guests[id].diet = (<FormGroup>guest).controls.diet.value;
-        this.user.guests[id].allergies = (<FormGroup>guest).controls.allergies.value;
-        this.user.guests[id].otherAllergies = (<FormGroup>guest).controls.otherAllergies.value;
-        this.user.guests[id].song = (<FormGroup>guest).controls.song.value;
+      if (!!this.guests_arr) {
+        this.guests_arr[id].isComing = (<FormGroup>guest).controls.isComing.value;
+        this.guests_arr[id].diet = (<FormGroup>guest).controls.diet.value;
+        this.guests_arr[id].allergies = (<FormGroup>guest).controls.allergies.value;
+        this.guests_arr[id].otherAllergies = (<FormGroup>guest).controls.otherAllergies.value;
+        this.guests_arr[id].song = (<FormGroup>guest).controls.song.value;
       }
     });
 
     if (!!this.user) {
-      this.cacheService.updateUserNonAdmin(this.user).subscribe( resp => {
+      this.guestApi.updateGuests(this.guests_arr).subscribe( resp => {
         if (resp && resp.status === API_STATUS.SUCCESS) {
           this.snackbar.open('Erfolgreich gespeichert!', 'Ok');
         } else {

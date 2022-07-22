@@ -5,8 +5,14 @@
     $BASE = __DIR__ . '/../../';
 
     require_once($BASE . 'autoload.php');
-    include('user.php');
-    include('budget.php');
+    require_once('user.php');
+    require_once('guests.php');
+    require_once('budget.php');
+
+    $USER = new User($PDO);
+    $GUESTS = new Guests($PDO);
+    $CATEGORIES = new BudgetCategories($PDO);
+    $COSTCENTERS = new BudgetCostCenters($PDO);
 
     // check JWT
     if (!validJWT()) {
@@ -15,17 +21,23 @@
     }
 
     // check admin rights
-    $user = decodeToken(readToken())->user;
-    $user_data = json_decode(read_file($BASE . 'data'), true);
-    if (!$user_data[$user->name]['isAdmin']) {
+    $user = decodeToken(readToken())->user->name;
+    $user_db = $USER->get($user);
+
+    if (!$user_db['is_admin']) {
         respondErrorMsg(401, "Unauthorized: Admin rights needed");
         exit();
     }
 
     // get user data
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['user'])) {
-        $user_data = json_decode(read_file($BASE . 'data'), true);
-        respondJSON(200, filterUser($user_data));
+        respondJSON(200, $USER->get_all());
+        exit();
+    }
+
+    // get guest data
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['guests'])) {
+        respondJSON(200, $GUESTS->get_all());
         exit();
     }
 
@@ -34,10 +46,16 @@
         addUser();
         exit();
     }
+
+    // add guests
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['guests'])) {
+        addGuests();
+        exit();
+    }
     
-    // update users
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-user'])) {
-        updateUser();
+    // update admin rights
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-admin-rights'])) {
+        updateAdminRights();
         exit();
     }
 
@@ -47,27 +65,45 @@
         exit();
     }
 
+    // delete guest
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['delete-guest'])) {
+        deleteGuest();
+        exit();
+    }
+
     // reset passwort for user
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['reset-pwd'])) {
         resetPwd();
         exit();
     }
 
-    // get budget data
-    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['get-budget-data'])) {
-        getBudgetData();
+    // get budget categories
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['categories'])) {
+        getBudgetCategories();
         exit();
     }
 
-    // update budget
+    // get budget cost_centers
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['cost_centers'])) {
+        getBudgetCostCenters();
+        exit();
+    }
+
+    // update budget (id = 0 of budget_categories table)
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-budget'])) {
         updateBudget();
         exit();
     }
 
-    // update categories (also add some)
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-categories'])) {
-        updateCategories();
+    // add category
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['add-category'])) {
+        addCategory();
+        exit();
+    }
+
+    // update category
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-category'])) {
+        updateCategory();
         exit();
     }
 
@@ -77,9 +113,15 @@
         exit();
     }
 
-    // update cost centers
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-cost-centers'])) {
-        updateCostCenters();
+    // add category
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['add-cost-center'])) {
+        addCostCenter();
+        exit();
+    }
+
+    // update cost center
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-cost-center'])) {
+        updateCostCenter();
         exit();
     }
 

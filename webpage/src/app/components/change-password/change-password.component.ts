@@ -45,7 +45,7 @@ export class ChangePasswordComponent implements OnInit {
       ).subscribe(resp => {
 
         if (resp.status === API_STATUS.SUCCESS && !!this.authService.loggedUser) {
-          const redirectUrl = !!this.authService.redirectUrl ? this.authService.redirectUrl : '/user/program';
+          const redirectUrl = !!this.authService.redirectUrl ? this.authService.redirectUrl : '/program';
 
           this.authService.loggedUser.firstLogin = false;
   

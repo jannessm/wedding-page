@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { API_STATUS, DataResponse } from 'src/models/api';
-import { BudgetData, Category } from 'src/models/budget';
+import { Category, CostCenter } from 'src/models/budget';
 import { BudgetApiService } from '../api/budget-api/budget-api.service';
 
 @Injectable({
@@ -16,10 +16,19 @@ export class BudgetService {
     private snackbar: MatSnackBar
   ) {}
 
-  getData(): Observable<BudgetData | undefined> {
-    return this.apiService.getBudgetData().pipe(map(resp => {
+  getCategories(): Observable<Category[] | undefined> {
+    return this.apiService.getBudgetCategories().pipe(map(resp => {
       if (resp && resp.status == API_STATUS.SUCCESS) {
-        return <BudgetData> (<DataResponse>resp).payload;
+        return <Category[]> resp.payload;
+      }
+      return;
+    }));
+  }
+
+  getCostCenters(): Observable<CostCenter[] | undefined> {
+    return this.apiService.getBudgetCostCenters().pipe(map(resp => {
+      if (resp && resp.status == API_STATUS.SUCCESS) {
+        return <CostCenter[]> resp.payload;
       }
       return;
     }));
@@ -36,8 +45,19 @@ export class BudgetService {
     }));
   }
 
-  updateCategories(categories: Category[]): Observable<boolean> {
-    return this.apiService.updateCategories(categories).pipe(map(resp => {
+  addCategory(category: Category): Observable<Category | undefined> {
+    return this.apiService.addCategory(category).pipe(map(resp => {
+      if (resp && resp.status === API_STATUS.SUCCESS) {
+        return <Category> resp.payload;
+      } else {
+        this.snackbar.open("Kategory konnte nicht hinzugefügt werden.", "Ok");
+        return;
+      }
+    }))
+  }
+
+  updateCategory(category: Category): Observable<boolean> {
+    return this.apiService.updateCategory(category).pipe(map(resp => {
       if (resp && resp.status === API_STATUS.SUCCESS) {        
         return true;
       } else {

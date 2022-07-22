@@ -3,13 +3,13 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
-import { CacheService } from 'src/app/services/cache/cache.service';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
 import { ExcelService } from 'src/app/services/excel/excel.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { UserTable } from 'src/models/guest-table';
 
 import { saveAs } from 'file-saver';
+import { GuestService } from 'src/app/services/guest/guest.service';
 
 @Component({
   selector: 'app-user-table',
@@ -34,7 +34,11 @@ export class UserTableComponent implements OnDestroy, AfterViewInit {
 
   userSubscription: Subscription;
 
-  constructor(private userService: UserService, private dialogService: DialogService, private excelService: ExcelService, private cacheService: CacheService) {
+  constructor(
+    private userService: UserService,
+    private guestService: GuestService,
+    private dialogService: DialogService,
+    private excelService: ExcelService) {
 
     this.dataSource = new MatTableDataSource<UserTable>([]);
     this.userSubscription = this.userService.users.subscribe( users => {
@@ -79,7 +83,11 @@ export class UserTableComponent implements OnDestroy, AfterViewInit {
     return this.dialogService.openConfirmDialog(`Soll der Benutzer ${row.name} gelöscht werden?`).afterClosed()
       .subscribe(result => {
         if (result === 'ok') {
-          this.userService.deleteUser(row).subscribe();
+          this.userService.deleteUser(row).subscribe(success => {
+            if (success) {
+              this.guestService.updateData();
+            }
+          });
         }
       });
   }
@@ -95,11 +103,15 @@ export class UserTableComponent implements OnDestroy, AfterViewInit {
   generateExcel(event: any) {
     event.stopPropagation();
 
-    if (this.cacheService._lastDataObject) {
-      const user = Object.entries(this.cacheService._lastDataObject).map((entry) => {
-        return Object.assign(entry[1], {
-          name: entry[0],
-        });
+    if (this.userService._lastDataObject) {
+      const user = this.userService._lastDataObject.map(user => {
+        return {
+          name: user.name,
+          firstLogin: false,
+          firstPassword: user.firstPassword,
+          isAdmin: user.isAdmin,
+          guests: user.guests
+        };
       })
       this.excelService.createUserFile(user).then(data => {
         const blob = new Blob([data], {

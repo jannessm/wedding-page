@@ -5,11 +5,15 @@ export interface User {
     firstLogin: boolean;
     isAdmin: boolean;
     firstPassword: string;
-    guests: Guest[];
+    guests: string;
 }
 
 export interface UserResponse {
-    [key: string]: User;
+    [key: number]: User;
+}
+
+export interface GuestResponse {
+    [key: number]: Guest;
 }
 
 export interface Guest {

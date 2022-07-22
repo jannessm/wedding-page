@@ -25,7 +25,12 @@
         include($BASE . "api/auth/change-password.php");
     }
 
+    // get guests
+    if (isset($_POST) && isset($_GET['guests'])) {
+        include($BASE . "api/auth/get-guests.php");
+    }
+
     // update User
-    if (isset($_POST) && isset($_GET['update-user'])) {
-        include($BASE . "api/auth/update-user.php");
+    if (isset($_POST) && isset($_GET['update-guests'])) {
+        include($BASE . "api/auth/update-guests.php");
     }

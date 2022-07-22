@@ -6,8 +6,6 @@ import { BudgetApiService } from 'src/app/services/api/budget-api/budget-api.ser
 import { API_STATUS } from 'src/models/api';
 import { Category, CostCenter, FilterKeywords } from 'src/models/budget';
 
-import { v4 as uuid } from 'uuid';
-
 @Component({
   selector: 'app-cost-centers',
   templateUrl: './cost-centers.component.html',
@@ -16,7 +14,7 @@ import { v4 as uuid } from 'uuid';
 export class CostCentersComponent implements AfterViewInit {
   @Input()
   costCenters: MatTableDataSource<CostCenter> | undefined;
-  oldCostCenteres = new Map<string, CostCenter>();
+  oldCostCenteres = new Map<number, CostCenter>();
 
   @Input()
   categories: Category[] | undefined;
@@ -32,7 +30,7 @@ export class CostCentersComponent implements AfterViewInit {
 
   filter = "";
 
-  displayedColumns: string[] = ['title', 'category', 'per_person', 'costs', 'paid', 'edit', 'delete'];
+  displayedColumns: string[] = ['title', 'category', 'per_person', 'amount', 'paid', 'edit', 'delete'];
 
   constructor(
     private apiService: BudgetApiService
@@ -60,11 +58,10 @@ export class CostCentersComponent implements AfterViewInit {
       }
       
       const d = this.costCenters.data;
-      const id = uuid();
-      const newCC = {
-        id,
+      const newCC: CostCenter = {
+        id: -1, // will get ignored
         amount: 0.0,
-        category: '',
+        category: null,
         paid: false,
         per_person: false,
         title: "Neue Kostenstelle",
@@ -74,7 +71,7 @@ export class CostCentersComponent implements AfterViewInit {
 
       d.unshift(newCC);
       this.costCenters.data = d;
-      this.oldCostCenteres.set(id, Object.assign({},newCC));
+      this.oldCostCenteres.set(-1, Object.assign({},newCC));
     }
   }
 
@@ -84,31 +81,43 @@ export class CostCentersComponent implements AfterViewInit {
       this.oldCostCenteres.delete(row.id);
       return;
     }
-    
-    let oldCategoryId = -1;
-    let oldCategory: Category | undefined;
-    
-    if (!!row.category && this.categories && this.costCenters) {
-      oldCategoryId = this.categories.findIndex(c => row.category == c.id);
-      oldCategory = Object.assign({}, this.categories[oldCategoryId]);
-
-      if (!this.categories[oldCategoryId].cost_center_ids.includes(row.id)) {
-        this.categories[oldCategoryId].cost_center_ids.push(row.id);
-      }
-    }
 
     row.isNew = false;
 
-    this.apiService.updateCostCenters(
-      this.categories,
-      this.costCenters.data.filter(cc => !cc.isNew)
-        .map(cc => {
-          const ccCopy = Object.assign({}, cc);
-          delete ccCopy.isNew;
-          delete ccCopy.editMode;
-          return ccCopy;
-        })
-    ).subscribe(resp => {
+    // new cost center
+    if (row.id == -1) {
+      this.addCostCenterApiCall(row);
+    } else {
+      this.updateCostCenter(row);
+    }
+
+  }
+
+  addCostCenterApiCall(row: CostCenter) {
+    this.apiService.addCostCenter(row).subscribe(resp => {
+      if (resp && resp.status === API_STATUS.SUCCESS) {
+        const newRow = <CostCenter>resp.payload;
+        row.id = newRow.id;
+
+        this.change.emit();
+      } else if (resp && resp.status === API_STATUS.ERROR && this.categories) {
+        const oldCostCenter = this.oldCostCenteres.get(row.id);
+        
+        if (oldCostCenter) {
+          row.amount = oldCostCenter.amount;
+          row.category = oldCostCenter.category;
+          row.paid = oldCostCenter.paid;
+          row.per_person = oldCostCenter.per_person;
+          row.title = oldCostCenter.title;
+        }
+      }
+
+      this.updateCategorySpent();
+    });
+  }
+
+  updateCostCenter(row: CostCenter) {
+    this.apiService.updateCostCenter(row).subscribe(resp => {
       if (resp && resp.status === API_STATUS.ERROR && this.categories) {
         const oldCostCenter = this.oldCostCenteres.get(row.id);
         
@@ -120,19 +129,12 @@ export class CostCentersComponent implements AfterViewInit {
           row.title = oldCostCenter.title;
         }
 
-        if (oldCategoryId && oldCategory) {
-          this.categories[oldCategoryId].cost_center_ids = oldCategory.cost_center_ids;
-          this.categories[oldCategoryId].spent = oldCategory.spent;
-        }
-
       } else {
         this.change.emit();
       }
 
       this.updateCategorySpent();
-      this.oldCostCenteres.delete(row.id);
     });
-
   }
 
   deleteCostCenter(row: CostCenter) {
@@ -163,7 +165,7 @@ export class CostCentersComponent implements AfterViewInit {
     }
   }
 
-  getCategoryLabel(id: string): string {
+  getCategoryLabel(id: number): string {
     if (this.categories) {
       const c = this.categories.find(c => c.id === id);
       return !!c ? c.label : '';
@@ -173,20 +175,10 @@ export class CostCentersComponent implements AfterViewInit {
 
   updateCategorySpent() {
     if (this.categories) {
-      this.categories.forEach(c => {
-
-        if (this.costCenters) {
-          c.spent = this.costCenters.data
-            .filter(cc => c.cost_center_ids.includes(cc.id))
-            .reduce((sum, cc) => {
-              if (cc.per_person) {
-                return sum + cc.amount * this.guests;
-              } else {
-                return sum + cc.amount;
-              }
-            }, 0.0);
-        }
-      })
+      this.categories.forEach(category => {
+        category.spent = this.costCenters?.data.filter(cc => cc.category == category.id)
+                                               .reduce((spent, cc) => !cc.per_person ? cc.amount + spent : cc.amount * this.guests + spent, 0.0);
+      });
     }
   }
 
@@ -216,7 +208,7 @@ export class CostCentersComponent implements AfterViewInit {
     }, 0.0) || 0.00;
   }
 
-  displayCategory(category_id: string): string {
+  displayCategory(category_id: number | null | undefined): string {
     return this.categories?.find(c => c.id == category_id)?.label || '';
   }
 

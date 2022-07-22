@@ -2,8 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ApiResponse } from 'src/models/api';
-import { User, UserResponse } from 'src/models/user';
+import { ApiResponse, DataResponse } from 'src/models/api';
+import { UserTable } from 'src/models/guest-table';
+import { Guest, User, UserResponse } from 'src/models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class UserApiService {
     });
   }
 
-  addUser(user: User): Observable<ApiResponse> {
+  addUser(user: UserTable): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.BASE_API + "admin/?user", user);
   }
 
@@ -42,19 +43,19 @@ export class UserApiService {
     return this.http.get<ApiResponse>(this.BASE_API + "admin/?user");
   }
 
-  updateUsers(user: UserResponse): Observable<ApiResponse> {
+  updateUser(user: UserResponse): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.BASE_API + 'admin/?update-user', user);
   }
 
-  updateUser(user: User): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.BASE_API + 'auth/?update-user', user);
+  updateAdminRights(username: string, isAdmin: boolean): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.BASE_API + 'admin/?update-admin-rights', {name: username, is_admin: isAdmin});
   }
 
   deleteUser(user: string): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.BASE_API + "admin/?delete-user", {name: user});
   }
 
-  resetPwd(user: string): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.BASE_API + "admin/?reset-pwd", {name: user});
+  resetPwd(user: string): Observable<DataResponse> {
+    return this.http.post<DataResponse>(this.BASE_API + "admin/?reset-pwd", {name: user});
   }
 }

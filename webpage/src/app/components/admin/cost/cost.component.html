@@ -1,35 +1,32 @@
-<div *ngIf="data">
-    <div>
-        <h2>Budget:</h2>
-        <p>Angegeben sind die geplanten Kosten und das gesetzte Budget aller Ausgaben.</p>
-        <span>
-            <div>Gesamt: <app-budget [spent]="spent_total" [budget]="data.budget" (change)="changeBudget($event)"></app-budget></div>
-        </span>
-    </div>
-
-    <div>
-        <h3>Kategorien: 
-            <button mat-icon-button (click)="addCategory()"><mat-icon>add</mat-icon></button>
-        </h3>
-        <p>Angegeben sind die geplanten Kosten pro Kategorie und das Budget.</p>
-        <span class="categories">
-            <app-category 
-                *ngFor="let category of categories"
-                [category]="category"
-                (change)="updateCategory($event)"
-                (delete)="deleteCategory($event)">
-            </app-category>
-        </span>
-        <span>Summe der Budgets: <h4>{{ category_total | currency:'EUR':'symbol' }}</h4></span>
-    </div>
-
-    <div>
-        <app-cost-centers
-            [costCenters]="cost_centers"
-            [categories]="categories"
-            [guests]="guests"
-            (change)="updateSpent()">
-        </app-cost-centers>
-    </div>
+<div>
+    <h2>Budget:</h2>
+    <p>Angegeben sind die geplanten Kosten und das gesetzte Budget aller Ausgaben.</p>
+    <span>
+        <div>Gesamt: <app-budget [spent]="spent_total" [budget]="budget_total" (change)="changeBudget($event)"></app-budget></div>
+    </span>
 </div>
-<div *ngIf="!data"><p>Keine Daten gefunden.</p></div>
+
+<div>
+    <h3>Kategorien: 
+        <button mat-icon-button (click)="addCategory()"><mat-icon>add</mat-icon></button>
+    </h3>
+    <p>Angegeben sind die geplanten Kosten pro Kategorie und das Budget.</p>
+    <span class="categories">
+        <app-category 
+            *ngFor="let category of categories"
+            [category]="category"
+            (change)="updateCategory($event)"
+            (delete)="deleteCategory($event)">
+        </app-category>
+    </span>
+    <span>Summe der Budgets: <h4>{{ category_total | currency:'EUR':'symbol' }}</h4></span>
+</div>
+
+<div>
+    <app-cost-centers
+        [costCenters]="cost_centers"
+        [categories]="categories"
+        [guests]="guests"
+        (change)="updateSpent()">
+    </app-cost-centers>
+</div>

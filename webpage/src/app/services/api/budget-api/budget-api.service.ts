@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { ApiResponse } from 'src/models/api';
+import { DataResponse, ApiResponse } from 'src/models/api';
 import { Category, CostCenter } from 'src/models/budget';
 
 @Injectable({
@@ -14,8 +14,12 @@ export class BudgetApiService {
 
   constructor(private http: HttpClient) {}
 
-  getBudgetData(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.BASE_API + 'get-budget-data');
+  getBudgetCategories(): Observable<DataResponse> {
+    return this.http.get<DataResponse>(this.BASE_API + 'categories');
+  }
+
+  getBudgetCostCenters(): Observable<DataResponse> {
+    return this.http.get<DataResponse>(this.BASE_API + 'cost_centers');
   }
 
   updateBudget(budget: number): Observable<ApiResponse> {
@@ -24,9 +28,15 @@ export class BudgetApiService {
     });
   }
 
-  updateCategories(categories: Category[]): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.BASE_API + 'update-categories', {
-      categories
+  addCategory(category: Category): Observable<DataResponse> {
+    return this.http.post<DataResponse>(this.BASE_API + 'add-category', {
+      category
+    });
+  }
+
+  updateCategory(category: Category): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.BASE_API + 'update-category', {
+      category
     });
   }
 
@@ -34,10 +44,15 @@ export class BudgetApiService {
     return this.http.delete<ApiResponse>(this.BASE_API + 'delete-category&id=' + category.id);
   }
 
-  updateCostCenters(categories: Category[], costCenters: CostCenter[]): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.BASE_API + 'update-cost-centers', {
-      categories,
-      costCenters
+  addCostCenter(costCenter: CostCenter): Observable<DataResponse> {
+    return this.http.post<DataResponse>(this.BASE_API + 'add-cost-center', {
+      cost_center: costCenter
+    });
+  }
+
+  updateCostCenter(costCenter: CostCenter): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(this.BASE_API + 'update-cost-center', {
+      cost_center: costCenter
     });
   }
 
