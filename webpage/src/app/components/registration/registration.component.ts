@@ -66,7 +66,6 @@ export class RegistrationComponent {
         guests.forEach(guest => this.youtubeURLs.push(this.getSaveYoutubeURL(guest.song)));
 
         this.guests_arr = guests;
-        console.log(guests);
       });
     }
   }

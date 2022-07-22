@@ -15,11 +15,11 @@ export class AppComponent {
   title = 'Tina und Jannes';
 
   navItems = [
-    {text: 'Programm', link:'/user/program'},
+    {text: 'Programm', link:'/program'},
     {text: 'Rückmeldung', link:'/user/registration'},
-    {text: 'Dress Code', link:'/user/dress-code'},
-    {text: 'Geschenketipps', link:'/user/gifts'},
-    {text: 'Unterkünfte', link:'/user/accomondations'},
+    {text: 'Dress Code', link:'/dress-code'},
+    {text: 'Geschenketipps', link:'/gifts'},
+    {text: 'Unterkünfte', link:'/accomondations'},
   ];
 
   menuExpanded = false;
@@ -51,6 +51,6 @@ export class AppComponent {
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/', 'login']);
+    this.router.navigate(['/program']);
   }
 }

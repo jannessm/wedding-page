@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl(this.authService.redirectUrl);
         
         } else {
-          this.router.navigateByUrl('/user/program');
+          this.router.navigateByUrl('/program');
         }
       }
     })
