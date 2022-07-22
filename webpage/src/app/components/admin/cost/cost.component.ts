@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { Category, CostCenter } from 'src/models/budget';
 import { BudgetService } from 'src/app/services/budget/budget.service';
 
-import { v4 as uuid } from 'uuid';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';

@@ -6,8 +6,6 @@ import { BudgetApiService } from 'src/app/services/api/budget-api/budget-api.ser
 import { API_STATUS } from 'src/models/api';
 import { Category, CostCenter, FilterKeywords } from 'src/models/budget';
 
-import { v4 as uuid } from 'uuid';
-
 @Component({
   selector: 'app-cost-centers',
   templateUrl: './cost-centers.component.html',
