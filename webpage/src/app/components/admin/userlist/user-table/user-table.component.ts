@@ -3,7 +3,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
-import { CacheService } from 'src/app/services/cache/cache.service';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
 import { ExcelService } from 'src/app/services/excel/excel.service';
 import { UserService } from 'src/app/services/user/user.service';
@@ -39,8 +38,7 @@ export class UserTableComponent implements OnDestroy, AfterViewInit {
     private userService: UserService,
     private guestService: GuestService,
     private dialogService: DialogService,
-    private excelService: ExcelService,
-    private cacheService: CacheService) {
+    private excelService: ExcelService) {
 
     this.dataSource = new MatTableDataSource<UserTable>([]);
     this.userSubscription = this.userService.users.subscribe( users => {

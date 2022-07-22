@@ -113,6 +113,12 @@
         exit();
     }
 
+    // add category
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['add-cost-center'])) {
+        addCostCenter();
+        exit();
+    }
+
     // update cost center
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST) && isset($_GET['update-cost-center'])) {
         updateCostCenter();

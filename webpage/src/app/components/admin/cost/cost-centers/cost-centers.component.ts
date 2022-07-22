@@ -60,11 +60,10 @@ export class CostCentersComponent implements AfterViewInit {
       }
       
       const d = this.costCenters.data;
-      const id = uuid();
-      const newCC = {
-        id,
+      const newCC: CostCenter = {
+        id: -1, // will get ignored
         amount: 0.0,
-        category: '',
+        category: null,
         paid: false,
         per_person: false,
         title: "Neue Kostenstelle",
@@ -72,29 +71,54 @@ export class CostCentersComponent implements AfterViewInit {
         isNew: true,
       };
 
-      // d.unshift(newCC);
-      // this.costCenters.data = d;
-      // this.oldCostCenteres.set(id, Object.assign({},newCC));
+      d.unshift(newCC);
+      this.costCenters.data = d;
+      this.oldCostCenteres.set(-1, Object.assign({},newCC));
     }
   }
 
 
   saveChanges(row: CostCenter) {
     if (!this.categories || !this.costCenters) {
-      // this.oldCostCenteres.delete(row.id);
+      this.oldCostCenteres.delete(row.id);
       return;
-    }
-    
-    let oldCategoryId = -1;
-    let oldCategory: Category | undefined;
-    
-    if (!!row.category && this.categories && this.costCenters) {
-      oldCategoryId = this.categories.findIndex(c => row.category == c.id);
-      oldCategory = Object.assign({}, this.categories[oldCategoryId]);
     }
 
     row.isNew = false;
 
+    // new cost center
+    if (row.id == -1) {
+      this.addCostCenterApiCall(row);
+    } else {
+      this.updateCostCenter(row);
+    }
+
+  }
+
+  addCostCenterApiCall(row: CostCenter) {
+    this.apiService.addCostCenter(row).subscribe(resp => {
+      if (resp && resp.status === API_STATUS.SUCCESS) {
+        const newRow = <CostCenter>resp.payload;
+        row.id = newRow.id;
+
+        this.change.emit();
+      } else if (resp && resp.status === API_STATUS.ERROR && this.categories) {
+        const oldCostCenter = this.oldCostCenteres.get(row.id);
+        
+        if (oldCostCenter) {
+          row.amount = oldCostCenter.amount;
+          row.category = oldCostCenter.category;
+          row.paid = oldCostCenter.paid;
+          row.per_person = oldCostCenter.per_person;
+          row.title = oldCostCenter.title;
+        }
+      }
+
+      this.updateCategorySpent();
+    });
+  }
+
+  updateCostCenter(row: CostCenter) {
     this.apiService.updateCostCenter(row).subscribe(resp => {
       if (resp && resp.status === API_STATUS.ERROR && this.categories) {
         const oldCostCenter = this.oldCostCenteres.get(row.id);
@@ -113,7 +137,6 @@ export class CostCentersComponent implements AfterViewInit {
 
       this.updateCategorySpent();
     });
-
   }
 
   deleteCostCenter(row: CostCenter) {
@@ -129,7 +152,7 @@ export class CostCentersComponent implements AfterViewInit {
   toggleEditMode(row: CostCenter) {
     row.editMode = !row.editMode;
     if (row.editMode) {
-      // this.oldCostCenteres.set(row.id, Object.assign({}, row));
+      this.oldCostCenteres.set(row.id, Object.assign({}, row));
     }
   }
 
@@ -187,8 +210,7 @@ export class CostCentersComponent implements AfterViewInit {
     }, 0.0) || 0.00;
   }
 
-  displayCategory(category_id: number): string {
-    console.log(category_id, this.categories);
+  displayCategory(category_id: number | null | undefined): string {
     return this.categories?.find(c => c.id == category_id)?.label || '';
   }
 

@@ -23,7 +23,7 @@ export class GuestApiService {
   }
 
   getGuestsForUser(user: string): Observable<DataResponse> {
-    return this.http.post<DataResponse>(this.BASE_API + "auth/?guests", user);
+    return this.http.post<DataResponse>(this.BASE_API + "auth/?guests", {name:user});
   }
 
   updateGuests(guests: Guest[]): Observable<ApiResponse> {

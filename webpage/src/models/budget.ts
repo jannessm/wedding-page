@@ -8,7 +8,7 @@ export interface Category {
 export interface CostCenter {
     id: number;
     title: string;
-    category: number;
+    category: number | null | undefined;
     amount: number;
     paid: boolean;
     per_person: boolean;

@@ -70,6 +70,15 @@ function deleteCategory() {
     respondJSON(201, "deleted category");
 }
 
+function addCostCenter() {
+    global $COSTCENTERS;
+    $payload = json_decode(file_get_contents("php://input"), true);
+
+    $newCostCenter = $COSTCENTERS->add($payload['cost_center']);
+
+    respondJSON(201, $newCostCenter);
+}
+
 function updateCostCenter() {
     global $COSTCENTERS;
     $payload = json_decode(file_get_contents("php://input"), true);
@@ -80,28 +89,10 @@ function updateCostCenter() {
 }
 
 function deleteCostCenter() {
-    global $BASE;
+    global $COSTCENTERS;
     $cost_center_id = $_GET['id'];
-    $data = json_decode(read_file($BASE . 'budget-data'), true);
 
-    $categories = $data['categories'];
-    foreach($categories as $c) {
-        $c['cost_center_ids'] = array_values(array_filter(
-            $c['cost_center_ids'],
-            function ($id) use ($cost_center_id) {
-                return strcmp($id, $cost_center_id) !== 0;
-            }
-        ));
-    }
-
-    $data['cost_centers'] = array_values(array_filter(
-        $data['cost_centers'],
-        function ($cc) use ($cost_center_id) {
-            return strcmp($cc['id'], $cost_center_id) !== 0;
-        }
-    ));
-
-    write_file($BASE . 'budget-data', json_encode($data));
+    $COSTCENTERS->delete($cost_center_id);
 
     respondJSON(201, "deleted cost center");
 }

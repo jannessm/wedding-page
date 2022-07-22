@@ -5,9 +5,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { GuestApiService } from 'src/app/services/api/guest-api/guest-api.service';
-import { UserApiService } from 'src/app/services/api/user-api/user-api.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { CacheService } from 'src/app/services/cache/cache.service';
 import { ALLERGIES, ALLERGIES_LABELS } from 'src/models/allergies';
 import { API_STATUS, DataResponse } from 'src/models/api';
 import { DIETS, DIET_LABELS, Guest, User } from 'src/models/user';
@@ -35,10 +33,8 @@ export class RegistrationComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private apiService: UserApiService,
     private guestApi: GuestApiService,
     private sanitizer: DomSanitizer,
-    private cacheService: CacheService,
     private snackbar: MatSnackBar
   ) {
     this.user = this.authService.loggedUser;

@@ -5,6 +5,7 @@
     $BASE = __DIR__ . '/../';
 
     require_once($BASE . 'autoload.php');
+    require_once($BASE . "src/reader.php");
     require_once($BASE . 'src/guests.php');
     require_once($BASE . 'src/user.php');
     require_once($BASE . 'src/budget_categories.php');

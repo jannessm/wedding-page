@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject, Subscriber } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { GuestTable } from 'src/models/guest-table';
-import { AGE_CATEGORIES, DIETS, Guest, GuestResponse, UserResponse } from 'src/models/user';
+import { AGE_CATEGORIES, DIETS, Guest, GuestResponse } from 'src/models/user';
 
-import { v4 as uuid } from 'uuid';
 import { API_STATUS } from 'src/models/api';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map } from 'rxjs/operators';
-import { CacheService } from '../cache/cache.service';
 import { AllergiesVector, RegisteredVector } from 'src/models/vector';
 import { ALLERGIES } from 'src/models/allergies';
 import { UserApiService } from '../api/user-api/user-api.service';
