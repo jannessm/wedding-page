@@ -93,7 +93,7 @@ class BudgetCostCenters {
         
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':title', $cost_center['title']);
-        if (array_key_exists('category', $cost_center) && is_int($cost_center['category'])) {
+        if (array_key_exists('category', $cost_center) && $cost_center['category'] !== null) {
             $stmt->bindValue(':category', $cost_center['category']);
         } else {
             $stmt->bindValue(':category', NULL);

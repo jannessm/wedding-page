@@ -117,6 +117,10 @@ export class CostCentersComponent implements AfterViewInit {
   }
 
   updateCostCenter(row: CostCenter) {
+    const changed_item = Object.assign({}, row);
+    if (changed_item.category && row.category) {
+      changed_item.category = row.category + 1;
+    }
     this.apiService.updateCostCenter(row).subscribe(resp => {
       if (resp && resp.status === API_STATUS.ERROR && this.categories) {
         const oldCostCenter = this.oldCostCenteres.get(row.id);
