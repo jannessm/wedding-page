@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-budget',
@@ -19,13 +19,13 @@ export class BudgetComponent {
 
   editMode = false;
 
-  control: FormControl | undefined;
+  control: UntypedFormControl | undefined;
 
   toggleEditMode() {
     this.editMode = !this.editMode;
 
     if (this.editMode) {
-      this.control = new FormControl(this.budget, [Validators.min(0), Validators.pattern(/\d+/), Validators.required])
+      this.control = new UntypedFormControl(this.budget, [Validators.min(0), Validators.pattern(/\d+/), Validators.required])
     }
   }
 

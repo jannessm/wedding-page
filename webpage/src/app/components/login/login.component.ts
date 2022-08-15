@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import md5 from 'md5-ts';
@@ -10,10 +10,10 @@ import md5 from 'md5-ts';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   wrongCredentials = false;
 
-  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {    
+  constructor(private authService: AuthService, private router: Router, private fb: UntypedFormBuilder) {    
     this.form = fb.group({
       'username': ['', Validators.required],
       'password': ['', Validators.required]

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
 import { GuestService } from 'src/app/services/guest/guest.service';
 import { UserService } from 'src/app/services/user/user.service';
@@ -21,7 +21,7 @@ export class AddGuestFormComponent implements OnDestroy {
   @Output()
   closed = new EventEmitter();
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   users: string[] = [];
   filteredUsers: string[] = [];
 
@@ -32,7 +32,7 @@ export class AddGuestFormComponent implements OnDestroy {
   usersSubscription: Subscription;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private userService: UserService,
     private guestService: GuestService) {
     this.form = fb.group({

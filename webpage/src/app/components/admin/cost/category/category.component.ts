@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { DialogService } from 'src/app/services/dialog/dialog.service';
 import { Category } from 'src/models/budget';
 
@@ -20,10 +20,10 @@ export class CategoryComponent {
 
   editMode = false;
 
-  form: FormGroup | undefined;
+  form: UntypedFormGroup | undefined;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private dialog: DialogService
   ) {}
 

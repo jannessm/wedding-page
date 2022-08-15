@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { UserApiService } from 'src/app/services/api/user-api/user-api.service';
 import { GuestService } from 'src/app/services/guest/guest.service';
@@ -24,14 +24,14 @@ export class AddUserFormComponent {
   @Output()
   closed = new EventEmitter();
 
-  form: FormGroup;
-  guests: FormArray;
+  form: UntypedFormGroup;
+  guests: UntypedFormArray;
 
   ages = Object.values(AGE_CATEGORIES);
   agesLabels = AGE_CATEGORY_LABELS;
   agesIcons = AGE_CATEGORY_ICONS;
 
-  constructor(private fb: FormBuilder, private userService: UserService, private guestService: GuestService) {
+  constructor(private fb: UntypedFormBuilder, private userService: UserService, private guestService: GuestService) {
     this.guests = fb.array([
       fb.group({
         'name': ['', Validators.required],
@@ -94,9 +94,9 @@ export class AddUserFormComponent {
     return this.guests.controls.map(group => {
       return <Guest>{
         uuid: uuid(),
-        name: (<FormGroup>group).controls.name.value,
-        lastname: (<FormGroup>group).controls.lastname.value,
-        age: (<FormGroup>group).controls.age.value,
+        name: (<UntypedFormGroup>group).controls.name.value,
+        lastname: (<UntypedFormGroup>group).controls.lastname.value,
+        age: (<UntypedFormGroup>group).controls.age.value,
         isComing: null,
         song: '',
         diet: DIETS.NORMAL,

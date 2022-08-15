@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import md5 from 'md5-ts';
 import { ConfirmValidator } from 'src/app/confirm-validator';
@@ -13,11 +13,11 @@ import { API_STATUS } from 'src/models/api';
   styleUrls: ['./change-password.component.scss']
 })
 export class ChangePasswordComponent implements OnInit {
-  form: FormGroup;
+  form: UntypedFormGroup;
   wrongCredentials = false;
 
   constructor(
-    fb: FormBuilder,
+    fb: UntypedFormBuilder,
     private apiService: UserApiService,
     private router: Router,
     public authService: AuthService

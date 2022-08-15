@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
@@ -17,7 +17,7 @@ import { getYoutubeID, isYoutubeLink } from 'src/models/youtube';
   styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent {
-  form: FormArray;
+  form: UntypedFormArray;
   user: User | null;
   guests: Observable<Guest[]> | null;
   guests_arr: Guest[] = [];
@@ -31,7 +31,7 @@ export class RegistrationComponent {
   youtubeURLs: SafeResourceUrl[] = [];
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private authService: AuthService,
     private guestApi: GuestApiService,
     private sanitizer: DomSanitizer,
@@ -73,11 +73,11 @@ export class RegistrationComponent {
   saveChanges() {
     this.form.controls.forEach((guest, id) => {
       if (!!this.guests_arr) {
-        this.guests_arr[id].isComing = (<FormGroup>guest).controls.isComing.value;
-        this.guests_arr[id].diet = (<FormGroup>guest).controls.diet.value;
-        this.guests_arr[id].allergies = (<FormGroup>guest).controls.allergies.value;
-        this.guests_arr[id].otherAllergies = (<FormGroup>guest).controls.otherAllergies.value;
-        this.guests_arr[id].song = (<FormGroup>guest).controls.song.value;
+        this.guests_arr[id].isComing = (<UntypedFormGroup>guest).controls.isComing.value;
+        this.guests_arr[id].diet = (<UntypedFormGroup>guest).controls.diet.value;
+        this.guests_arr[id].allergies = (<UntypedFormGroup>guest).controls.allergies.value;
+        this.guests_arr[id].otherAllergies = (<UntypedFormGroup>guest).controls.otherAllergies.value;
+        this.guests_arr[id].song = (<UntypedFormGroup>guest).controls.song.value;
       }
     });
 
