@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AGE_CATEGORY_LABELS, DIET_LABELS, User } from 'src/models/user';
 
-import * as ExcelJS from 'exceljs';
+import { Buffer, Workbook, Worksheet } from 'exceljs';
 import { GuestTable } from 'src/models/guest-table';
 import { ALLERGIES, ALLERGIES_LABELS } from 'src/models/allergies';
 
@@ -18,7 +18,7 @@ export class ExcelService {
 
   constructor() { }
 
-  async createGuestFile(guests: GuestTable[]): Promise<ExcelJS.Buffer> {
+  async createGuestFile(guests: GuestTable[]): Promise<Buffer> {
     const columns: Column[] = [
       { header: 'Vorname', key: 'name', width: 20 },
       { header: 'Nachname', key: 'lastname', width: 20 },
@@ -53,7 +53,7 @@ export class ExcelService {
     return await workbook.xlsx.writeBuffer();
   }
 
-  async createUserFile(user: User[]): Promise<ExcelJS.Buffer> {
+  async createUserFile(user: User[]): Promise<Buffer> {
     const columns: Column[] = [
       { header: 'Benutzername', key: 'user', width: 20 },
       { header: 'Gäste', key: 'guests', width: 60 },
@@ -76,14 +76,14 @@ export class ExcelService {
     return await workbook.xlsx.writeBuffer();
   }
 
-  setupWorkbook(): ExcelJS.Workbook {
-    const workbook = new ExcelJS.Workbook();
+  setupWorkbook(): Workbook {
+    const workbook = new Workbook();
     workbook.creator = 'Wedding Page - J. Magnusson';
 
     return workbook;
   }
 
-  createWorksheet(workbook: ExcelJS.Workbook, title: string, columns: Column[]): ExcelJS.Worksheet {
+  createWorksheet(workbook: Workbook, title: string, columns: Column[]): Worksheet {
     const sheet = workbook.addWorksheet('Benutzer', {
       headerFooter:{firstHeader: title, firstFooter: "Wedding Page - J. Magnusson"}
     });

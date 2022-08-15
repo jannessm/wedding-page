@@ -8,7 +8,7 @@ import { ExcelService } from 'src/app/services/excel/excel.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { UserTable } from 'src/models/guest-table';
 
-import { saveAs } from 'file-saver';
+import { saveAs } from 'file-saver-es';
 import { GuestService } from 'src/app/services/guest/guest.service';
 
 @Component({
