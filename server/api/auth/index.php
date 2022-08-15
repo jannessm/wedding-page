@@ -23,6 +23,7 @@
     // change Pwd
     if (isset($_POST) && isset($_GET['change-password'])) {
         include($BASE . "api/auth/change-password.php");
+        $sqlconn->backup();
     }
 
     // get guests
@@ -33,4 +34,5 @@
     // update User
     if (isset($_POST) && isset($_GET['update-guests'])) {
         include($BASE . "api/auth/update-guests.php");
+        $sqlconn->backup();
     }

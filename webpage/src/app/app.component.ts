@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
 import { registerLocaleData } from '@angular/common';
 import localDe from '@angular/common/locales/de';
+import { Observable } from 'rxjs';
+import { User } from 'src/models/user';
 
 @Component({
   selector: 'app-root',
@@ -16,8 +18,8 @@ export class AppComponent {
 
   navItems = [
     {text: 'Programm', link:'/program'},
-    {text: 'Rückmeldung', link:'/user/registration'},
     {text: 'Dress Code', link:'/dress-code'},
+    {text: 'Fotos', link:'/photos'},
     {text: 'Geschenketipps', link:'/gifts'},
     {text: 'Unterkünfte', link:'/accomondations'},
   ];
@@ -51,6 +53,7 @@ export class AppComponent {
 
   logout() {
     this.authService.logout();
+    this.menuExpanded = false;
     this.router.navigate(['/program']);
   }
 }

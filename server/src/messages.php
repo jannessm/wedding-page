@@ -11,7 +11,6 @@ function respondErrorMsg($httpCode, $message) {
         "message" => $message,
         "code" => $httpCode
     ));
-    exit;
 }
 
 function respondJSON($httpCode, $payload) {

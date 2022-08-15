@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "export NODE_OPTIONS=--openssl-legacy-provider; ng serve",
+    "start": "ng serve",
     "build": "export NODE_OPTIONS=--openssl-legacy-provider; ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -15,6 +15,7 @@
     "@angular/common": "^14.1.2",
     "@angular/compiler": "^14.1.2",
     "@angular/core": "^14.1.2",
+    "@angular/flex-layout": "^14.0.0-beta.40",
     "@angular/forms": "^14.1.2",
     "@angular/material": "^14.1.2",
     "@angular/platform-browser": "^14.1.2",

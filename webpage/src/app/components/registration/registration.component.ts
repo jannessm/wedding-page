@@ -18,7 +18,7 @@ import { getYoutubeID, isYoutubeLink } from 'src/models/youtube';
 })
 export class RegistrationComponent {
   form: UntypedFormArray;
-  user: User | null;
+  user: User | null = null;
   guests: Observable<Guest[]> | null;
   guests_arr: Guest[] = [];
 
@@ -37,7 +37,8 @@ export class RegistrationComponent {
     private sanitizer: DomSanitizer,
     private snackbar: MatSnackBar
   ) {
-    this.user = this.authService.loggedUser;
+    this.authService.loggedUser.subscribe(u => this.user = u);
+    this.user = this.authService.loggedUser.getValue();
     this.guests = null;
 
     this.form = fb.array([]);

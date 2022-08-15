@@ -11,6 +11,8 @@ import { Subscription } from 'rxjs';
 import { ExcelService } from 'src/app/services/excel/excel.service';
 import { UserService } from 'src/app/services/user/user.service';
 
+import { saveAs } from 'file-saver';
+
 @Component({
   selector: 'app-guestlist-table',
   templateUrl: './guestlist-table.component.html',

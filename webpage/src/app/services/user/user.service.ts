@@ -14,6 +14,7 @@ import { GuestService } from '../guest/guest.service';
   providedIn: 'root'
 })
 export class UserService {
+  loggedUser: User | null = null;
   users: Subject<UserTable[]>;
 
   _lastDataObject: UserTable[] = [];
@@ -28,6 +29,8 @@ export class UserService {
     this.users = new Subject<UserTable[]>();
     
     this.updateData();
+
+    this.authService.loggedUser.subscribe(u => this.loggedUser = u);
   }
 
   updateData() {
@@ -66,7 +69,7 @@ export class UserService {
   updateUser(updatedUser: UserTable): Observable<boolean> {
     let update = updatedUser.isAdmin != updatedUser.newIsAdmin;
 
-    if (updatedUser.name === this.authService.loggedUser?.name && updatedUser.isAdmin !== this.authService.loggedUser?.isAdmin) {
+    if (updatedUser.name === this.loggedUser?.name && updatedUser.isAdmin !== this.loggedUser?.isAdmin) {
       this.snackBar.open("Rechte des aktuellen Admins können nicht übernommen werden.", "OK");
       updatedUser.isAdmin = !updatedUser.isAdmin;
       return of(false);
@@ -89,7 +92,7 @@ export class UserService {
   }
 
   deleteUser(row: UserTable): Observable<boolean> {
-    if (row.name === this.authService.loggedUser?.name) {
+    if (row.name === this.loggedUser?.name) {
       this.snackBar.open("Der aktuelle Benutzer kann nicht gelöscht werden.", "OK");
       return of(false);
     }

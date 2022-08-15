@@ -63,6 +63,8 @@ import { BudgetComponent } from './components/admin/cost/budget/budget.component
 import { CostCentersComponent } from './components/admin/cost/cost-centers/cost-centers.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { environment } from 'src/environments/environment';
+import { PhotosComponent } from './components/photos/photos.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
  
 
 
@@ -93,7 +95,8 @@ import { environment } from 'src/environments/environment';
     CategoryComponent,
     BudgetComponent,
     CostCentersComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    PhotosComponent
   ],
   imports: [
     BrowserModule,
@@ -103,6 +106,7 @@ import { environment } from 'src/environments/environment';
     ReactiveFormsModule,
     NgcCookieConsentModule.forRoot(COOKIE_CONFIG),
     FormsModule,
+    FlexLayoutModule,
     
     MatAutocompleteModule,
     MatButtonModule,

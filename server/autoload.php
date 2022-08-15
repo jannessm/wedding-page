@@ -9,4 +9,5 @@
     require_once("src/budget_costcenters.php");
     require_once("src/budget_categories.php");
 
-    $PDO = (new SQLiteConnection())->connect();
+    $sqlconn = new SQLiteConnection();
+    $PDO = $sqlconn->connect();

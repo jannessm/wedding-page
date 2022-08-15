@@ -8,6 +8,8 @@ import { LocalStorageService } from '../local-storage/local-storage.service';
 
 import jwt_decode from 'jwt-decode';
 import { JWT } from 'src/models/jwt';
+import { ReplaySubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,7 @@ export class AuthService {
   // store the URL so we can redirect after logging in
   redirectUrl: string | null = null;
 
-  loggedUser: User | null = null;
+  loggedUser = new BehaviorSubject<User | null>(null);
 
   loggedStateChanges = new EventEmitter<undefined>();
 
@@ -44,6 +46,7 @@ export class AuthService {
     } else {
       this._jwtValidation = of(false);
     }
+    this._jwtValidation.subscribe();
   }
 
   isLoggedIn(): Observable<boolean> {
@@ -81,7 +84,7 @@ export class AuthService {
   }
 
   logout(): void {
-    this.loggedUser = null;
+    this.loggedUser.next(null);
     this._isLoggedIn = false;
     this.lsService.jwt = undefined;
     this.loggedStateChanges.next();
@@ -90,7 +93,7 @@ export class AuthService {
   setJWT(jwt: string): User {
     const jwt_decoded: JWT = jwt_decode(jwt);
     
-    this.loggedUser = <User>jwt_decoded.user;
+    this.loggedUser.next(<User>jwt_decoded.user);
     this._isLoggedIn = true;
     this.isAdmin = (<User>jwt_decoded.user).isAdmin;
 

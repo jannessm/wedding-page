@@ -8,10 +8,11 @@
         <mat-icon>person</mat-icon>
       </button>
       <mat-menu #accountMenu="matMenu">
-        <button mat-button *ngIf="!authService.loggedUser" routerLink='/login'>Login</button>
-        <button mat-button *ngIf="authService.loggedUser" routerLink='/user/change-password'>Passwort ändern</button>
-        <button mat-button *ngIf="authService.loggedUser?.isAdmin" routerLink='/user/admin'>Admin</button>
-        <button mat-button *ngIf="authService.loggedUser" (click)='logout()'>Logout</button>
+        <button mat-button *ngIf="!(authService.loggedUser | async)" routerLink='/login'>Login</button>
+        <button mat-button *ngIf="authService.loggedUser | async" routerLink='/user/registration'>Registrierung</button>
+        <button mat-button *ngIf="authService.loggedUser | async" routerLink='/user/change-password'>Passwort ändern</button>
+        <button mat-button *ngIf="(authService.loggedUser | async)?.isAdmin" routerLink='/user/admin'>Admin</button>
+        <button mat-button *ngIf="authService.loggedUser | async" (click)='logout()'>Logout</button>
       </mat-menu>
   </mat-toolbar>
 </div>
@@ -28,10 +29,11 @@
 
       <button *ngFor="let item of navItems" mat-button (click)="nav(item.link)" [class.active]="router.isActive(item.link, true)">{{item.text}}</button>
 
-      <button mat-button *ngIf="!authService.loggedUser" routerLink='/login'>Login</button>
-      <button mat-button *ngIf="authService.loggedUser" routerLink='/user/change-password'>Passwort ändern</button>
-      <button mat-button *ngIf="authService.loggedUser?.isAdmin" routerLink='/user/admin'>Admin</button>
-      <button mat-button *ngIf="authService.loggedUser" (click)='logout()'>Logout</button>
+      <button mat-button *ngIf="!(authService.loggedUser | async)" routerLink='/login' (click)="menuExpanded = false">Login</button>
+      <button mat-button *ngIf="authService.loggedUser | async" routerLink='/user/registration' (click)="menuExpanded = false">Registrierung</button>
+      <button mat-button *ngIf="authService.loggedUser | async" routerLink='/user/change-password' (click)="menuExpanded = false">Passwort ändern</button>
+      <button mat-button *ngIf="(authService.loggedUser | async)?.isAdmin" routerLink='/user/admin' (click)="menuExpanded = false">Admin</button>
+      <button mat-button *ngIf="authService.loggedUser | async" (click)='logout()'>Logout</button>
     </mat-expansion-panel>
     
     

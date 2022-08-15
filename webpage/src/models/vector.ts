@@ -1,6 +1,3 @@
-import { ThrowStmt } from "@angular/compiler";
-import { Subject } from "rxjs";
-
 export interface Vector {
     vector: number[];
 
