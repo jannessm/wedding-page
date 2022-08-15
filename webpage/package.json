@@ -29,7 +29,6 @@
     "file-saver": "^2.0.5",
     "filesaver": "0.0.13",
     "jwt-decode": "^3.1.2",
-    "localstorage-slim": "^2.1.1",
     "md5-ts": "^0.1.6",
     "ngx-cookieconsent": "^2.2.3",
     "rxjs": "~6.6.0",
