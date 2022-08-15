@@ -10,7 +10,7 @@ div {
 
         a[href] {
             text-decoration: none;
-            color: mat.get-color-from-palette(mat.$teal-palette, 800);
+            color: var(--color-accent-800);
         }
     }
 }

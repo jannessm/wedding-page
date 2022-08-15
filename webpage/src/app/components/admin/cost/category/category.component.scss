@@ -1,5 +1,4 @@
 @use '@angular/material' as mat;
-@use 'colors';
 
 div {
     line-height: 48px;
@@ -15,7 +14,7 @@ div {
     }
 
     &:hover {
-        border: mat.get-color-from-palette(colors.$webpage-primary) solid 2px;
+        border: var(--color-primary) solid 2px;
         border-radius: 5px;
     }
 

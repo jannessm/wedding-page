@@ -5,8 +5,6 @@ import { Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
 import { registerLocaleData } from '@angular/common';
 import localDe from '@angular/common/locales/de';
-import { Observable } from 'rxjs';
-import { User } from 'src/models/user';
 
 @Component({
   selector: 'app-root',

@@ -3,19 +3,27 @@
 @use '@angular/material' as mat;
 // Plus imports for other components in your app.
 
+// Plus imports for other components in your app.
+@import url('https://fonts.googleapis.com/css2?family=Birthstone+Bounce:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bitter:wght@200;400;700&display=swap');
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat.core();
+$custom-typography: mat.define-typography-config(
+    $font-family: "Bitter, serif !important",
+    $headline: mat.define-typography-level(64px, $font-family: "Birthstone Bounce !important"),
+    $title: mat.define-typography-level(20px, $letter-spacing: 2px !important),
+    $subheading-2: mat.define-typography-level(18px, $letter-spacing: 4px !important),
+    $subheading-1: mat.define-typography-level(16px, $letter-spacing: 2px !important),
+    $button: mat.define-typography-level(16px, $letter-spacing: 2px !important),
+);
+@include mat.core($custom-typography);
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $webpage-primary: mat.define-palette(mat.$amber-palette, 300, 200, 500, 900);
 $webpage-accent: mat.define-palette(mat.$teal-palette, 200, 100, 400);
-
-$text: #212121;
-$secondary-text: #757575;
 
 // The warn palette is optional (defaults to red).
 $webpage-warn: mat.define-palette(mat.$red-palette);
@@ -29,3 +37,13 @@ $webpage-theme: mat.define-light-theme((
     warn: $webpage-warn,
   )
 ));
+
+@include mat.all-component-themes($webpage-theme);
+
+:root {
+  --color-primary: #{mat.get-color-from-palette($webpage-primary)};
+  --color-primary-700: #{mat.get-color-from-palette($webpage-primary, 700)};
+  --color-primary-50-7: #{mat.get-color-from-palette($webpage-primary, 50, 0.7)};
+  --color-accent-800: #{mat.get-color-from-palette($webpage-accent, 800)};
+  --color-accent-50: #{mat.get-color-from-palette($webpage-accent, 50)};
+}

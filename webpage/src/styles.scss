@@ -1,40 +1,15 @@
-
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
-@use 'colors.scss';
-@use 'vars.scss';
-// Plus imports for other components in your app.
-@import url('https://fonts.googleapis.com/css2?family=Birthstone+Bounce:wght@400;500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bitter:wght@200;400;700&display=swap');
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
-$custom-typography: mat.define-typography-config(
-    $font-family: "Bitter, serif !important",
-    $headline: mat.define-typography-level(64px, $font-family: "Birthstone Bounce !important"),
-    $title: mat.define-typography-level(20px, $letter-spacing: 2px !important),
-    $subheading-2: mat.define-typography-level(18px, $letter-spacing: 4px !important),
-    $subheading-1: mat.define-typography-level(16px, $letter-spacing: 2px !important),
-    $button: mat.define-typography-level(16px, $letter-spacing: 2px !important),
-);
-@include mat.core($custom-typography);
+@use 'vars';
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes(colors.$webpage-theme);
-
 /* You can add global styles to this file, and also import other style files */
 
-html, body { min-height: 100vh; background: mat.get-color-from-palette(colors.$webpage-primary, 50, 0.7); color: colors.$text;}
+html, body { min-height: 100vh; background: var(--color-primary-50-7); color: vars.$text;}
 body { margin: 0; font-family: Bitter, sans-serif; }
 
-button { color: colors.$text; }
+button { color: vars.$text; }
 
 iframe {
     width: 100%;

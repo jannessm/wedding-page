@@ -1,11 +1,10 @@
-@use 'colors.scss';
 @use 'vars.scss';
 
 mat-form-field, table, tr {
     width: 100%;
 
     .user {
-        color: colors.$secondary-text;
+        color: vars.$secondary-text;
     }
 
     .icon-column {

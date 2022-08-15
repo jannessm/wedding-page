@@ -1,4 +1,4 @@
-@use 'colors.scss';
+@use 'vars';
 
 div {
     width: min(100%, 1000px);
@@ -9,7 +9,7 @@ div {
     }
 
     a {
-        color: colors.$secondary-text;
+        color: vars.$secondary-text;
         text-decoration: none;
     }
     

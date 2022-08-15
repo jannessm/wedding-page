@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-accomondations',
   templateUrl: './accomondations.component.html',
   styleUrls: ['./accomondations.component.scss']
 })
-export class AccomondationsComponent implements OnInit {
+export class AccomondationsComponent {
 
   accomondations = [
     {
@@ -31,8 +31,5 @@ export class AccomondationsComponent implements OnInit {
   ]
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }
