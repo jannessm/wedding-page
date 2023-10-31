@@ -3,7 +3,7 @@
 ## Install
 
 1. start your server
-1. call `http://<your-api-domain>/install.php?user=<preferred admin username>&pwd=<default admin pwd>`
+1. call `http://<your-api-domain>/install.php?user=<preferred admin username>&pwd=<default admin pwd>&host=<my domain>`
     1. it checks if data is already present:
         1. if yes, it cancels the operation
         1. if no, all data files are created and encrypt them with a random password saved in a config file
